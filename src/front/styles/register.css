@@ -1,0 +1,25 @@
+/* register.css */
+.btn-primary-custom {
+  background-color: #2364AA;
+  border-color: #2364AA;
+  color: white;
+}
+
+.btn-primary-custom:hover {
+  background-color: #3DA5D9;
+  border-color: #3DA5D9;
+}
+
+.input-custom:focus {
+  border-color: #73BFB8;
+  box-shadow: 0 0 0 0.2rem rgba(115, 191, 184, 0.25);
+}
+
+.text-warning-custom {
+  color: #FEC601;
+}
+
+.bg-accent {
+  background-color: #EA7317;
+  color: white;
+}
