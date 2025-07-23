@@ -22,3 +22,20 @@
   border-radius: 20px;
   margin-right: 10px;
 }
+.buttonCategoria {
+  display: block;
+  background: none;
+  border: none;
+}
+
+.categorias {
+  font-size: 20px;
+  display: block;
+  box-sizing: border-box;
+  border-bottom: 1px solid;
+}
+.seleccionGrid {
+  grid-auto-flow: column;
+  display: grid;
+  grid-gap: 24px;
+}
