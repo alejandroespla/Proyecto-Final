@@ -10,10 +10,10 @@ export const Navbar = () => {
 				<a className="navbar-brand pt-0" href="#"><img className="imgLogo" src="public/Logo.png" alt="" /> </a>
 				
 				<div className="collapse navbar-collapse ">
-					<div className="w-100 searchBox"> 
+					<div className="w-100 searchBox "> 
 						<form className="w-100 d-flex align-items-center">
-							<div className="position-relative w-100 d-flex">
-								<input className=" w-100 search_input " type="search" placeholder="Buscar" />
+							<div className="position-relative w-100 d-flex ">
+								<input className=" w-100 search_input px-3 " type="search" placeholder="Buscar" />
 							</div>
 						</form>
 					</div>
