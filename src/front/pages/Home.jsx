@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import rigoImageUrl from "../assets/img/rigo-baby.jpg";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Navbar } from "../components/Navbar.jsx"
+import { Banner } from "../components/Banner.jsx"
 
 import { Link } from "react-router-dom";
 
@@ -43,6 +44,9 @@ export const Home = () => {
 					< Navbar />
 				</div>
 			</div>
+			<div><Banner /></div>
+
+
 			<h2>Prueba</h2>
 
 		</div>
