@@ -77,11 +77,13 @@ const RegisterForm = () => {
       }}
     >
       <div className="register-card bg-white bg-opacity-75 p-4 rounded shadow">
+        <Link to={"/"} >
         <img className="mx-auto d-block mb-3"  
 					 src="../src/front/assets/img/logo.png" 
 					 style={{ maxWidth: "280px", width: "100%", borderRadius:"24px"}} 
 					 alt="Logo"
 				/>
+        </Link>
         <h2 className="text-left mb-5">Registro</h2>
         {message && <div className="alert alert-info">{message}</div>}
 
