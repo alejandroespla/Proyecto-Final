@@ -1,0 +1,25 @@
+
+.imgLogo{
+    height: 120px;
+    width: 100px;
+    margin: auto;
+}
+.searchBox {
+  margin-right: 12px;
+  display: block;
+  box-sizing: border-box;
+}
+.search_input {
+  border-radius: 40px;
+  height: 40px;
+}
+.checkRegrister,
+.checkPay {
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  margin-right: 10px;
+}
+.footerLogo{
+    
+}
