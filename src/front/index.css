@@ -1,17 +1,19 @@
-
-.imgLogo{
-    height: 120px;
-    width: 100px;
-    margin: auto;
+.imgLogo {
+  height: 120px;
+  width: 100px;
 }
+
 .searchBox {
   margin-right: 12px;
   display: block;
   box-sizing: border-box;
 }
-.search_input {
-  border-radius: 40px;
+
+.searchBox_input {
+  font-size: 1rem;
+  border-radius: 32px;
   height: 40px;
+  padding-right: 16px;
 }
 .checkRegrister,
 .checkPay {
@@ -20,6 +22,20 @@
   border-radius: 20px;
   margin-right: 10px;
 }
-.footerLogo{
-    
+.buttonCategoria {
+  display: block;
+  background: none;
+  border: none;
+}
+
+.categorias {
+  font-size: 20px;
+  display: block;
+  box-sizing: border-box;
+  border-bottom: 1px solid;
+}
+.seleccionGrid {
+  grid-auto-flow: column;
+  display: grid;
+  grid-gap: 24px;
 }
