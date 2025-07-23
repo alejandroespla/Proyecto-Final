@@ -38,11 +38,13 @@ export const Login = () => {
 	return (
 		<div style={currentBackground} className="d-flex justify-content-start p-5">
 			<div className="d-flex align-content-center card shadow-sm p-5 bg-white bg-opacity-75" style={{ maxWidth: "600px", width: "100%", borderRadius:"24px"}}>
+				<Link to={"/"} >
 				<img className="mx-auto d-block mb-3"  
 					 src="../src/front/assets/img/logo.png" 
 					 style={{ maxWidth: "280px", width: "100%", borderRadius:"24px"}} 
 					 alt="Logo"
 				/>
+				</Link>
 				<h2 className="text-center mb-4">Login</h2>
 				<form onSubmit={handleLogin}>
 					<div className="mb-3">
