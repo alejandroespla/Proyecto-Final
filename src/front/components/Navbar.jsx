@@ -37,7 +37,6 @@ export const Navbar = () => {
 						<div className=" d-flex align-items-center seleccionGrid">
 							<div className="seleccionCategoria">
 								<button className="buttonCategoria">
-									
 									<span>Todas las categorias</span>
 								</button>
 
