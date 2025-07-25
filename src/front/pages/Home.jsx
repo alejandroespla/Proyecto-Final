@@ -5,6 +5,7 @@ import { Navbar } from "../components/Navbar.jsx"
 import { Banner } from "../components/Banner.jsx"
 
 import { Link } from "react-router-dom";
+import { Footer } from "../components/Footer.jsx";
 
 export const Home = () => {
 	/*
@@ -48,6 +49,7 @@ export const Home = () => {
 
 
 			<h2>Prueba</h2>
+			<Footer></Footer>
 
 		</div>
 

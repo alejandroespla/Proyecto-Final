@@ -10,7 +10,6 @@
 }
 
 .searchBox_input {
-  font-size: 1rem;
   border-radius: 32px;
   height: 40px;
   padding-right: 16px;
@@ -38,4 +37,16 @@
   grid-auto-flow: column;
   display: grid;
   grid-gap: 24px;
+}
+
+li {
+  list-style-type: none;
+  color: #868686;
+}
+.container  {
+      width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
 }
