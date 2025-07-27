@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/register.css'; // ⬅️ CSS externo para márgenes
+import '../styles/register.css'; 
 import { Link } from 'react-router-dom';
 
 const RegisterForm = () => {
   const [form, setForm] = useState({
-    name: '',
+    username: '',
+    fullname: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -51,7 +52,7 @@ const RegisterForm = () => {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await fetch('http://localhost:5000/api/register', {
+        const response = await fetch('https://automatic-broccoli-6xqxgpqr6jj3x77-3001.app.github.dev/api/user/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(form),
@@ -94,7 +95,7 @@ const RegisterForm = () => {
             <label className="form-label">Nombre de usuario</label>
             <input
               type="text"
-              name="name"
+              name="username"
               className={`form-control ${errors.name && 'is-invalid'}`}
               value={form.username}
               onChange={handleChange}
@@ -106,7 +107,7 @@ const RegisterForm = () => {
             <label className="form-label">Nombre completo</label>
             <input
               type="text"
-              name="name"
+              name="fullname"
               className={`form-control ${errors.fullname && 'is-invalid'}`}
               value={form.fullname}
               onChange={handleChange}

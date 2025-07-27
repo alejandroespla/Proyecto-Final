@@ -6,6 +6,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.database.db import db
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+#from models.User import User
 
 api = Blueprint('api', __name__)
 
@@ -21,3 +22,25 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+@api.route('/register', methods=['POST'])
+def register_user():
+    """
+        data = request.get_json()
+    if not data or 'email' not in data or 'password' not in data:
+        return jsonify({"error": "Missing email or password"}), 400
+
+    new_user = User(
+        email=data['email'],
+        password=data['password'],
+        is_active=True,
+        fullname=data.get('fullname', ''),
+        username=data.get('username', '')
+    )
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify(new_user.serialize()), 201
+    """
+    return jsonify({"message": "This endpoint is not implemented yet"}), 501
