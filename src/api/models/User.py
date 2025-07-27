@@ -8,6 +8,7 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
+    fullname: Mapped[str] = mapped_column(String(120), nullable=False)
     username: Mapped[str] = mapped_column(String(120), nullable=False)
 
 
@@ -15,6 +16,6 @@ class User(db.Model):
         return {
             "id": self.id,
             "email": self.email,
-            "username": self.username 
-            # do not serialize the password, its a security breach
+            "username": self.username,
+            "fullname": self.fullname
         }

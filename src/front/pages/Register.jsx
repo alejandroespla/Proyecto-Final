@@ -33,7 +33,8 @@ const RegisterForm = () => {
 
   const validateForm = () => {
     let newErrors = {};
-    if (!form.name.trim()) newErrors.name = 'El nombre es obligatorio';
+    if (!form.username.trim()) newErrors.username = 'El nombre de usuario obligatorio';
+    if (!form.fullname.trim()) newErrors.fullname = 'El nombre es obligatorio';
     if (!form.email) newErrors.email = 'El email es obligatorio';
     else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = 'Email inválido';
     if (!form.password) newErrors.password = 'La contraseña es obligatoria';
@@ -88,16 +89,29 @@ const RegisterForm = () => {
         {message && <div className="alert alert-info">{message}</div>}
 
         <form onSubmit={handleSubmit} noValidate>
+
+          <div className="mb-3">
+            <label className="form-label">Nombre de usuario</label>
+            <input
+              type="text"
+              name="name"
+              className={`form-control ${errors.name && 'is-invalid'}`}
+              value={form.username}
+              onChange={handleChange}
+            />
+            {errors.name && <div className="invalid-feedback">{errors.username}</div>}
+          </div>
+
           <div className="mb-3">
             <label className="form-label">Nombre completo</label>
             <input
               type="text"
               name="name"
-              className={`form-control ${errors.name && 'is-invalid'}`}
-              value={form.name}
+              className={`form-control ${errors.fullname && 'is-invalid'}`}
+              value={form.fullname}
               onChange={handleChange}
             />
-            {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+            {errors.name && <div className="invalid-feedback">{errors.fullname}</div>}
           </div>
 
           <div className="mb-3">
