@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import db, Product
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -30,6 +30,8 @@ def create_product():
     required = ["title", "description", "category", "subcategory", "price", "user_id"]
     if not all(k in data for k in required):
         return jsonify({"error": "Faltan campos obligatorios"}), 400
+    
+    print("hola")
 
     product = Product(
         title=data['title'],
@@ -37,7 +39,7 @@ def create_product():
         category=data['category'],
         subcategory=data['subcategory'],
         price=data['price'],
-        location=data.get('location', ''),
+        location=data['location'],
         user_id=data['user_id']
     )
 
