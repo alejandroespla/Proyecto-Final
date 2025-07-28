@@ -20,3 +20,28 @@ def handle_hello():
     }
 
     return jsonify(response_body), 200
+
+
+
+@api.route('/products', methods=['POST'])
+def create_product():
+    data = request.get_json()
+
+    required = ["title", "description", "category", "subcategory", "price", "user_id"]
+    if not all(k in data for k in required):
+        return jsonify({"error": "Faltan campos obligatorios"}), 400
+
+    product = Product(
+        title=data['title'],
+        description=data['description'],
+        category=data['category'],
+        subcategory=data['subcategory'],
+        price=data['price'],
+        location=data.get('location', ''),
+        user_id=data['user_id']
+    )
+
+    db.session.add(product)
+    db.session.commit()
+
+    return jsonify(product.serialize()), 201

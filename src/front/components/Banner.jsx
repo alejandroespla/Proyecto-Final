@@ -7,15 +7,15 @@ export const Banner = () => {
     <Container
       fluid
       className=""
-      style={{ maxHeight: "500px", overflow: "hidden", backgroundColor: "#CE8C1A"}}
+      style={{ maxHeight: "500px", overflow: "hidden", backgroundColor: "#E5A332" }}
     >
       <Row className="align-items-center flex-column flex-md-row text-center text-md-start" style={{ height: "100%" }}>
         <Col className="d-flex justify-content-end" md={5} style={{ maxHeight: "500px" }}>
-          <img 
+          <img
             src={banner}
             alt="Material Deportivo"
             style={{
-              height: "450px",           
+              height: "450px",
             }}
           />
         </Col>
@@ -26,9 +26,11 @@ export const Banner = () => {
             <strong> ¡alquílalo aquí!</strong> Y además, saca un extra
             <strong> prestando el tuyo.</strong>
           </p>
-          <Button variant="success" size="lg">
-            Empieza ahora
-          </Button>
+          <Link to={"/add-product"} >
+            <Button variant="success" size="lg">
+              Empieza ahora
+            </Button>
+          </Link>
         </Col>
       </Row>
     </Container>
