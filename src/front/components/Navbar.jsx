@@ -8,7 +8,7 @@ export const Navbar = () => {
 			<nav className="navbar navbar-expand-lg bg-body-tertiary pt-0">
 				<div className="container-fluid d-flex flex-nowrap">
 
-					<a className="navbar-brand pt-0" href="#"><img className="imgLogo" src="public/Logo.png" alt="" /> </a>
+					<a className="navbar-brand pt-0" href="/"><img className="imgLogo" src="public/Logo.png" alt="" /> </a>
 					<div className="w-100 searchBox">
 						<form className="w-100 d-flex align-items-center">
 							<div className=" position-relative w-100  d-flex align-items-center ">

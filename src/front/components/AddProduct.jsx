@@ -49,7 +49,7 @@ export const AddProduct = () => {
 
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/products", {
+      const response = await fetch("https://probable-waffle-64p76qv66pcr7v7-3000.app.github.dev/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -79,29 +79,29 @@ export const AddProduct = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-6 p-6 bg-white shadow-lg rounded-2xl">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800">Publicar nuevo producto</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="container">
+      <h2 className="my-5">Publicar nuevo producto</h2>
+      <form onSubmit={handleSubmit} className="d-flex flex-column mb-5">
         <input
           type="text"
           name="title"
           placeholder="Título del producto"
           value={form.title}
           onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
+          className="w-full border mb-5 px-3 py-2 rounded"
         />
         <textarea
           name="description"
           placeholder="Descripción"
           value={form.description}
           onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
+          className="w-full border mb-5 px-3 py-2 rounded"
         />
         <select
           name="category"
           value={form.category}
           onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
+          className="w-full border mb-5 px-3 py-2 rounded"
         >
           <option value="">Selecciona una categoría</option>
           {Object.keys(categoryOptions).map((cat) => (
@@ -113,7 +113,7 @@ export const AddProduct = () => {
             name="subcategory"
             value={form.subcategory}
             onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
+            className="w-full border mb-5 px-3 py-2 rounded"
           >
             <option value="">Selecciona una subcategoría</option>
             {categoryOptions[form.category].map((sub) => (
@@ -127,7 +127,7 @@ export const AddProduct = () => {
           placeholder="Precio por día (€)"
           value={form.price}
           onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
+          className="w-full border mb-5 px-3 py-2 rounded"
         />
         <input
           type="text"
@@ -135,15 +135,13 @@ export const AddProduct = () => {
           placeholder="Ubicación"
           value={form.location}
           onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
+          className="w-full border mb-5 px-3 py-2 rounded"
         />
 
         <button
           type="submit"
-          disabled={loading}
-          className={`w-full ${loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"} text-white py-2 rounded font-semibold`}
-        >
-          {loading ? "Publicando..." : "Publicar producto"}
+          className="btn" style={{ backgroundColor: "#2E676A", border: "none", borderRadius: "8px", color:"#ffffff" }}>
+            Añadir producto
         </button>
       </form>
     </div>

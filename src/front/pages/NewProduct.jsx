@@ -1,9 +1,12 @@
 import {AddProduct} from "../components/AddProduct";
-
+import { Navbar } from "../components/Navbar.jsx"
+import { Footer } from "../components/Footer.jsx";
 const NewProduct = () => {
   return (
-    <div className="container">
+    <div className="pt-6">
+      <Navbar/>
       <AddProduct />
+      <Footer/>
     </div>
   );
 };
