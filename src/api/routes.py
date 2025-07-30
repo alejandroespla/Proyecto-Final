@@ -31,7 +31,6 @@ def create_product():
     if not all(k in data for k in required):
         return jsonify({"error": "Faltan campos obligatorios"}), 400
     
-    print("hola")
 
     product = Product(
         title=data['title'],
