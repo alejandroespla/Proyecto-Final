@@ -1,6 +1,6 @@
 .imgLogo {
-  height: 120px;
-  width: 100px;
+  height: 130px;
+  width: 170px;
 }
 
 .searchBox {
@@ -11,13 +11,16 @@
 
 .searchBox_input {
   border-radius: 32px;
-  height: 40px;
+  height: 45px;
+  padding-left: 16px;
   padding-right: 16px;
+  font-size: 20px;
 }
+
 .checkRegrister,
 .checkPay {
-  width: 100px;
-  height: 40px;
+  width: 110px;
+  height: 45px;
   border-radius: 20px;
   margin-right: 10px;
 }
@@ -31,20 +34,35 @@
   font-size: 20px;
   display: block;
   box-sizing: border-box;
-  border-bottom: 1px solid;
+
 }
+
 .seleccionGrid {
   grid-auto-flow: column;
   display: grid;
-  grid-gap: 24px;
+  grid-gap: 26px;
+}
+
+.seleccionGridCategorias {
+  grid-auto-flow: column;
+  display: grid;
+  grid-gap: 28px;
+  font-size: 18px;
+  color: #868686;
 }
 
 li {
   list-style-type: none;
   color: #868686;
+  text-align: center ;
 }
-.container  {
-      width: 100%;
+
+a:hover {
+  cursor: pointer;
+  border-bottom: 2px solid black;
+}
+.containerFooter  {
+    width: 100%;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
@@ -71,4 +89,8 @@ li {
   font-size: 36px;
   line-height: 130%;
   margin-bottom: 56px;
+}
+.imgFooter{
+  max-width: 100px;
+
 }
