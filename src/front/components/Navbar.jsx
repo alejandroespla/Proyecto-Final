@@ -7,13 +7,11 @@ export const Navbar = () => {
 		<div>
 			<nav className="navbar navbar-expand-lg bg-body-tertiary pt-0">
 				<div className="container-fluid d-flex flex-nowrap">
-
-					<a className="navbar-brand pt-0" href="#"><img className="imgLogo" src="public/Logo.png" alt="" /> </a>
+					<a className="navbar-brand pt-0" href="/"><img className="imgLogo" src="src/front/assets/img/logo.png" alt="" /> </a>
 					<div className="w-100 searchBox">
 						<form className="w-100 d-flex align-items-center">
 							<div className=" position-relative w-100  d-flex align-items-center ">
-								<input type="search" className="w-100 searchBox_input " placeholder="Buscar" />
-
+								<input type="search" className=" w-100 searchBox_input " placeholder="Buscar" />
 							</div>
 						</form>
 					</div>
@@ -35,17 +33,20 @@ export const Navbar = () => {
 				<div className="d-block" >
 					<section className="categorias" >
 						<div className=" d-flex align-items-center seleccionGrid">
-							<div className="seleccionCategoria">
-								<button className="buttonCategoria">
+							<div className="seleccionCategoria dropend" role="group">
+								<button type="button" className="buttonCategoria" data-bs-toggle="dropdown" aria-expanded="false" >
 									<span>Todas las categorias</span>
 								</button>
+							</div>
+							<div>
 
 							</div>
-
-							<nav className="nav seleccionGrid" aria-label="top_categorias">
-								<a>Primera categoria</a>
-								<a>Segunda Categoria</a>
-								<a> Tercera categoria</a>
+							<nav className="nav seleccionGridCategorias" aria-label="top_categorias">
+								<a>Deportes de Pelota</a>
+								<a>Deportes de Agua</a>
+								<a>Deportes de Montaña</a>
+								<a>Deportes sobre ruedas</a>
+								<a>otros Deportes</a>
 							</nav>
 						</div>
 
