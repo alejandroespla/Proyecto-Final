@@ -1,24 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean, Column, Integer, Float, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy.orm import relationship
+from api.models import db
 
-
-db = SQLAlchemy()
-
-class User(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(nullable=False)
-    is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
-
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "email": self.email,
-            # do not serialize the password, its a security breach
-        }
-    
 class Product(db.Model):
     id = Column(Integer, primary_key=True)
     title = Column(String(120), nullable=False)
