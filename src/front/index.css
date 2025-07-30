@@ -57,7 +57,9 @@ li {
   text-align: center ;
 }
 
-a:hover {
+
+.borderCategoria:hover  {
+  text-decoration: none;
   cursor: pointer;
   border-bottom: 2px solid black;
 }

@@ -42,11 +42,11 @@ export const Navbar = () => {
 
 							</div>
 							<nav className="nav seleccionGridCategorias" aria-label="top_categorias">
-								<a>Deportes de Pelota</a>
-								<a>Deportes de Agua</a>
-								<a>Deportes de Montaña</a>
-								<a>Deportes sobre ruedas</a>
-								<a>otros Deportes</a>
+								<a className="borderCategoria text-dark link-underline link-underline-opacity-0">Deportes de Pelota</a>
+								<a className="borderCategoria text-dark link-underline link-underline-opacity-0">Deportes de Agua</a>
+								<a className="borderCategoria text-dark link-underline link-underline-opacity-0">Deportes de Montaña</a>
+								<a className="borderCategoria text-dark link-underline link-underline-opacity-0">Deportes sobre ruedas</a>
+								<a className="borderCategoria text-dark link-underline link-underline-opacity-0">Otros Deportes</a>
 							</nav>
 						</div>
 
