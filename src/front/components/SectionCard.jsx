@@ -4,22 +4,27 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export const SectionCard = ({ title, image, reverse = false, children }) => {
   const scrollRef = useRef(null);
+  //Para llevar la apgina actual del carrusel
   const [scrollIndex, setScrollIndex] = useState(0);
 
-  const totalItems = React.Children.count(children);
+  const totalItems = React.Children.count(children); //conteo de cuantas subsectioncard hay
   const itemsPerPage = 6; // 2 filas de 3 columnas
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
+  //Funcion para desplazar el carrusel 
   const scrollTo = (index) => {
     if (!scrollRef.current) return;
-    const cardWidth = scrollRef.current.offsetWidth;
+    const cardWidth = scrollRef.current.offsetWidth; //para saber el ancho visible y multiplicarlo por el indice de pagina
+    // Desplazar el carrusel al indice que hace falta
     scrollRef.current.scrollTo({
       left: cardWidth * index,
       behavior: "smooth",
     });
+    // Actualizar el indice de pagina
     setScrollIndex(index);
   };
 
+  //Funciones para los botones de flecha
   const handlePrev = () => {
     if (scrollIndex > 0) scrollTo(scrollIndex - 1);
   };
@@ -49,7 +54,7 @@ export const SectionCard = ({ title, image, reverse = false, children }) => {
           </button>
 
           {/* Carrusel */}
-          <div className="scroll-container" ref={scrollRef}>
+          <div className="scroll-container" ref={scrollRef}/*para referenciar el contenedor del carrusel*/>
             <div className="grid-container">
               {children}
             </div>

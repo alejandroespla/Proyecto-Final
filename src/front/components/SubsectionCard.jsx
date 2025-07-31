@@ -15,6 +15,7 @@ export const SubsectionCard = ({ image, title, price, oldPrice, discount }) => {
 
         <div className="sub-card-price">
           <span className="current-price">{price}</span>
+          {/* Esto no es del todo necesario, por si en implementaciones futuras se quiere poner descuentos y precios anteriores */}
           {oldPrice && <span className="old-price">{oldPrice}</span>}
           {discount && <span className="discount">-{discount}%</span>}
         </div>
