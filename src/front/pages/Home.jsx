@@ -55,7 +55,7 @@ export const Home = () => {
 	return (
 		<div>
 			<div className="bg-body-tertiary">
-				<div className="container">
+				<div className="">
 					< Navbar />
 				</div>
 			</div>
