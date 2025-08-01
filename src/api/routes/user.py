@@ -2,31 +2,14 @@ from flask import Flask, request, jsonify, Blueprint
 from api.database.db import db
 from api.models.User import User
 import bcrypt
-
+from flask_cors import CORS
 
 api_user = Blueprint("api/user", __name__)
+CORS (api_user)
 
 @api_user.route('/register', methods=['POST'])
 def register_user():
-    #metodo encontrado entre youtube y stackoverflow
-    """
-    data = request.get_json()
-    if not data or 'email' not in data or 'password' not in data:
-        return jsonify({"error": "Missing email or password"}), 400
 
-    new_user = User(
-        email=data['email'],
-        password=data['password'],
-        is_active=True,
-        fullname=data.get('fullname', ''),
-        username=data.get('username', '')
-    )
-
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify(new_user.serialize()), 201
-    """
     body = request.get_json()
     print(body)
 
@@ -42,4 +25,4 @@ def register_user():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"message": "Desde el user.py"}), 501
+    return jsonify({"message": "Desde el user.py"}), 200
