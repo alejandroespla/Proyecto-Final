@@ -4,6 +4,7 @@ import banner from "../assets/img/banner.png";
 import banner2 from "../assets/img/banner2.jpeg";
 import banner3 from "../assets/img/banner3.jpg";
 import banner4 from "../assets/img/banner4.png";
+import "../styles/carousel.css";
 
 export const Banner = () => {
   return (
