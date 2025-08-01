@@ -8,7 +8,7 @@ export const Footer = () => (
 				</section>
 				<section className="col-6 col-md-2 p-0 px-md-3">
 					<p><strong>Sportsy</strong></p>
-					<ul className="p-0">
+					<ul className="p-0 list-unstyled">
 						<li>Quiénes somos</li>
 						<li>Cómo Funciona</li>
 						<li>Brand Book</li>
@@ -19,7 +19,7 @@ export const Footer = () => (
 				</section>
 				<section className="col-6 col-md-2 p-0 px-md-3" >
 					<p><strong>Soporte</strong></p>
-					<ul className="p-0">
+					<ul className="p-0 list-unstyled">
 						<li>Centro de ayuda</li>
 						<li>Normas de la comunidad</li>
 						<li>Consejos de seguridad</li>
@@ -28,7 +28,7 @@ export const Footer = () => (
 				
 				<section className="col-6 col-md-2 p-0 px-md-3">
 					<p><strong>Legal</strong></p>
-					<ul className="p-0">
+					<ul className="p-0 list-unstyled">
 						<li>Aviso Legal</li>
 						<li>Condiciones de uso</li>
 						<li>Politica de privacidad</li>
@@ -38,7 +38,7 @@ export const Footer = () => (
 				
 				<section className="col-6 col-md-2 p-0 px-md-3">
 					<p><strong>Sportsy Pro</strong></p>
-					<ul className="p-0">
+					<ul className="p-0 list-unstyled">
 						<li>Multicategoria</li>
 						<li>Desportes</li>
 					</ul>
