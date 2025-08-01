@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from api.models import db
 
+
 class Product(db.Model):
     id = Column(Integer, primary_key=True)
     title = Column(String(120), nullable=False)
@@ -10,7 +11,7 @@ class Product(db.Model):
     subcategory = Column(String(120), nullable=False)
     price = Column(Float, nullable=False)
     location = Column(String(120))
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    # user_id = Column(Integer, ForeignKey('user.id'), nullable=False) ----> AGREGAR CUANDO ESTE CREADO EL USUARIO
 
     user = relationship("User", backref="products")
 
@@ -23,6 +24,6 @@ class Product(db.Model):
             "subcategory": self.subcategory,
             "price": self.price,
             "location": self.location,
-            "user_id": self.user_id,
+            # "user_id": self.user_id, ----> AGREGAR CUANDO ESTE CREADO EL USUARIO
             "username": self.user.username
         }

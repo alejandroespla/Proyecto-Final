@@ -1,35 +1,36 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, Boolean, Column, Integer, Float, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
+from sqlalchemy.orm import relationship
 
 db = SQLAlchemy()
 
 class User(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(nullable=False)
-    is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    is_active = db.Column(db.Boolean, nullable=False)
 
+    products = db.relationship('Product', back_populates='user', cascade="all, delete-orphan")
 
     def serialize(self):
         return {
             "id": self.id,
+            "username": self.username,
             "email": self.email,
-            # do not serialize the password, its a security breach
         }
-    
-class Product(db.Model):
-    id = Column(Integer, primary_key=True)
-    title = Column(String(120), nullable=False)
-    description = Column(String(500), nullable=False)
-    category = Column(String(120), nullable=False)
-    subcategory = Column(String(120), nullable=False)
-    price = Column(Float, nullable=False)
-    location = Column(String(120))
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
 
-    user = relationship("User", backref="products")
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.String(500), nullable=False)
+    category = db.Column(db.String(120), nullable=False)
+    subcategory = db.Column(db.String(120), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    location = db.Column(db.String(120))
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', back_populates='products')
 
     def serialize(self):
         return {
@@ -41,5 +42,5 @@ class Product(db.Model):
             "price": self.price,
             "location": self.location,
             "user_id": self.user_id,
-            "username": self.user.username
+            "username": self.user.username if self.user else None
         }

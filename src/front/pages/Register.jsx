@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/register.css'; // ⬅️ CSS externo para márgenes
+import '../styles/register.css'; 
 import { Link } from 'react-router-dom';
 
 const RegisterForm = () => {
   const [form, setForm] = useState({
-    name: '',
+    username: '',
+    fullname: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -33,7 +34,8 @@ const RegisterForm = () => {
 
   const validateForm = () => {
     let newErrors = {};
-    if (!form.name.trim()) newErrors.name = 'El nombre es obligatorio';
+    if (!form.username.trim()) newErrors.username = 'El nombre de usuario obligatorio';
+    if (!form.fullname.trim()) newErrors.fullname = 'El nombre es obligatorio';
     if (!form.email) newErrors.email = 'El email es obligatorio';
     else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = 'Email inválido';
     if (!form.password) newErrors.password = 'La contraseña es obligatoria';
@@ -50,7 +52,7 @@ const RegisterForm = () => {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await fetch('http://localhost:5000/api/register', {
+        const response = await fetch('https://automatic-broccoli-6xqxgpqr6jj3x77-3001.app.github.dev/api/user/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(form),
@@ -88,16 +90,29 @@ const RegisterForm = () => {
         {message && <div className="alert alert-info">{message}</div>}
 
         <form onSubmit={handleSubmit} noValidate>
+
+          <div className="mb-3">
+            <label className="form-label">Nombre de usuario</label>
+            <input
+              type="text"
+              name="username"
+              className={`form-control ${errors.name && 'is-invalid'}`}
+              value={form.username}
+              onChange={handleChange}
+            />
+            {errors.name && <div className="invalid-feedback">{errors.username}</div>}
+          </div>
+
           <div className="mb-3">
             <label className="form-label">Nombre completo</label>
             <input
               type="text"
-              name="name"
-              className={`form-control ${errors.name && 'is-invalid'}`}
-              value={form.name}
+              name="fullname"
+              className={`form-control ${errors.fullname && 'is-invalid'}`}
+              value={form.fullname}
               onChange={handleChange}
             />
-            {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+            {errors.name && <div className="invalid-feedback">{errors.fullname}</div>}
           </div>
 
           <div className="mb-3">
