@@ -15,12 +15,11 @@ export const Banner = () => {
             className="d-flex align-items-start w-100"
             src={banner2}
             alt="Material Deportivo"
-            style={{ maxHeight: "500px", objectFit: "cover" }}
+            style={{ height: "400px", objectFit: "cover" }}
           />
-          <Carousel.Caption className="caption-style text-start text-dark ">
-            <p className="bigFont fw-medium ">¿Solo lo necesitas un día?</p>
-            <p className="text-banner fw-light">
-              
+          <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
+            <h1 className="fw-bold">¿Solo lo vas a usar un día?</h1>
+            <p className="lead">
               ¡Alquílalo fácil y ahorra! <br />
               Y si tienes material, gana dinero prestándolo.
             </p>
@@ -38,10 +37,10 @@ export const Banner = () => {
             className="d-block w-100"
             src={banner}
             alt="Slide 2"
-            style={{ maxHeight: "500px", objectFit: "cover" }}
+            style={{ height: "400px", objectFit: "cover" }}
           />
           <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
-            <h1 className="fw-bold">No compres lo que puedes alquilar.</h1>
+            <h1 className="fw-bold">Deja de comprar y alquila.</h1>
             <p className="lead">
               
               Usa el material solo cuando lo necesites,
@@ -61,7 +60,7 @@ export const Banner = () => {
             className="d-block w-100"
             src={banner3}
             alt="Slide 3"
-            style={{ maxHeight: "500px", objectFit: "cover" }}
+            style={{ height: "400px", objectFit: "cover" }}
           />
           <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
             <h1 className="fw-bold">¿Vas a usarlo una vez?</h1>
@@ -84,7 +83,7 @@ export const Banner = () => {
             className="d-block w-100"
             src={banner4}
             alt="Slide 4"
-            style={{ maxHeight: "500px", objectFit: "cover" }}
+            style={{ height: "400px", objectFit: "cover" }}
           />
           <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
             <h1 className="fw-bold">Gana prestando.</h1>

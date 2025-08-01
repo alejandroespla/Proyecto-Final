@@ -11,6 +11,7 @@ import ciclismo from "../assets/img/ciclismo.jpg"
 import mountain_bike from "../assets/img/mountain_bike.jpg"
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg"
 
+
 export const Home = () => {
 
 	const [categories, setCategories] = useState([]);
@@ -30,6 +31,10 @@ export const Home = () => {
 					< Navbar />
 				</div>
 			</div>
+			<div className="mb-5">
+				<Banner/>
+			</div>
+			
 			{categories.map((cat, index) => (
 				<SectionCard
 					key={index}
