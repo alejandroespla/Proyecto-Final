@@ -3,7 +3,6 @@ import rigoImageUrl from "../assets/img/rigo-baby.jpg";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Navbar } from "../components/Navbar.jsx"
 import { Banner } from "../components/Banner.jsx"
-
 import { Link } from "react-router-dom";
 import { Footer } from "../components/Footer.jsx";
 import { CardProducto } from "../components/CardProducto.jsx";
