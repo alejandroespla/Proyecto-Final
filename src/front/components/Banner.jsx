@@ -3,7 +3,7 @@ import { Container, Button, Carousel } from "react-bootstrap";
 import banner from "../assets/img/banner.png";
 import banner2 from "../assets/img/banner2.jpeg";
 import banner3 from "../assets/img/banner3.jpg";
-// import slide4 from "../assets/img/slide4.jpg";
+import banner4 from "../assets/img/banner4.png";
 
 export const Banner = () => {
   return (
@@ -15,17 +15,16 @@ export const Banner = () => {
             className="d-flex align-items-start w-100"
             src={banner2}
             alt="Material Deportivo"
-            style={{ maxHeight: "500px", objectFit: "cover" }}
+            style={{ height: "400px", objectFit: "cover" }}
           />
-          <Carousel.Caption className="caption-style text-start text-light">
-            <h2 className="fw-bold">¿Necesitas material deportivo?</h2>
+          <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
+            <h1 className="fw-bold">¿Solo lo vas a usar un día?</h1>
             <p className="lead">
-              No te gastes un pastón para usarlo solo un día,
-              <strong> ¡alquílalo aquí!</strong> Y además, saca un extra
-              <strong> prestando el tuyo.</strong>
+              ¡Alquílalo fácil y ahorra! <br />
+              Y si tienes material, gana dinero prestándolo.
             </p>
             <Link to={"/add-product"}>
-              <Button variant="success" size="lg">
+              <Button variant="btn btn-outline-success" size="lg">
                 Empieza ahora
               </Button>
             </Link>
@@ -38,14 +37,14 @@ export const Banner = () => {
             className="d-block w-100"
             src={banner}
             alt="Slide 2"
-            style={{ maxHeight: "500px", objectFit: "cover" }}
+            style={{ height: "400px", objectFit: "cover" }}
           />
-          <Carousel.Caption className="caption-style text-start text-light">
-            <h2 className="fw-bold">¿Necesitas material deportivo?</h2>
+          <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
+            <h1 className="fw-bold">Deja de comprar y alquila.</h1>
             <p className="lead">
-              No te gastes un pastón para usarlo solo un día,
-              <strong> ¡alquílalo aquí!</strong> Y además, saca un extra
-              <strong> prestando el tuyo.</strong>
+              
+              Usa el material solo cuando lo necesites,
+              y saca beneficio del que ya tienes.
             </p>
             <Link to={"/add-product"}>
               <Button variant="success" size="lg">
@@ -61,14 +60,14 @@ export const Banner = () => {
             className="d-block w-100"
             src={banner3}
             alt="Slide 3"
-            style={{ maxHeight: "500px", objectFit: "cover" }}
+            style={{ height: "400px", objectFit: "cover" }}
           />
-          <Carousel.Caption className="caption-style text-start text-light">
-            <h2 className="fw-bold">¿Necesitas material deportivo?</h2>
+          <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
+            <h1 className="fw-bold">¿Vas a usarlo una vez?</h1>
             <p className="lead">
-              No te gastes un pastón para usarlo solo un día,
-              <strong> ¡alquílalo aquí!</strong> Y además, saca un extra
-              <strong> prestando el tuyo.</strong>
+              
+              ¡No lo compres, alquílalo aquí!
+              Y si lo tienes tirado en casa… ¡ponlo a generar dinero!
             </p>
             <Link to={"/add-product"}>
               <Button variant="success" size="lg">
@@ -82,16 +81,15 @@ export const Banner = () => {
         <Carousel.Item>
           <img
             className="d-block w-100"
-            src={banner}
+            src={banner4}
             alt="Slide 4"
-            style={{ maxHeight: "500px", objectFit: "cover" }}
+            style={{ height: "400px", objectFit: "cover" }}
           />
-          <Carousel.Caption className="caption-style text-start text-light">
-            <h2 className="fw-bold">¿Necesitas material deportivo?</h2>
+          <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
+            <h1 className="fw-bold">Gana prestando.</h1>
             <p className="lead">
-              No te gastes un pastón para usarlo solo un día,
-              <strong> ¡alquílalo aquí!</strong> Y además, saca un extra
-              <strong> prestando el tuyo.</strong>
+              Ahorra alquilando. 
+              Todo el material deportivo que necesitas, en una sola app.
             </p>
             <Link to={"/add-product"}>
               <Button variant="success" size="lg">
