@@ -1,0 +1,30 @@
+.carousel-caption {
+    width: 50%;
+    bottom: 2.5rem;
+    max-height: 90%;
+}
+.caption-style {
+  
+  
+  background: rgba(255, 255, 255, 0.572);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.bigFont {
+  font-size: 64px;
+  line-height: 100%;
+  margin-bottom: 24px;
+}
+
+.text-banner {
+  font-size: 36px;
+  line-height: 130%;
+  margin-bottom: 56px;
+}
+.imgFooter{
+  max-width: 100px;
+
+}
