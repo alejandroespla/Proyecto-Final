@@ -59,6 +59,7 @@ export const Home = () => {
 					< Navbar />
 				</div>
 			</div>
+			<Banner className="mb-5"/>
 			{categories.map((cat, index) => (
 				<SectionCard
 					key={index}
