@@ -51,13 +51,6 @@
   color: #868686;
 }
 
-li {
-  list-style-type: none;
-  color: #868686;
-  text-align: center ;
-}
-
-
 .borderCategoria:hover  {
   text-decoration: none;
   cursor: pointer;

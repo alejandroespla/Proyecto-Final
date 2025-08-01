@@ -1,14 +1,16 @@
-import '../styles/CardProducto.css';
-export const CardProducto = () => {
+import '../styles/cardProducto.css';
+import { Link } from 'react-router-dom';
+export const CardProducto = () =>{
     return (
         <div>
-           <div className="card">
-            <img src="" alt="" />
-            <div className="card-body">
-                <h5 className="card-title">Card title</h5>
-                <p className="card-text">Texto del producto,es solo un ejemplo </p>
+            <div className="card " >
+                <img src="" className="card-img-top"/>
+                <div className="card-body">
+                    <h5 className="card-title">Nombre producto</h5>
+                    <h6 className="card-subtitle mb2 text-body-secondary">Precio del producto</h6>
+                    <p className="card-text">Esto es la descripcion del producto,añadir mas texto para completar y asegurar que se vaya hacia abajo </p>
+                </div>
             </div>
-           </div>
         </div>
     )
 }
