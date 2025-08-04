@@ -3,10 +3,14 @@ import rigoImageUrl from "../assets/img/rigo-baby.jpg";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Navbar } from "../components/Navbar.jsx"
 import { Banner } from "../components/Banner.jsx"
+
+
 import { SectionCard } from "../components/SectionCard.jsx";
 import { SubsectionCard } from "../components/SubsectionCard.jsx";
+
 import { Link } from "react-router-dom";
 import { Footer } from "../components/Footer.jsx";
+import { CardProducto } from "../components/CardProducto.jsx";
 import ciclismo from "../assets/img/ciclismo.jpg"
 import mountain_bike from "../assets/img/mountain_bike.jpg"
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg"
@@ -31,6 +35,7 @@ export const Home = () => {
 					< Navbar />
 				</div>
 			</div>
+
 			<div className="mb-5">
 				<Banner/>
 			</div>
@@ -52,7 +57,7 @@ export const Home = () => {
 					))}
 				</SectionCard>
 			))}
-			<h2>Prueba</h2>
+
 			<Footer></Footer>
 
 		</div>

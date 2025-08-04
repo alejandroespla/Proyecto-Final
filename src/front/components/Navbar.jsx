@@ -19,10 +19,7 @@ export const Navbar = () => {
 					<div className="d-none d-lg-flex align-items-center">
 						<div className="d-flex">
 							<Link to={"/Login"} ><button type="button" className="checkRegrister  btn btn-outline-success" >Login </button></Link>
-						</div>
-						<Link to={"/Login"} >
-							<button type="button" class="checkPay btn btn-success">Vender</button>
-						</Link>
+						</div>""
 						<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 							<span class="navbar-toggler-icon"></span>
 						</button>
@@ -43,11 +40,11 @@ export const Navbar = () => {
 
 							</div>
 							<nav className="nav seleccionGridCategorias" aria-label="top_categorias">
-								<a>Deportes de Pelota</a>
-								<a>Deportes de Agua</a>
-								<a>Deportes de Montaña</a>
-								<a>Deportes sobre ruedas</a>
-								<a>otros Deportes</a>
+								<a className="borderCategoria text-dark link-underline link-underline-opacity-0">Deportes de Pelota</a>
+								<a className="borderCategoria text-dark link-underline link-underline-opacity-0">Deportes de Agua</a>
+								<a className="borderCategoria text-dark link-underline link-underline-opacity-0">Deportes de Montaña</a>
+								<a className="borderCategoria text-dark link-underline link-underline-opacity-0">Deportes sobre ruedas</a>
+								<a className="borderCategoria text-dark link-underline link-underline-opacity-0">Otros Deportes</a>
 							</nav>
 						</div>
 

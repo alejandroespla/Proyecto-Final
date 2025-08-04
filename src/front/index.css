@@ -51,13 +51,8 @@
   color: #868686;
 }
 
-li {
-  list-style-type: none;
-  color: #868686;
-  text-align: center ;
-}
-
-a:hover {
+.borderCategoria:hover  {
+  text-decoration: none;
   cursor: pointer;
   border-bottom: 2px solid black;
 }
@@ -69,28 +64,3 @@ a:hover {
     margin-left: auto;
 }
 
-.caption-style {
-  
-  width: 35rem;
-  background: rgba(255, 255, 255, 0.572);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(15px);
-  border-radius: 15px;
-  padding: 20px;
-}
-
-.bigFont {
-  font-size: 64px;
-  line-height: 100%;
-  margin-bottom: 24px;
-}
-
-.text-banner {
-  font-size: 36px;
-  line-height: 130%;
-  margin-bottom: 56px;
-}
-.imgFooter{
-  max-width: 100px;
-
-}
