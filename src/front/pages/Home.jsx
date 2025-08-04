@@ -4,7 +4,6 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Navbar } from "../components/Navbar.jsx"
 import { Banner } from "../components/Banner.jsx"
 
-import { CardProducto } from "../components/CardProducto.jsx";
 
 import { SectionCard } from "../components/SectionCard.jsx";
 import { SubsectionCard } from "../components/SubsectionCard.jsx";
@@ -36,8 +35,6 @@ export const Home = () => {
 					< Navbar />
 				</div>
 			</div>
-
-			<div><Banner /></div>
 
 			<div className="mb-5">
 				<Banner/>
