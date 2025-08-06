@@ -43,7 +43,7 @@ export const Navbar = () => {
         } else {
             //Si no hay token pero si habia usuario guardado, lo eliminamos
             localStorage.removeItem("user");
-            dispatch({ type: "currentUser", payload: null });
+            dispatch({ type: "set_current_user", payload: null });
         }
     }, []);
 

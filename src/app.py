@@ -2,9 +2,8 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
-from flask import Flask, request, jsonify, url_for, send_from_directory
+from flask import Flask, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
-from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
 from flask_jwt_extended import JWTManager
 
@@ -18,6 +17,7 @@ from api.routes.user import api_user
 
 # Importar el blueprint de autenticacion
 from api.routes.autentificacion import auth
+from api.routes.recuperar_password import api_reset  # Importa tu blueprint de password reset
 from api.admin import setup_admin
 from api.commands import setup_commands
 
@@ -49,6 +49,7 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
 
