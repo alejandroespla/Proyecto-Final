@@ -56,7 +56,7 @@ export const ForgotPassword = () => {
 	};
 
 	return (
-		<div style={currentBackground}>
+		<div style={currentBackground} className="d-flex justify-content-start align-items-start p-5">
 			<div className="card shadow-sm p-5 bg-white bg-opacity-75" style={{ maxWidth: "500px", width: "100%", borderRadius: "24px" }}>
 				<Link to={"/"}>
 					<img className="mx-auto d-block mb-3"
