@@ -63,13 +63,23 @@ export const Navbar = () => {
 
 					<div className="d-none d-lg-flex align-items-center">
 						{store.currentUser ? (
-							<Link to="/user">
-								<img
-									src="https://ui-avatars.com/api/?name=Usuario" // foto del user
-									alt="Perfil"
-									style={{ borderRadius: "50%", cursor: "pointer" }}
-								/>
-							</Link>
+							<div className="d-flex align-items-center gap-2">
+								<Link to="/add-product">
+								<button 
+									type="button" 
+									className="checkRegrister btn btn-outline-success"
+									style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "150px" }}
+								>Agregar</button>
+								</Link>
+								<Link to="/user">
+									<img
+										src="https://ui-avatars.com/api/?name=Usuario" // foto del user
+										alt="Perfil"
+										style={{ borderRadius: "50%", cursor: "pointer" }}
+									/>
+								</Link>
+							</div>
+
 						) : (
 							//Si NO esta logueado, mostrar boton de login
 							<Link to={"/Login"}>

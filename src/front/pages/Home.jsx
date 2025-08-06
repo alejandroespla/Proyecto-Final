@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Navbar } from "../components/Navbar.jsx"
 import { Banner } from "../components/Banner.jsx"
-
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 import { SectionCard } from "../components/SectionCard.jsx";
 import { SubsectionCard } from "../components/SubsectionCard.jsx";
@@ -19,6 +18,7 @@ import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg"
 export const Home = () => {
 
 	const [categories, setCategories] = useState([]);
+	const { store, dispatch } = useGlobalReducer();
 
 	useEffect(() => {
 		fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/products`) 
@@ -37,7 +37,11 @@ export const Home = () => {
 			</div>
 
 			<div className="mb-5">
-				<Banner/>
+				{store.currentUser ?(
+					<div></div>
+				):(
+					<Banner/>
+				)}
 			</div>
 			
 			{categories.map((cat, index) => (

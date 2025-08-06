@@ -49,7 +49,14 @@ export const Login = () => {
 
 			console.log("Token recibido:", data.token);
 			localStorage.setItem("jwt-token", data.token);
-			window.location.href = "/"
+
+			if(res.ok){
+				dispatch({ type: "set_current_user", payload: data.user });
+				window.location.href = "/"
+			}else {
+				alert(data.error || "Error en el login");
+			}
+
 			/*
 			if (res.ok) {
 				// 1. Primero guarda en localStorage de forma síncrona
