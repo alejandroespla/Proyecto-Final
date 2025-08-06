@@ -35,3 +35,12 @@ def setup_commands(app):
     @app.cli.command("insert-test-data")
     def insert_test_data():
         pass
+
+    @app.cli.command("insert-test-products")
+    def insert_test_products():
+        product1 = Product(name="Balón de fútbol", description="Balón profesional FIFA", price=29.99)
+        product2 = Product(name="Raqueta de tenis", description="Raqueta ligera de grafito", price=79.99)
+
+        db.session.add_all([product1, product2])
+        db.session.commit()
+        print("Productos de prueba insertados")
