@@ -52,7 +52,7 @@ const RegisterForm = () => {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await fetch('https://probable-waffle-64p76qv66pcr7v7-3001.app.github.dev/api/user/register', {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(form),

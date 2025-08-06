@@ -27,7 +27,7 @@ export const Login = () => {
 		minHeight: "100vh"
 	};
 
-	const handleLogin = (e) => {
+	const handleLogin = async (e) => {
 		e.preventDefault();
 		const email = e.target.email.value.trim();
 		const password = e.target.password.value;
@@ -51,9 +51,32 @@ export const Login = () => {
 
 		if (!valid) return;
 
-		console.log("Iniciando sesión con:", { email, password });
+		// Simulación de login (reemplaza esto con tu API real)
+		try {
+			const response = await fetch("https://tu-api.com/api/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({ email, password })
+			});
 
-		// Aquí va tu lógica real de login (fetch, dispatch, navigate, etc)
+			const data = await response.json();
+
+			if (response.ok) {
+				// Este type SÍ EXISTE en tu reducer
+				dispatch({
+					type: "set_current_user",
+					payload: data.user // asegúrate de que esto sea el objeto usuario
+				});
+				console.log("Usuario logueado:", data.user);
+			} else {
+				alert(data.message || "Credenciales incorrectas.");
+			}
+		} catch (error) {
+			console.error("Error en login:", error);
+			alert("Error de red al intentar iniciar sesión.");
+		}
 	};
 
 	return (
@@ -77,7 +100,6 @@ export const Login = () => {
 							id="email"
 							name="email"
 							placeholder="email@example.com"
-							required
 						/>
 						{errors.email && <div className="invalid-feedback">{errors.email}</div>}
 					</div>
@@ -89,7 +111,6 @@ export const Login = () => {
 							id="password"
 							name="password"
 							placeholder="••••••••"
-							required
 						/>
 						{errors.password && <div className="invalid-feedback">{errors.password}</div>}
 
