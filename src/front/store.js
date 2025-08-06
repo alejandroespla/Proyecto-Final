@@ -1,3 +1,5 @@
+
+
 export const initialStore = () => {
   return {
     currentUser: null, // se llena después del login

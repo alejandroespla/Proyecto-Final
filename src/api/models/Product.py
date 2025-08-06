@@ -1,5 +1,5 @@
-from sqlalchemy import String, Boolean
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, Boolean, Integer, Float, Column, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from api.database.db import db
 from api.models.User import User
 
@@ -17,7 +17,7 @@ class Product(db.Model):
     user = relationship("User", backref="products")
 
     def serialize(self):
-        return {
+            return {
             "id": self.id,
             "title": self.title,
             "description": self.description,

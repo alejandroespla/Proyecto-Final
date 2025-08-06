@@ -21,7 +21,7 @@ export const Home = () => {
 	const [categories, setCategories] = useState([]);
 
 	useEffect(() => {
-		fetch("http://localhost:5000/api/products") // hay que crear ese endpoint en el backend
+		fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/products`) 
 			.then(res => res.json())
 			.then(data => setCategories(data))
 			.catch(err => console.error(err));
