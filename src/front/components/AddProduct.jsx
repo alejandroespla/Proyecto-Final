@@ -49,7 +49,7 @@ export const AddProduct = () => {
 
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/set-products`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/set-products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

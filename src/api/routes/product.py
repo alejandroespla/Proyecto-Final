@@ -1,8 +1,9 @@
-from flask import jsonify, Blueprint
+from flask import Flask, request, jsonify, Blueprint
 from api.models.Product import Product
 from api.database.db import db
 from api.models.User import User
 from flask_cors import CORS
+
 api_product = Blueprint('api_product', __name__)
 
 CORS (api_product)

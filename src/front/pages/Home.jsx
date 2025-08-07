@@ -48,7 +48,7 @@ export const Home = () => {
 				<SectionCard
 					key={index}
 					title={cat.category}
-					image="https://via.placeholder.com/400x400" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
+					image="https://s3.amazonaws.com/images.ecwid.com/images/39796239/2109448797.jpg" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
 					reverse={index % 2 !== 0} //Para alternar la iamgen de las Categorias (En principio debe funcionar ajjaajjaja)
 				>
 					{cat.products.map((product) => (
