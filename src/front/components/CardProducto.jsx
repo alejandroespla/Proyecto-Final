@@ -1,5 +1,8 @@
 import '../styles/cardProducto.css';
 import { Link } from 'react-router-dom';
+
+
+
 export const CardProducto = () => {
     return (
         <div className=' container container-xxl'>

@@ -2,7 +2,7 @@ import React, { useState} from "react";
 
 
 export const AddProduct = () => {
-  const currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
+  const currentUser = JSON.parse(localStorage.getItem("user"));
 
   const [form, setForm] = useState({
     title: "",
@@ -49,7 +49,7 @@ export const AddProduct = () => {
 
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/products`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/set-products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
