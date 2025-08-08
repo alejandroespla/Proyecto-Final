@@ -8,8 +8,9 @@ export const ResetPassword = () => {
     const [passwordError, setPasswordError] = useState(null);
 
     const navigate = useNavigate();
+    const query = new URLSearchParams(useLocation().search);
+    const token = query.get("token"); // Captura el token
 
-    // Lista de fondos aleatorios
     const backgrounds = [
         "https://static.nationalgeographic.es/files/styles/image_3200/public/gettyimages-1272468011.webp?w=1600&h=1068",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEPT9_GDJ1885ZHKbBP0AYr1dCFIcGJF9o8w&s",
@@ -17,15 +18,10 @@ export const ResetPassword = () => {
         "https://thewfa.co.uk/wp-content/uploads/2020/07/social-preview.jpg"
     ];
 
-    // Selecciona un fondo aleatorio al cargar
     useEffect(() => {
         const randomIndex = Math.floor(Math.random() * backgrounds.length);
         setBackgroundUrl(backgrounds[randomIndex]);
     }, []);
-
-    // Extraer token de la URL (?token=xxx)
-    const query = new URLSearchParams(useLocation().search);
-    const token = query.get("token");
 
     const currentBackground = {
         backgroundImage: `url(${backgroundUrl})`,
@@ -44,8 +40,12 @@ export const ResetPassword = () => {
         setError(null);
         setPasswordError(null);
 
-        const password = e.target.password.value;
+        if (!token) {
+            setError("Token inválido o inexistente. Solicita un nuevo enlace.");
+            return;
+        }
 
+        const password = e.target.password.value;
         if (password.length < 6) {
             setPasswordError("La contraseña debe tener al menos 6 caracteres");
             return;
@@ -56,7 +56,6 @@ export const ResetPassword = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ token, password }),
-                mode: "cors",
             });
 
             const data = await response.json();
