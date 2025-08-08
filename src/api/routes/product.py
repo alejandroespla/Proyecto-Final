@@ -6,7 +6,8 @@ from flask_cors import CORS
 
 api_product = Blueprint('api_product', __name__)
 
-CORS (api_product)
+CORS(api_product)
+
 
 @api_product.route("/products", methods=["GET"])
 def get_products_grouped():
@@ -47,10 +48,11 @@ def get_products_grouped():
 def create_product():
     data = request.get_json()
 
-    required = ["title", "description", "category", "subcategory", "price", "user_id"]
+    required = ["title", "description", "category",
+                "subcategory", "price", "user_id"]
     if not all(k in data for k in required):
         return jsonify({"error": "Faltan campos obligatorios"}), 400
-    
+
     # Verifica que el user_id exista en la tabla User
     user = User.query.get(data['user_id'])
     if not user:
@@ -70,3 +72,11 @@ def create_product():
     db.session.commit()
 
     return jsonify(product.serialize()), 201
+
+
+@api_product.route("/product/<int:product_id>", methods=["GET"])
+def get_product(product_id):
+    product = Product.query.get(product_id)
+    if not product:
+        return jsonify({"error": "Producto no encontrado"}), 404
+    return jsonify(product.serialize()), 200

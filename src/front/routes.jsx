@@ -14,6 +14,7 @@ import { Login } from "./pages/Login";
 import Register from "./pages/Register";
 
 import NewProduct from "./pages/NewProduct";
+import { Product } from "./components/CardProducto";
 
 
 export const router = createBrowserRouter(
@@ -39,6 +40,7 @@ export const router = createBrowserRouter(
         <Route path="/register" element={<Register />} />
 
         <Route path="/add-product" element={<NewProduct />} />
+        <Route path="/product/:id" element={<Product/>}/>
       </Route>
       </>
     )
