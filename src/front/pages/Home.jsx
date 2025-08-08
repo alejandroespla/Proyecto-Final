@@ -4,6 +4,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Navbar } from "../components/Navbar.jsx"
 import { Banner } from "../components/Banner.jsx"
 
+
 import { SectionCard } from "../components/SectionCard.jsx";
 import { SubsectionCard } from "../components/SubsectionCard.jsx";
 
@@ -20,41 +21,12 @@ export const Home = () => {
 	const [categories, setCategories] = useState([]);
 
 	useEffect(() => {
-		fetch("http://localhost:5000/api/products") // hay que crear ese endpoint en el backend
+		fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/products`) 
 			.then(res => res.json())
 			.then(data => setCategories(data))
 			.catch(err => console.error(err));
 	}, []); 
 
-	/*
-		const { store, dispatch } = useGlobalReducer()
-	
-		const loadMessage = async () => {
-			try {
-				const backendUrl = import.meta.env.VITE_BACKEND_URL
-	
-				if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
-	
-				const response = await fetch(backendUrl + "/api/hello")
-				const data = await response.json()
-	
-				if (response.ok) dispatch({ type: "set_hello", payload: data.message })
-	
-				return data
-	
-			} catch (error) {
-				if (error.message) throw new Error(
-					`Could not fetch the message from the backend.
-					Please check if the backend is running and the backend port is public.`
-				);
-			}
-	
-		}
-	
-		useEffect(() => {
-			loadMessage()
-		}, [])
-	*/
 
 	return (
 		<div>
@@ -62,8 +34,14 @@ export const Home = () => {
 				<div className="">
 					< Navbar />
 				</div>
+
 			</div> 
 			<div className="mb-5"> 
+=======
+			</div>
+
+			<div className="mb-5">
+
 				<Banner/>
 			</div>
 			

@@ -11,7 +11,7 @@ class Product(db.Model):
     subcategory = Column(String(120), nullable=False)
     price = Column(Float, nullable=False)
     location = Column(String(120))
-    # user_id = Column(Integer, ForeignKey('user.id'), nullable=False) ----> AGREGAR CUANDO ESTE CREADO EL USUARIO
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False) #----> AGREGAR CUANDO ESTE CREADO EL USUARIO
 
     user = relationship("User", backref="products")
 
@@ -24,6 +24,6 @@ class Product(db.Model):
             "subcategory": self.subcategory,
             "price": self.price,
             "location": self.location,
-            # "user_id": self.user_id, ----> AGREGAR CUANDO ESTE CREADO EL USUARIO
+            "user_id": self.user_id, #----> AGREGAR CUANDO ESTE CREADO EL USUARIO
             "username": self.user.username
         }

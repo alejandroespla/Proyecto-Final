@@ -52,7 +52,7 @@ const RegisterForm = () => {
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length === 0) {
       try {
-        const response = await fetch('https://automatic-broccoli-6xqxgpqr6jj3x77-3001.app.github.dev/api/user/register', {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(form),

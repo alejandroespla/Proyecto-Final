@@ -49,7 +49,7 @@ export const AddProduct = () => {
 
     try {
       setLoading(true);
-      const response = await fetch("https://probable-waffle-64p76qv66pcr7v7-3001.app.github.dev/api/products", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

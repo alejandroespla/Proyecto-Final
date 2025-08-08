@@ -60,7 +60,7 @@ export const SectionCard = ({ title, image, reverse = false, children }) => {
             </div>
           </div>
 
-          {/* Puntos de navegación */}
+          {/* Puntos de navegacion */}
           <div className="dots">
             {Array.from({ length: totalPages }).map((_, i) => (
               <span
