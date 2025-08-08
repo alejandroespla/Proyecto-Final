@@ -16,6 +16,10 @@ import Register from "./pages/Register";
 import NewProduct from "./pages/NewProduct";
 import { Product } from "./components/CardProducto";
 
+import { ForgotPassword } from "./pages/RecuperarPassword.jsx";
+
+import ProductDetail from "./pages/ProductDetail.jsx";
+
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -38,6 +42,8 @@ export const router = createBrowserRouter(
         <Route path="/login" element={<Login />} />
         
         <Route path="/register" element={<Register />} />
+
+         <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route path="/add-product" element={<NewProduct />} />
         <Route path="/product/:id" element={<Product/>}/>
