@@ -25,7 +25,7 @@ export const Home = () => {
 			.then(res => res.json())
 			.then(data => setCategories(data))
 			.catch(err => console.error(err));
-	}, []);
+	}, []); 
 
 
 	return (
@@ -34,6 +34,10 @@ export const Home = () => {
 				<div className="">
 					< Navbar />
 				</div>
+
+			</div> 
+			<div className="mb-5"> 
+=======
 			</div>
 
 			<div className="mb-5">
@@ -42,6 +46,8 @@ export const Home = () => {
 				) : (
 					<Banner />
 				)}
+
+				<Banner/>
 			</div>
 
 			{categories.map((cat, index) => (
@@ -62,7 +68,7 @@ export const Home = () => {
 					))}
 				</SectionCard>
 			))}
-
+			<CardProducto></CardProducto>
 			<Footer></Footer>
 
 		</div>

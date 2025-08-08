@@ -1,0 +1,38 @@
+.seo-secction{
+  gap: 32px;
+}
+.product-card {
+  width: 400px;
+  height: 520px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden; /* Para que las imágenes no sobresalgan */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  margin: 10px;
+}
+
+.carousel-item img {
+  height: 400px;
+}
+.select-card {
+  margin: 0;
+}
+.select-card:hover {
+  cursor: pointer;
+
+}
+
+.card-title {
+  display: flex;
+
+  padding: 8px 10px 10px 10px;
+  justify-content: space-between;
+}
+.card-text {
+  display: block;
+  padding: 5px 10px 0px 10px;
+  
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
