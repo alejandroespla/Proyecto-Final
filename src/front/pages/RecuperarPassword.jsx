@@ -5,6 +5,7 @@ export const ForgotPassword = () => {
 	const [backgroundUrl, setBackgroundUrl] = useState("");
 	const [message, setMessage] = useState(null);
 	const [error, setError] = useState(null);
+	const [emailError, setEmailError] = useState(null);
 
 	const backgrounds = [
 		"https://static.nationalgeographic.es/files/styles/image_3200/public/gettyimages-1272468011.webp?w=1600&h=1068",
@@ -33,21 +34,29 @@ export const ForgotPassword = () => {
 		e.preventDefault();
 		setMessage(null);
 		setError(null);
+		setEmailError(null);
 
 		const email = e.target.email.value;
 
 		try {
-			const response = await fetch("https://probable-waffle-64p76qv66pcr7v7-3001.app.github.dev/api/user/password-reset", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ email }),
-			});
+			const response = await fetch( "https://probable-waffle-64p76qv66pcr7v7-3001.app.github.dev/api/password-reset",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ email }),
+				});
 
 			if (response.ok) {
 				setMessage("Te hemos enviado un enlace de recuperación al correo proporcionado.");
 			} else {
 				const data = await response.json();
-				setError(data.message || "No se pudo procesar la solicitud.");
+				if (response.status === 404) {
+					setEmailError(data.message || "Email no registrado");
+				} else {
+					setError(data.message || "No se pudo procesar la solicitud.");
+				}
 			}
 		} catch (err) {
 			setError("Error al conectar con el servidor. Intenta más tarde.");
@@ -69,7 +78,18 @@ export const ForgotPassword = () => {
 				<form onSubmit={handleSubmit}>
 					<div className="mb-3">
 						<label htmlFor="email" className="form-label">Email</label>
-						<input type="email" className="form-control" id="email" name="email" placeholder="email@example.com" required />
+						<input
+							type="email"
+							className="form-control"
+							id="email"
+							name="email"
+							placeholder="email@example.com"
+							required
+							onChange={() => setEmailError(null)}
+						/>
+						{emailError && (
+							<div className="text-danger small mt-1">{emailError}</div>
+						)}
 					</div>
 					<div className="d-grid my-4">
 						<button type="submit" className="btn" style={{ backgroundColor: "#2E676A", border: "none", borderRadius: "8px", color: "#ffffff" }}>
