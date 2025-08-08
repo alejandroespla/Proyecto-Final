@@ -1,5 +1,3 @@
-
-
 export const initialStore = () => {
   return {
     currentUser: null, // se llena después del login
@@ -29,6 +27,7 @@ export default function storeReducer(store, action = {}) {
       };
 
     default:
-      throw Error("Unknown action.");
+      console.error("Unknown action:", action.type);
+      return store;
   }
 }

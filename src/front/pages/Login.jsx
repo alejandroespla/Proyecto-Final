@@ -64,10 +64,9 @@ export const Login = () => {
 			const data = await response.json();
 
 			if (response.ok) {
-				// Este type SÍ EXISTE en tu reducer
 				dispatch({
 					type: "set_current_user",
-					payload: data.user // asegúrate de que esto sea el objeto usuario
+					payload: data.user
 				});
 				console.log("Usuario logueado:", data.user);
 			} else {
@@ -101,7 +100,11 @@ export const Login = () => {
 							name="email"
 							placeholder="email@example.com"
 						/>
-						{errors.email && <div className="invalid-feedback">{errors.email}</div>}
+						{errors.email && (
+							<div className="invalid-feedback">
+								{errors.email}
+							</div>
+						)}
 					</div>
 					<div className="mb-3">
 						<label htmlFor="password" className="form-label">Password</label>
@@ -112,7 +115,11 @@ export const Login = () => {
 							name="password"
 							placeholder="••••••••"
 						/>
-						{errors.password && <div className="invalid-feedback">{errors.password}</div>}
+						{errors.password && (
+							<div className="invalid-feedback">
+								{errors.password}
+							</div>
+						)}
 
 						<div className="mt-2 text-center">
 							<Link to="/forgot-password" className="text-decoration-none">
