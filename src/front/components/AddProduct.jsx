@@ -80,7 +80,7 @@ export const AddProduct = () => {
 
   return (
     <div className="container">
-      <h2 className="my-5">Publicar nuevo producto</h2>
+     
       <form onSubmit={handleSubmit} className="d-flex flex-column mb-5">
         <input
           type="text"
