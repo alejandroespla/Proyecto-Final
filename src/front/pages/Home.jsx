@@ -4,8 +4,6 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Navbar } from "../components/Navbar.jsx"
 import { Banner } from "../components/Banner.jsx"
 
-import { CardProducto } from "../components/CardProducto.jsx";
-
 import { SectionCard } from "../components/SectionCard.jsx";
 import { SubsectionCard } from "../components/SubsectionCard.jsx";
 
@@ -26,7 +24,7 @@ export const Home = () => {
 			.then(res => res.json())
 			.then(data => setCategories(data))
 			.catch(err => console.error(err));
-	}, []);
+	}, []); 
 
 	/*
 		const { store, dispatch } = useGlobalReducer()
@@ -64,11 +62,8 @@ export const Home = () => {
 				<div className="">
 					< Navbar />
 				</div>
-			</div>
-
-			<div><Banner /></div>
-
-			<div className="mb-5">
+			</div> 
+			<div className="mb-5"> 
 				<Banner/>
 			</div>
 			
@@ -78,6 +73,7 @@ export const Home = () => {
 					title={cat.category}
 					image="https://via.placeholder.com/400x400" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
 					reverse={index % 2 !== 0} //Para alternar la iamgen de las Categorias (En principio debe funcionar ajjaajjaja)
+					
 				>
 					{cat.products.map((product) => (
 						<SubsectionCard
@@ -89,7 +85,7 @@ export const Home = () => {
 					))}
 				</SectionCard>
 			))}
-
+			<CardProducto></CardProducto>
 			<Footer></Footer>
 
 		</div>

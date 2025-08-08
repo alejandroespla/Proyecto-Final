@@ -19,7 +19,7 @@ export const Navbar = () => {
 					<div className="d-none d-lg-flex align-items-center">
 						<div className="d-flex">
 							<Link to={"/Login"} ><button type="button" className="checkRegrister  btn btn-outline-success" >Login </button></Link>
-						</div>""
+						</div>
 						<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
 							<span class="navbar-toggler-icon"></span>
 						</button>
