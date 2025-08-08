@@ -51,60 +51,24 @@ export const Login = () => {
 
 		if (!valid) return;
 
-		// Simulación de login (reemplaza esto con tu API real)
 		try {
-			const response = await fetch("https://tu-api.com/api/login", {
+			const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
+				headers: { "Content-Type": "application/json"},
 				body: JSON.stringify({ email, password })
 			});
 
 			const data = await response.json();
 
 			if (response.ok) {
-				// Este type SÍ EXISTE en tu reducer
-				dispatch({
-					type: "set_current_user",
-					payload: data.user // asegúrate de que esto sea el objeto usuario
-				});
+				dispatch({ type: "set_current_user", payload: data.user });
 				console.log("Usuario logueado:", data.user);
-			const data = await res.json();
-			console.log("Respuesta del backend:", data);
+				//const data = await res.json();
+				console.log("Respuesta del backend:", data);
 
-			console.log("Token recibido:", data.token);
-			localStorage.setItem("jwt-token", data.token);
-
-			if(res.ok){
-				dispatch({ type: "set_current_user", payload: data.user });
+				console.log("Token recibido:", data.token);
+				localStorage.setItem("jwt-token", data.token);
 				window.location.href = "/"
-			}else {
-				alert(data.error || "Error en el login");
-			}
-
-			/*
-			if (res.ok) {
-				// 1. Primero guarda en localStorage de forma síncrona
-				window.localStorage.setItem("token", data.token);
-				window.localStorage.setItem("user", JSON.stringify(data.user));
-				
-				// 2. Espera un ciclo de evento completo
-				await new Promise(resolve => setTimeout(resolve, 0));
-				
-				// 3. Verifica que los datos se guardaron
-				console.log("Verificación localStorage:", {
-					token: window.localStorage.getItem("token"),
-					user: window.localStorage.getItem("user")
-				});
-				
-				// 4. Actualiza el estado global
-				dispatch({ type: "set_current_user", payload: data.user });
-				
-				// 5. Redirecciona usando window.location en lugar de navigate
-				window.location.href = "/"; // Esto evita problemas con React Router
-			} else {
-				alert(data.message || "Credenciales incorrectas.");
 			}
 		} catch (error) {
 			console.error("Error en login:", error);
