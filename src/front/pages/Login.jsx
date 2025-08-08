@@ -63,6 +63,16 @@ export const Login = () => {
 
 			const data = await response.json();
 
+			if (response.ok) {
+				// Este type SÍ EXISTE en tu reducer
+				dispatch({
+					type: "set_current_user",
+					payload: data.user // asegúrate de que esto sea el objeto usuario
+				});
+				console.log("Usuario logueado:", data.user);
+			const data = await res.json();
+			console.log("Respuesta del backend:", data);
+
 			console.log("Token recibido:", data.token);
 			localStorage.setItem("jwt-token", data.token);
 
@@ -87,7 +97,12 @@ export const Login = () => {
 					token: window.localStorage.getItem("token"),
 					user: window.localStorage.getItem("user")
 				});
-				console.log("Usuario logueado:", data.user);
+				
+				// 4. Actualiza el estado global
+				dispatch({ type: "set_current_user", payload: data.user });
+				
+				// 5. Redirecciona usando window.location en lugar de navigate
+				window.location.href = "/"; // Esto evita problemas con React Router
 			} else {
 				alert(data.message || "Credenciales incorrectas.");
 			}
