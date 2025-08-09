@@ -7,45 +7,45 @@ export const Navbar = () => {
 
 	//Al cargar el navbar, revisamos si hay un usuario en localStorage
 	//Buscar otra solucion, porque cada vez que se cargue el navbar en cada pagina
-	    const { store, dispatch } = useGlobalReducer();
+	const { store, dispatch } = useGlobalReducer();
 
-    useEffect(() => {
-        const token = localStorage.getItem("jwt-token");
+	useEffect(() => {
+		const token = localStorage.getItem("jwt-token");
 		console.log("Token que envío:", token);
-		
 
-        if (token) {
-            //Validar el token contra el backend
-            fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/user`, {
-                headers: {
-                    Authorization: `Bearer ${token}` // Se manda el token en el header
-                }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.id) {
-                        //Si el token es valido, se guarda el usuario en el estado global
-                        dispatch({ type: "set_current_user", payload: data });
-                        localStorage.setItem("user", JSON.stringify(data));
-                    } else {
-                        // Si el token no es valido, se limpia la sesion
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("user");
-                        dispatch({ type: "set_current_user", payload: null });
-                    }
-                })
-                .catch(err => {
-                    console.error("Error al validar token:", err);
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("user");
-                    dispatch({ type: "set_current_user", payload: null });
-                });
-        } else {
-            //Si no hay token pero si habia usuario guardado, lo eliminamos
-            localStorage.removeItem("user");
-            dispatch({ type: "set_current_user", payload: null });
-        }
-    }, []);
+
+		if (token) {
+			//Validar el token contra el backend
+			fetch(`${import.meta.env.VITE_BACKEND_URL}auth/user`, {
+				headers: {
+					Authorization: `Bearer ${token}` // Se manda el token en el header
+				}
+			})
+				.then(res => res.json())
+				.then(data => {
+					if (data.id) {
+						//Si el token es valido, se guarda el usuario en el estado global
+						dispatch({ type: "set_current_user", payload: data });
+						localStorage.setItem("user", JSON.stringify(data));
+					} else {
+						// Si el token no es valido, se limpia la sesion
+						localStorage.removeItem("token");
+						localStorage.removeItem("user");
+						dispatch({ type: "set_current_user", payload: null });
+					}
+				})
+				.catch(err => {
+					console.error("Error al validar token:", err);
+					localStorage.removeItem("token");
+					localStorage.removeItem("user");
+					dispatch({ type: "set_current_user", payload: null });
+				});
+		} else {
+			//Si no hay token pero si habia usuario guardado, lo eliminamos
+			localStorage.removeItem("user");
+			dispatch({ type: "set_current_user", payload: null });
+		}
+	}, []);
 
 	return (
 		<div>
@@ -63,13 +63,23 @@ export const Navbar = () => {
 
 					<div className="d-none d-lg-flex align-items-center">
 						{store.currentUser ? (
-							<Link to="/user">
-								<img
-									src="https://ui-avatars.com/api/?name=Usuario" // foto del user
-									alt="Perfil"
-									style={{ borderRadius: "50%", cursor: "pointer" }}
-								/>
-							</Link>
+							<div className="d-flex align-items-center gap-2">
+								<Link to="/add-product">
+									<button
+										type="button"
+										className="checkRegrister btn btn-outline-success"
+										style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: "150px" }}
+									>Agregar</button>
+								</Link>
+								<Link to="/user">
+									<img
+										src="https://ui-avatars.com/api/?name=Usuario" // foto del user
+										alt="Perfil"
+										style={{ borderRadius: "50%", cursor: "pointer" }}
+									/>
+								</Link>
+							</div>
+
 						) : (
 							//Si NO esta logueado, mostrar boton de login
 							<Link to={"/Login"}>

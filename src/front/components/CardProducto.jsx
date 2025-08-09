@@ -1,16 +1,62 @@
-import '../styles/cardProducto.css';
-import { Link } from 'react-router-dom';
-export const CardProducto = () =>{
-    return (
-        <div>
-            <div className="card " >
-                <img src="" className="card-img-top"/>
-                <div className="card-body">
-                    <h5 className="card-title">Nombre producto</h5>
-                    <h6 className="card-subtitle mb2 text-body-secondary">Precio del producto</h6>
-                    <p className="card-text">Esto es la descripcion del producto,añadir mas texto para completar y asegurar que se vaya hacia abajo </p>
-                </div>
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Navbar } from "../components/Navbar.jsx";
+import { Footer } from "../components/Footer.jsx";
+
+export const CardProducto = () => {
+  const { id } = useParams();
+  const [prod, setProd] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`);
+        const data = await res.json();
+        setProd(data);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [id]);
+
+  if (loading) return <div className="container my-5">Cargando producto…</div>;
+  if (!prod) return <div className="container my-5">Producto no encontrado</div>;
+
+  return (
+    <div>
+      <Navbar />
+      <div className="container my-5">
+        <div className="row g-4">
+          <div className="col-md-6">
+            <img
+              src={prod.image || "https://via.placeholder.com/800x600"}
+              alt={prod.title}
+              className="img-fluid rounded shadow-sm"
+            />
+          </div>
+          <div className="col-md-6">
+            <h2 className="mb-2">{prod.title}</h2>
+            <p className="text-muted">{prod.category} / {prod.subcategory}</p>
+            <h3 className="text-danger mb-3">{prod.price} €/día</h3>
+
+            <p className="mb-4">{prod.description}</p>
+
+            <div className="d-flex flex-column gap-1 mb-4">
+              <span><strong>Ubicación:</strong> {prod.location || "—"}</span>
+              <span><strong>Publicado por:</strong> {prod.username}</span>
             </div>
+
+            <div className="d-flex gap-2">
+              <button className="btn btn-primary">Reservar</button>
+              <button className="btn btn-outline-secondary">Contactar</button>
+            </div>
+          </div>
         </div>
-    )
-}
+      </div>
+      <Footer />
+    </div>
+  );
+};

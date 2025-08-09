@@ -1,21 +1,26 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 import "../styles/subsectioncard.css";
 
-export const SubsectionCard = ({ image, title, price, oldPrice, discount }) => {
+export const SubsectionCard = ({ id, image, title, price, oldPrice, discount }) => {
+  const navigate = useNavigate();
+  const { store } = useGlobalReducer();
+
+  const handleClick = () => {
+    if (store?.currentUser) navigate(`/product/${id}`);
+    else navigate("/login");
+  };
+
   return (
-    <div className="sub-card shadow-sm">
-      {/* Imagen del producto */}
+    <div className="sub-card shadow-sm" onClick={handleClick} style={{ cursor: "pointer" }}>
       <div className="sub-card-img">
         <img src={image} alt={title} />
       </div>
-
-      {/* Información del producto */}
       <div className="sub-card-body">
         <h6 className="sub-card-title">{title}</h6>
-
         <div className="sub-card-price">
           <span className="current-price">{price}</span>
-          {/* Esto no es del todo necesario, por si en implementaciones futuras se quiere poner descuentos y precios anteriores */}
           {oldPrice && <span className="old-price">{oldPrice}</span>}
           {discount && <span className="discount">-{discount}%</span>}
         </div>

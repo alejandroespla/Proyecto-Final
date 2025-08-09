@@ -10,6 +10,8 @@ import { Single } from "./pages/Single";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
 import NewProduct from "./pages/NewProduct";
+import { CardProducto } from "./components/CardProducto";
+
 import { ForgotPassword } from "./pages/RecuperarPassword.jsx";
 import { ResetPassword } from "./pages/ResetearPassword.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
@@ -29,7 +31,7 @@ export const router = createBrowserRouter(
         <Route element={<ResetPassword />} path="/reset-password" />
 
         <Route path="/add-product" element={<NewProduct />} />
-          
+        <Route path="/product/:id" element={<CardProducto/>}/>
       </Route>
     </>
   )

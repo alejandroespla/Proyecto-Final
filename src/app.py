@@ -7,7 +7,7 @@ from flask_migrate import Migrate
 from api.utils import APIException, generate_sitemap
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-from flask_mail import Mail  # <-- Importa Mail aquí
+from flask_mail import Mail  
 
 from api.database.db import db
 from api.routes.product import api_product
