@@ -9,7 +9,7 @@ export function LogoutButton() {
     localStorage.removeItem('token');
 
     // Redirigir a login o página pública
-    navigate('/login');
+    navigate('/');
   };
 
   return (

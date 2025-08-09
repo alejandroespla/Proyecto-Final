@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AddProduct } from "./AddProduct";
+import "../styles/modal.css";
 
 export const AddProductModal = () => {
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +21,11 @@ export const AddProductModal = () => {
       {showModal && (
         <div
           className="modal fade show"
-          style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+          style={{
+            display: "block",
+            backdropFilter: "blur(8px)",
+            backgroundColor: "rgba(159, 159, 159, 0.6)"
+          }}
           tabIndex="-1"
           role="dialog"
         >
@@ -29,8 +34,8 @@ export const AddProductModal = () => {
             role="document"
           >
             <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Publicar nuevo producto</h5>
+              <div className="modal-title ">
+                <h3 className="mt-4" style={{ width: "100%",}}>Publicar nuevo producto</h3>
                 <button
                   type="button"
                   className="btn-close"
@@ -38,12 +43,12 @@ export const AddProductModal = () => {
                   aria-label="Close"
                 />
               </div>
-              <div className="modal-body">
+              <div className="modal-style">
                 <AddProduct />
               </div>
             </div>
           </div>
-        </div>
+        </div >
       )}
     </>
   );
