@@ -6,13 +6,15 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 
 import { SectionCard } from "../components/SectionCard.jsx";
 import { SubsectionCard } from "../components/SubsectionCard.jsx";
-
 import { Link } from "react-router-dom";
 import { Footer } from "../components/Footer.jsx";
-import ciclismo from "../assets/img/ciclismo.jpg"
-import mountain_bike from "../assets/img/mountain_bike.jpg"
-import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg"
+import { CardProducto } from "../components/CardProducto.jsx";
+import ciclismo from "../assets/img/ciclismo.jpg";
+import mountain_bike from "../assets/img/mountain_bike.jpg";
+import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
 
+// 🆕 IMPORTO el modal para testearlo
+import { AddProductModal } from "../components/AddProductModal";
 
 export const Home = () => {
 
@@ -24,7 +26,7 @@ export const Home = () => {
 			.then(res => res.json())
 			.then(data => setCategories(data))
 			.catch(err => console.error(err));
-	}, []); 
+	}, []);
 
 
 	return (
@@ -34,37 +36,38 @@ export const Home = () => {
 					< Navbar />
 				</div>
 
-			</div> 
-			<div className="mb-5"> 
+			</div>
+			<div className="mb-5">
 			</div>
 
 			<div className="mb-5">
-				{store.currentUser ? (
-					<div></div>
-				) : (
-					<Banner />
-				)}
-
+				<Banner />
+			</div>
+			
+			{/* 🆕 ENLACE TEMPORAL PARA TESTEAR EL MODAL */}
+			<div className="text-center my-4">
+				<p>🛠 Test del modal AddProduct:</p>
+				<AddProductModal />
 			</div>
 
 			{categories.map((cat, index) => (
 				<SectionCard
 					key={index}
 					title={cat.category}
-					image={null}            // ← sin banner: carrusel ocupa todo el ancho
-					reverse={false}         // ya no importa alternar si no hay banner
+					image="https://via.placeholder.com/400x400" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
+					reverse={index % 2 !== 0} //Para alternar la iamgen de las Categorias (En principio debe funcionar ajjaajjaja)
 				>
 					{cat.products.map((product) => (
 						<SubsectionCard
 							key={product.id}
-							id={product.id}      // ← necesario para navegar a /producto/:id
-							image={"https://via.placeholder.com/300"}
+							image="https://via.placeholder.com/300" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
 							title={product.title}
 							price={`${product.price}€/día`}
 						/>
 					))}
 				</SectionCard>
 			))}
+
 			<Footer></Footer>
 
 		</div>
