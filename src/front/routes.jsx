@@ -10,7 +10,7 @@ import { Single } from "./pages/Single";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
 import NewProduct from "./pages/NewProduct";
-import { Product } from "./components/CardProducto";
+import { CardProducto } from "./components/CardProducto";
 
 import { ForgotPassword } from "./pages/RecuperarPassword.jsx";
 import { ResetPassword } from "./pages/ResetearPassword.jsx";
@@ -27,11 +27,10 @@ export const router = createBrowserRouter(
         <Route path="/register" element={<Register />} />
 
         <Route element={<ForgotPassword />} path="/forgot-password" />
-        {/* Ahora aceptamos el token en la URL */}
         <Route element={<ResetPassword />} path="/reset-password/:token" />
 
         <Route path="/add-product" element={<NewProduct />} />
-        <Route path="/product/:id" element={<Product/>}/>
+        <Route path="/product/:id" element={<CardProducto/>}/>
       </Route>
     </>
   )
