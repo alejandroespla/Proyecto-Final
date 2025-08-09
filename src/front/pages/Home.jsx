@@ -9,7 +9,6 @@ import { SubsectionCard } from "../components/SubsectionCard.jsx";
 
 import { Link } from "react-router-dom";
 import { Footer } from "../components/Footer.jsx";
-import { Product } from "../components/CardProducto.jsx";
 import ciclismo from "../assets/img/ciclismo.jpg"
 import mountain_bike from "../assets/img/mountain_bike.jpg"
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg"
@@ -37,7 +36,6 @@ export const Home = () => {
 
 			</div> 
 			<div className="mb-5"> 
-=======
 			</div>
 
 			<div className="mb-5">
@@ -47,7 +45,6 @@ export const Home = () => {
 					<Banner />
 				)}
 
-				<Banner/>
 			</div>
 
 			{categories.map((cat, index) => (
@@ -68,7 +65,6 @@ export const Home = () => {
 					))}
 				</SectionCard>
 			))}
-			<CardProducto></CardProducto>
 			<Footer></Footer>
 
 		</div>
