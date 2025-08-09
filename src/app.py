@@ -22,7 +22,8 @@ from api.commands import setup_commands
 # ======================================================
 app = Flask(__name__)
 # Habilitar CORS para todo y todos los orígenes (en producción restringir)
-frontend_url = "https://probable-waffle-64p76qv66pcr7v7-3000.app.github.dev"
+
+frontend_url = os.getenv("FRONTEND_URL")
 CORS(app, resources={r"/*": {"origins": frontend_url}}, supports_credentials=True)
 
 

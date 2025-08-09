@@ -53,7 +53,7 @@ export const Login = () => {
 
 		// Simulación de login (reemplaza esto con tu API real)
 		try {
-			const response = await fetch("https://probable-waffle-64p76qv66pcr7v7-3001.app.github.dev/login", {
+			const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
