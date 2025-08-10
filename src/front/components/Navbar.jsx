@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { useEffect } from "react";
+import {LogoutButton} from "./CerrarSesion.jsx"
 
 export const Navbar = () => {
 
@@ -78,6 +79,7 @@ export const Navbar = () => {
 										style={{ borderRadius: "50%", cursor: "pointer" }}
 									/>
 								</Link>
+								<LogoutButton/>
 							</div>
 
 						) : (

@@ -80,3 +80,40 @@ def get_product(product_id):
     if not product:
         return jsonify({"error": "Producto no encontrado"}), 404
     return jsonify(product.serialize()), 200
+
+@api_product.route("/product/<int:product_id>", methods=["PUT"])
+def update_product(product_id):
+    data = request.get_json() or {}
+
+    # 1) Buscar producto
+    product = Product.query.get(product_id)
+    if not product:
+        return jsonify({"error": "Producto no encontrado"}), 404
+
+    # 2) Validar propietario (con lo que tienes hoy: user_id viene del front)
+    # En producción, valida con usuario autenticado (sesión/JWT), no con user_id del cliente.
+    user_id = data.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Falta user_id"}), 400
+
+    if product.user_id != user_id:
+        return jsonify({"message": "forbidden"}), 403
+
+    # 3) Actualizar solo campos permitidos (parcial o total)
+    editable_fields = ("title", "description", "category", "subcategory", "price", "location")
+    try:
+        for field in editable_fields:
+            if field in data and data[field] is not None:
+                if field == "price":
+                    product.price = float(data["price"])
+                else:
+                    setattr(product, field, data[field])
+    except (TypeError, ValueError):
+        return jsonify({"error": "price debe ser numérico"}), 400
+
+    # 4) Guardar y devolver actualizado
+    db.session.commit()
+    return jsonify(product.serialize()), 200
+
+
+
