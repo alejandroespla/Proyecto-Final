@@ -79,29 +79,29 @@ export const AddProduct = () => {
   };
 
   return (
-    <div className="container">
-      <h2 className="my-5">Publicar nuevo producto</h2>
-      <form onSubmit={handleSubmit} className="d-flex flex-column mb-5">
+    <div className="">
+     
+      <form onSubmit={handleSubmit} className="d-flex flex-column ">
         <input
           type="text"
           name="title"
           placeholder="Título del producto"
           value={form.title}
           onChange={handleChange}
-          className="w-full border mb-5 px-3 py-2 rounded"
+          className="w-full border mb-3 px-3 py-2 rounded"
         />
         <textarea
           name="description"
           placeholder="Descripción"
           value={form.description}
           onChange={handleChange}
-          className="w-full border mb-5 px-3 py-2 rounded"
+          className="w-full border mb-3 px-3 py-2 rounded"
         />
         <select
           name="category"
           value={form.category}
           onChange={handleChange}
-          className="w-full border mb-5 px-3 py-2 rounded"
+          className="w-full border mb-3 px-3 py-2 rounded"
         >
           <option value="">Selecciona una categoría</option>
           {Object.keys(categoryOptions).map((cat) => (
@@ -113,7 +113,7 @@ export const AddProduct = () => {
             name="subcategory"
             value={form.subcategory}
             onChange={handleChange}
-            className="w-full border mb-5 px-3 py-2 rounded"
+            className="w-full border mb-3 px-3 py-2 rounded"
           >
             <option value="">Selecciona una subcategoría</option>
             {categoryOptions[form.category].map((sub) => (
@@ -127,7 +127,7 @@ export const AddProduct = () => {
           placeholder="Precio por día (€)"
           value={form.price}
           onChange={handleChange}
-          className="w-full border mb-5 px-3 py-2 rounded"
+          className="w-full border mb-3 px-3 py-2 rounded"
         />
         <input
           type="text"

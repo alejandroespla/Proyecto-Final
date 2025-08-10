@@ -27,7 +27,8 @@ export const router = createBrowserRouter(
         <Route path="/register" element={<Register />} />
 
         <Route element={<ForgotPassword />} path="/forgot-password" />
-        <Route element={<ResetPassword />} path="/reset-password/:token" />
+        {/* Ahora aceptamos el token en la URL */}
+        <Route element={<ResetPassword />} path="/reset-password" />
 
         <Route path="/add-product" element={<NewProduct />} />
         <Route path="/product/:id" element={<CardProducto/>}/>

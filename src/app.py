@@ -22,13 +22,9 @@ from api.commands import setup_commands
 # ======================================================
 app = Flask(__name__)
 # Habilitar CORS para todo y todos los orígenes (en producción restringir)
-#frontend_url = "https://reimagined-disco-57j7q9jxg7qf7g6-3000.app.github.dev"
-frontend_url = os.getenv("FRONTEND_URL", "https://reimagined-disco-57j7q9jxg7qf7g6-3000.app.github.dev").rstrip("/")
-extras = [
-    "https://reimagined-disco-57j7q9jxg7qf7g6-3000.app.github.dev",
-    "https://probable-waffle-64p76qv66pcr7v7-3000.app.github.dev",
-]
-CORS(app, resources={r"/*": {"origins": [frontend_url, *extras]}}, supports_credentials=True)
+
+frontend_url = os.getenv("FRONTEND_URL")
+CORS(app, resources={r"/*": {"origins": frontend_url}}, supports_credentials=True)
 
 
 # Clave secreta para JWT

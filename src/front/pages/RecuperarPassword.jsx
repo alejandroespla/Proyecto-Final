@@ -39,7 +39,7 @@ export const ForgotPassword = () => {
 		const email = e.target.email.value;
 
 		try {
-			const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}api/password-reset` ,
+			const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/password-reset`,
 				{
 					method: "POST",
 					headers: {
