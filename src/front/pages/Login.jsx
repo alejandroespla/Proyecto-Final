@@ -7,7 +7,7 @@ export const Login = () => {
   const { dispatch } = useGlobalReducer();
 
   const [backgroundUrl, setBackgroundUrl] = useState("");
-  const [errors, setErrors] = useState({});       // <-- AÑADIDO
+  const [errors, setErrors] = useState({});   
   const [submitting, setSubmitting] = useState(false);
 
   const backgrounds = [
