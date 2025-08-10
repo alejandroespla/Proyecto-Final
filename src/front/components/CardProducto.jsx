@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar.jsx";
 import { Footer } from "../components/Footer.jsx";
 
@@ -7,6 +7,7 @@ export const CardProducto = () => {
   const { id } = useParams();
   const [prod, setProd] = useState(null);
   const [loading, setLoading] = useState(true);
+  const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     (async () => {
@@ -52,6 +53,15 @@ export const CardProducto = () => {
             <div className="d-flex gap-2">
               <button className="btn btn-primary">Reservar</button>
               <button className="btn btn-outline-secondary">Contactar</button>
+              {/* Botón de prueba "Editar" */}
+              {/* Si quieres mostrarlo siempre para probar, deja solo el Link. 
+                  Si quieres mostrarlo solo al dueño, envuelve con la condición: */}
+                { currentUser?.id === prod.user_id && (
+                  <Link to={`/products/${id}/edit`} className="btn btn-warning">
+                    Editar
+                  </Link>
+                )} 
+
             </div>
           </div>
         </div>
