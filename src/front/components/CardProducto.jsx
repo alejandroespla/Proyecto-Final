@@ -2,10 +2,11 @@ import '../styles/cardProducto.css';
 import { Link } from 'react-router-dom';
 export const CardProducto = () => {
     return (
-        <div className=' container container-xxl'>
-            <article className='mt-5 d-flex flex-column'>
-                <h1>Categoria de musica</h1>
-                <div className='d-flex'>
+        <div className=' container container-xxxl'>
+            <article className='mt-5 d-flex flex-column '>
+                <h1>Categoria de montaña:</h1>
+                <h4>Descubres lugares nuevos </h4>
+                <div className='d-flex item-card'>
                     <a className='select-card text-dark link-underline link-underline-opacity-0'>
                         <div className='product-card '>
                             <div id="carouselExampleIndicators" class="carousel slide">
@@ -17,16 +18,16 @@ export const CardProducto = () => {
                                 </div>
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img src="https://cdn.fanaticguitars.com/products/washburn/220002691122/washburn-c40-natural-1744099014126_1800.webp" class="d-block w-100" alt="..." />
+                                        <img src="https://assets.thenorthface.eu/images/t_img/f_auto,h_462,w_462,e_sharpen:60/dpr_2.0/v1753206954/NF0A87BZ4GZ-HERO/Terra-55Litre-Hiking-Backpack.jpg" class="d-block w-100" alt="..." />
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="https://cdn.fanaticguitars.com/products/washburn/220002691122/washburn-c40-natural-1744099016400_1800.webp" class="d-block w-100 " alt="..." />
+                                        <img src="https://assets.thenorthface.eu/images/t_img/f_auto,h_462,w_462,e_sharpen:60/dpr_2.0/v1753206953/NF0A87BZ4GZ-ALT2/Terra-55Litre-Hiking-Backpack.jpg" class="d-block w-100 " alt="..." />
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="https://cdn.fanaticguitars.com/products/washburn/220002691122/washburn-c40-natural-1744099017736_1800.webp" class="d-block w-100" alt="..." />
+                                        <img src="https://assets.thenorthface.eu/images/t_img/f_auto,h_462,w_462,e_sharpen:60/dpr_2.0/v1753206954/NF0A87BZ4GZ-ALT4/Terra-55Litre-Hiking-Backpack.jpg" class="d-block w-100" alt="..." />
                                     </div>
                                     <div className='carousel-item'>
-                                        <img src="https://cdn.fanaticguitars.com/products/washburn/220002691122/washburn-c40-natural-1744099019736_1800.webp" class="d-block w-100" alt="" />
+                                        <img src="https://assets.thenorthface.eu/images/t_img/f_auto,h_462,w_462,e_sharpen:60/dpr_2.0/v1753206954/NF0A87BZ4GZ-ALT5/Terra-55Litre-Hiking-Backpack.jpg" class="d-block w-100" alt="" />
                                     </div>
                                 </div>
                                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -39,8 +40,8 @@ export const CardProducto = () => {
                                 </button>
                             </div>
                             <div class="card-body overflow-y-hidden ">
-                                <h5 class="card-title  ">Guitarra  Washburn <span>25€/Dia</span> </h5>
-                                <p class="card-text">Disfruta con esta guitarra Washburn de la conexión con la música. Está diseñada para aficionados y profesionales. Con este instrumento descubrirás nuevos acordes, entonarás tus canciones y disfrutarás de la vida musical</p>
+                                <h5 class="card-title  ">Macuto de senderismo <span>50€/Dia</span> </h5>
+                                <p class="card-text"> Este clásico macuto de senderismo está diseñado para varios días de ruta. Cuenta con un panel trasero con un patrón distribuido de manera estratégica, correas para los hombros y cinturón lumbar, todo con un acabado cómodo y transpirable.</p>
                                 <p>Disponible</p>
                             </div>
                         </div>
@@ -56,16 +57,16 @@ export const CardProducto = () => {
                                 </div>
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img src="https://r2.gear4music.com/media/52/526138/1200/preview_1.jpg" class="d-block w-100" alt="..." />
+                                        <img src="https://cdn.deporvillage.com/cdn-cgi/image/h=2250,w=1800,dpr=1,f=auto,q=75,fit=contain,background=white/product-vertical/grn-330024_001.jpg" class="d-block w-100" alt="..." />
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="https://r2.gear4music.com/media/71/710901/1200/preview.jpg" class="d-block w-100 " alt="..." />
+                                        <img src="https://cdn.deporvillage.com/cdn-cgi/image/h=2250,w=1800,dpr=1,f=auto,q=75,fit=contain,background=white/product-vertical/grn-330024_003.jpg" class="d-block w-100 " alt="..." />
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="https://r2.gear4music.com/media/52/526140/1200/preview_1.jpg" class="d-block w-100" alt="..." />
+                                        <img src="https://cdn.deporvillage.com/cdn-cgi/image/h=2250,w=1800,dpr=1,f=auto,q=75,fit=contain,background=white/product-vertical/grn-330024_007.jpg" class="d-block w-100" alt="..." />
                                     </div>
                                     <div className='carousel-item'>
-                                        <img src="https://r2.gear4music.com/media/52/526141/1200/preview_1.jpg" class="d-block w-100" alt="" />
+                                        <img src="https://cdn.deporvillage.com/cdn-cgi/image/h=2250,w=1800,dpr=1,f=auto,q=75,fit=contain,background=white/product-vertical/grn-330024_010.jpg" class="d-block w-100" alt="" />
                                     </div>
                                 </div>
                                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators1" data-bs-slide="prev">
@@ -78,8 +79,8 @@ export const CardProducto = () => {
                                 </button>
                             </div>
                             <div class="card-body overflow-y-hidden">
-                                <h5 class="card-title ">Amplificador <span>20€/Dia</span> </h5>
-                                <p class="card-text">El Amplificador de Guitarra Eléctrica de 15 W de Gear4music es un amplificador de práctica compacto y potente con funciones intuitivas. Su diseño increíblemente sencillo permite definir el sonido de forma instintiva y directa. De este modo, podrá conseguir un sonido excelente con total facilidad.</p>
+                                <h5 class="card-title ">Tienda de campaña <span>39€/Dia</span> </h5>
+                                <p class="card-text">Grand Canyon son las compañeras perfectas para hacer senderismo, ciclismo, kayak, escapadas de fin de semana, ir de vacaciones, a festivales o acampar con tus hijos en el jardín.</p>
                                 <p>Disponible</p>
                             </div>
                         </div>
@@ -91,21 +92,19 @@ export const CardProducto = () => {
                                     <button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                                     <button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="1" aria-label="Slide 2"></button>
                                     <button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                                    <button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="3" aria-label="Slide 4"></button>
+
                                 </div>
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img src="https://auvisa.com/cdn/shop/files/67628.jpg?v=1719509386" class="d-block w-100" alt="..." />
+                                        <img src="https://contents.mediadecathlon.com/m12360339/k$74bb17ff5a920be882789d1e55847185/picture.jpg?format=auto&f=640x0" class="d-block w-100" alt="..." />
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="https://auvisa.com/cdn/shop/files/67628_hash_escaped_04.jpg?v=1719509388" class="d-block w-100 " alt="..." />
+                                        <img src="https://contents.mediadecathlon.com/m12360317/k$2365132bbf07ee0bf0bf57af81615948/picture.jpg?format=auto&f=969x0" class="d-block w-100 " alt="..." />
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="https://auvisa.com/cdn/shop/files/67628_hash_escaped_05.jpg?v=1719509389" class="d-block w-100" alt="..." />
+                                        <img src="https://contents.mediadecathlon.com/m12360781/k$7c15a617110972bcbeef6cb3fb1846a7/picture.jpg?format=auto&f=320x0" class="d-block w-100" alt="..." />
                                     </div>
-                                    <div className='carousel-item'>
-                                        <img src="https://auvisa.com/cdn/shop/files/67628_hash_escaped_09.jpg?v=1719509391" class="d-block w-100" alt="" />
-                                    </div>
+
                                 </div>
                                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -117,8 +116,8 @@ export const CardProducto = () => {
                                 </button>
                             </div>
                             <div class="card-body overflow-y-hidden">
-                                <h5 class="card-title  ">BATERIA ACUSTICA<span>15€/Dia</span> </h5>
-                                <p class="card-text">Ideal para disfrutar una noche de banda musical, con tu grupo y arrasar en el escenario </p>
+                                <h5 class="card-title  ">Zapatos de senderismo<span>45€/Dia</span> </h5>
+                                <p class="card-text">Bota de trekking y excursionismo con look y tecnología derivados de la familia Trango. Está diseñada para rutas por caminos de tierra, paseos por el bosque y excursiones con la mochila completamente </p>
                                 <p>Disponible</p>
                             </div>
                         </div>
@@ -126,8 +125,8 @@ export const CardProducto = () => {
                 </div>
             </article>
             <article className='mt-5 d-flex flex-column'>
-                <h1>Categoria de Deporte </h1>
-                <div className='d-flex'>
+                <h1>Categoria de Deporte: </h1> <h4>No olvides de moverte</h4>
+                <div className='d-flex item-card'>
                     <a className='select-card text-dark link-underline link-underline-opacity-0'>
                         <div className='product-card '>
                             <div id="carouselExampleIndicators3" class="carousel slide">
@@ -249,7 +248,7 @@ export const CardProducto = () => {
             </article>
             <article className='d-flex flex-column'>
                 <h1>Categoria de Agua:</h1><h4>Sumergete en la aventura de agua</h4>
-                <div className='d-flex'>
+                <div className='d-flex item-card'>
                     <a className='select-card text-dark link-underline link-underline-opacity-0'>
                         <div className='product-card '>
                             <div id="carouselExampleIndicators6" class="carousel slide">

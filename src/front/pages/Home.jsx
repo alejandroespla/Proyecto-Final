@@ -37,7 +37,7 @@ export const Home = () => {
 
 			</div> 
 			<div className="mb-5"> 
-=======
+
 			</div>
 
 			<div className="mb-5">
