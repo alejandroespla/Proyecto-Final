@@ -22,7 +22,7 @@ export const Home = () => {
 	const { store, dispatch } = useGlobalReducer();
 
 	useEffect(() => {
-		fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/products`)
+		fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/products`)
 			.then(res => res.json())
 			.then(data => setCategories(data))
 			.catch(err => console.error(err));
@@ -37,11 +37,14 @@ export const Home = () => {
 				</div>
 
 			</div>
-			<div className="mb-5">
-			</div>
 
 			<div className="mb-5">
-				<Banner />
+				{store.currentUser ? (
+					<div></div>
+				) : (
+					<Banner />
+				)}
+
 			</div>
 			
 			{/* 🆕 ENLACE TEMPORAL PARA TESTEAR EL MODAL */}
@@ -54,12 +57,13 @@ export const Home = () => {
 				<SectionCard
 					key={index}
 					title={cat.category}
-					image="https://via.placeholder.com/400x400" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
-					reverse={index % 2 !== 0} //Para alternar la iamgen de las Categorias (En principio debe funcionar ajjaajjaja)
+					image={null}
+					reverse={false} //Para alternar la iamgen de las Categorias (En principio debe funcionar ajjaajjaja)
 				>
 					{cat.products.map((product) => (
 						<SubsectionCard
 							key={product.id}
+							id={product.id}
 							image="https://via.placeholder.com/300" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
 							title={product.title}
 							price={`${product.price}€/día`}

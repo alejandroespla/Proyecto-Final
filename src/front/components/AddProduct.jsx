@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState} from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 export const AddProduct = () => {
+
+  const { id } = useParams();                 // <- si existe, estamos editando
+  const isEdit = Boolean(id);
+  const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
   const [form, setForm] = useState({
@@ -12,8 +17,7 @@ export const AddProduct = () => {
     location: ""
   });
 
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [loading, setLoading] = useState(isEdit); // si edit, entonces secargan los datos
 
   const categoryOptions = {
     "Deportes de pelota": ["Fútbol", "Baloncesto", "Tennis", "Volleyball", "Golf", "Ping pong", "Pádel", "Otro"],
@@ -22,6 +26,32 @@ export const AddProduct = () => {
     "Deportes sobre ruedas": ["Bicicleta", "MTB", "Skate", "Surf skate", "Patinaje", "Rollerblades", "Motocross", "Motociclismo", "Otro"],
     "Otros deportes": ["Bolos", "Billar", "Otro"]
   };
+
+
+  useEffect(()=>{
+    if(!isEdit) return;
+
+    (async()=>{
+      try{
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/product/${id}`);
+        if(!res.ok) throw new Error("No se pudo cargar el producto");
+        const data = await res.json();
+        
+        setForm({
+          title: data.title ?? "",
+          description: data.description ?? "",
+          category: data.category ?? "",
+          subcategory: data.subcategory ?? "",
+          price: String(data.price ?? ""),
+          location: data.location ?? ""
+        });
+      } catch(err){
+        alert("No se pudo cargar el producto");
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [id, isEdit]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,6 +71,12 @@ export const AddProduct = () => {
       return;
     }
 
+    const url = isEdit
+    ? `${import.meta.env.VITE_BACKEND_URL}api_product/product/${id}`
+    : `${import.meta.env.VITE_BACKEND_URL}api_product/set-products`;
+
+    const method = isEdit ? "PUT" : "POST";
+
     const payload = {
       ...form,
       user_id: currentUser.id,
@@ -48,19 +84,36 @@ export const AddProduct = () => {
     };
 
     try {
-      setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/set-products`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      //setLoading(true);
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify(payload)
       });
 
-      if (!response.ok) throw new Error("Error al crear producto");
+      if(response.status === 403) {alert("No puedes editar este producto"); return;}
+      if (!response.ok) throw new Error(isEdit ? "Error al guardar cambios" : "Error al crear producto");
 
       await response.json();
+      alert(isEdit ? "Cambios guardados" : "Producto creado con éxito");
+      navigate(`/product/${id}`) 
 
-      setMessage({ type: "success", text: "Producto creado con éxito ✅" });
+      // o limpia el form si es creación:
+      if (!isEdit) {
+        setForm({ title: "", description: "", category: "", subcategory: "", price: "", location: "" });
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Ocurrió un error al guardar.");
+    }
+  };
 
+  
+  if (loading) return <p>Cargando…</p>;
+
+/*
       setForm({
         title: "",
         description: "",
@@ -75,7 +128,7 @@ export const AddProduct = () => {
     } finally {
       setLoading(false);
     }
-  };
+  };*/
 
   return (
     <div>
