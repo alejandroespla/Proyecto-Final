@@ -13,6 +13,10 @@ import ciclismo from "../assets/img/ciclismo.jpg";
 import mountain_bike from "../assets/img/mountain_bike.jpg";
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
 
+import Skeleton from 'react-loading-skeleton';
+
+//import 'react-loading-skeleton/dist/skeleton.css'; ESTO HAY QUE AGREGARLO PARA LOS RODUCTOS CUANDO ESTEN CARGANDO
+
 
 
 export const Home = () => {

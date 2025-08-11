@@ -9,16 +9,12 @@ export const Navbar = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt-token");
-    console.log("Token que envío:", token);
-
     if (token) {
-      fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/user`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Se manda el token en el header
-        },
+      fetch(`${import.meta.env.VITE_BACKEND_URL}auth/user`, {
+        headers: { Authorization: `Bearer ${token}` }
       })
-        .then((res) => res.json())
-        .then((data) => {
+        .then(res => res.json())
+        .then(data => {
           if (data.id) {
             dispatch({ type: "set_current_user", payload: data });
             localStorage.setItem("user", JSON.stringify(data));
@@ -28,8 +24,7 @@ export const Navbar = () => {
             dispatch({ type: "set_current_user", payload: null });
           }
         })
-        .catch((err) => {
-          console.error("Error al validar token:", err);
+        .catch(() => {
           localStorage.removeItem("jwt-token");
           localStorage.removeItem("user");
           dispatch({ type: "set_current_user", payload: null });
@@ -53,17 +48,22 @@ export const Navbar = () => {
   const initials = getInitials(currentUser?.fullname);
 
   return (
-    <div>
+    <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary pt-0">
-        <div className="container-fluid d-flex flex-nowrap">
-          <a className="navbar-brand pt-0" href="/">
-            <img
-              className="imgLogo"
-              src="src/front/assets/img/logo.png"
-              alt="Logo"
-            />
+        <div className="container-fluid d-flex align-items-center justify-content-between">
+          <a className="navbar-brand pt-0 d-flex align-items-center" href="/">
+            <img className="imgLogo" src="src/front/assets/img/logo.png" alt="Logo" />
           </a>
-          <div className="w-100 searchBox">
+
+          <div
+            className="searchBox"
+            style={{
+              flexGrow: 1,
+              maxWidth: "1440px",
+              marginLeft: "auto",
+              marginRight: "auto"
+            }}
+          >
             <form className="w-100 d-flex align-items-center">
               <div className="position-relative w-100 d-flex align-items-center">
                 <input
@@ -75,73 +75,142 @@ export const Navbar = () => {
             </form>
           </div>
 
-          <div className="d-none d-lg-flex align-items-center">
+          <div className="d-flex align-items-center gap-3 m-3">
             {currentUser ? (
               <>
-                <AddProductModal />
-              </div>
+                <div className="text-center my-4">
+                  <AddProductModal />
+                </div>
 
-              <div className="dropdown">
-                <button
-                  className="d-flex align-items-center gap-2"
-                  type="button"
-                  id="userMenuButton"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    padding: 0,
-                    cursor: "pointer"
-                  }}
-                >
-                  <div
+                <div className="dropdown">
+                  <button
+                    className="d-flex align-items-center gap-2"
+                    type="button"
+                    id="userMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
                     style={{
-                      width: "35px",
-                      height: "35px",
-                      backgroundColor: "#2E676A",
-                      color: "#fff",
-                      borderRadius: "50%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: "bold",
-                      userSelect: "none"
+                      border: "none",
+                      background: "transparent",
+                      padding: 0,
+                      cursor: "pointer"
                     }}
                   >
-                    {initials}
-                  </div>
-                  <span style={{ fontSize: "0.8rem", userSelect: "none" }}>▼</span>
+                    <div
+                      style={{
+                        width: "35px",
+                        height: "35px",
+                        backgroundColor: "#2E676A",
+                        color: "#fff",
+                        borderRadius: "50%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                        userSelect: "none"
+                      }}
+                    >
+                      {initials}
+                    </div>
+                    <span style={{ fontSize: "0.8rem", userSelect: "none" }}>▼</span>
+                  </button>
+                  <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+                    <li>
+                      <Link className="dropdown-item" to="/user">
+                        Mi perfil
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="dropdown-item" to="/my-products">
+                        Mis productos
+                      </Link>
+                    </li>
+                    <li>
+                      <LogoutButton dispatch={dispatch} />
+                    </li>
+                  </ul>
+                </div>
+              </>
+            ) : (
+              <Link to={"/Login"}>
+                <button
+                  type="button"
+                  className="btn btn-outline-success"
+                >
+                  Login
                 </button>
-                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+              </Link>
+            )}
+          </div>
+        </div>
+      </nav>
+
+      {/* Categorías con collapse */}
+      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <div className="container-fluid" style={{ maxWidth: "1440px" }}>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarCategories"
+            aria-controls="navbarCategories"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div
+            className="collapse navbar-collapse"
+            id="navbarCategories"
+          >
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0 button-categoria">
+              <li className="nav-item border-categoria">
+                <a className="nav-link" aria-current="page" href="#">
+                  Deporte de montaña
+                </a>
+              </li>
+              <li className="nav-item border-categoria">
+                <a className="nav-link" href="#">
+                  Deporte de Pelota
+                </a>
+              </li>
+              <li className="nav-item border-categoria">
+                <a className="nav-link" href="#">
+                  Deporte de Agua
+                </a>
+              </li>
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="#"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Otros Deportes
+                </a>
+                <ul className="dropdown-menu">
                   <li>
-                    <Link className="dropdown-item" to="/user">
-                      Mi perfil
-                    </Link>
+                    <a className="dropdown-item" href="#">
+                      Sobre ruedas
+                    </a>
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/my-products">
-                      Mis productos
-                    </Link>
+                    <a className="dropdown-item" href="#">
+                      Bolos
+                    </a>
                   </li>
                   <li>
-                    <LogoutButton dispatch={dispatch} />
+                    <a className="dropdown-item" href="#">
+                      Billar
+                    </a>
                   </li>
                 </ul>
-              </div>
-            </>
-          ) : (
-            <Link to={"/Login"}>
-              <button
-                type="button"
-                className="btn btn-outline-success"
-              >
-                Login
-              </button>
-            </Link>
-          )}
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 };
