@@ -1,6 +1,10 @@
-.seo-secction{
-  gap: 32px;
+.item-card {
+  scrollbar-width: none;
+  gap: 16px;
+  overflow: scroll hidden;
 }
+
+
 .product-card {
   width: 400px;
   height: 520px;
@@ -9,6 +13,7 @@
   overflow: hidden; /* Para que las imágenes no sobresalgan */
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
   margin: 10px;
+  overflow: scroll hidden;
 }
 
 .carousel-item img {
@@ -19,7 +24,6 @@
 }
 .select-card:hover {
   cursor: pointer;
-
 }
 
 .card-title {
@@ -31,7 +35,7 @@
 .card-text {
   display: block;
   padding: 5px 10px 0px 10px;
-  
+
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
