@@ -35,6 +35,9 @@ export const Home = () => {
 					< Navbar />
 				</div>
 
+			</div> 
+			<div className="mb-5"> 
+
 			</div>
 
 			<div className="mb-5">
