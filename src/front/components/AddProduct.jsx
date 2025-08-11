@@ -1,5 +1,4 @@
-import React, { useState} from "react";
-
+import React, { useState } from "react";
 
 export const AddProduct = () => {
   const currentUser = JSON.parse(localStorage.getItem("user"));
@@ -14,6 +13,7 @@ export const AddProduct = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ type: "", text: "" });
 
   const categoryOptions = {
     "Deportes de pelota": ["Fútbol", "Baloncesto", "Tennis", "Volleyball", "Golf", "Ping pong", "Pádel", "Otro"],
@@ -37,7 +37,7 @@ export const AddProduct = () => {
     e.preventDefault();
 
     if (!form.title || !form.description || !form.category || !form.subcategory || !form.price) {
-      alert("Rellena todos los campos obligatorios.");
+      setMessage({ type: "error", text: "Rellena todos los campos obligatorios." });
       return;
     }
 
@@ -51,16 +51,15 @@ export const AddProduct = () => {
       setLoading(true);
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/set-products`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
 
       if (!response.ok) throw new Error("Error al crear producto");
 
-      const data = await response.json();
-      alert("Producto creado con éxito");
+      await response.json();
+
+      setMessage({ type: "success", text: "Producto creado con éxito ✅" });
 
       setForm({
         title: "",
@@ -72,79 +71,65 @@ export const AddProduct = () => {
       });
     } catch (error) {
       console.error(error);
-      alert("Ocurrió un error al guardar el producto.");
+      setMessage({ type: "error", text: "Ocurrió un error al guardar el producto." });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="">
-     
-      <form onSubmit={handleSubmit} className="d-flex flex-column ">
-        <input
-          type="text"
-          name="title"
-          placeholder="Título del producto"
-          value={form.title}
-          onChange={handleChange}
-          className="w-full border mb-3 px-3 py-2 rounded"
-        />
-        <textarea
-          name="description"
-          placeholder="Descripción"
-          value={form.description}
-          onChange={handleChange}
-          className="w-full border mb-3 px-3 py-2 rounded"
-        />
-        <select
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          className="w-full border mb-3 px-3 py-2 rounded"
+    <div>
+      {message.text && (
+        <div
+          style={{
+            backgroundColor: message.type === "success" ? "#d4edda" : "#f8d7da",
+            color: message.type === "success" ? "#155724" : "#721c24",
+            padding: "10px",
+            borderRadius: "5px",
+            marginBottom: "15px"
+          }}
         >
+          {message.text}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="d-flex flex-column">
+        <input type="text" name="title" placeholder="Título del producto"
+          value={form.title} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+        
+        <textarea name="description" placeholder="Descripción"
+          value={form.description} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+        
+        <select name="category" value={form.category} onChange={handleChange}
+          className="w-full border mb-3 px-3 py-2 rounded">
           <option value="">Selecciona una categoría</option>
           {Object.keys(categoryOptions).map((cat) => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
+
         {form.category && (
-          <select
-            name="subcategory"
-            value={form.subcategory}
-            onChange={handleChange}
-            className="w-full border mb-3 px-3 py-2 rounded"
-          >
+          <select name="subcategory" value={form.subcategory} onChange={handleChange}
+            className="w-full border mb-3 px-3 py-2 rounded">
             <option value="">Selecciona una subcategoría</option>
             {categoryOptions[form.category].map((sub) => (
               <option key={sub} value={sub}>{sub}</option>
             ))}
           </select>
         )}
-        <input
-          type="number"
-          name="price"
-          placeholder="Precio por día (€)"
-          value={form.price}
-          onChange={handleChange}
-          className="w-full border mb-3 px-3 py-2 rounded"
-        />
-        <input
-          type="text"
-          name="location"
-          placeholder="Ubicación"
-          value={form.location}
-          onChange={handleChange}
-          className="w-full border mb-5 px-3 py-2 rounded"
-        />
 
-        <button
-          type="submit"
-          className="btn" style={{ backgroundColor: "#2E676A", border: "none", borderRadius: "8px", color:"#ffffff" }}>
-            Añadir producto
+        <input type="number" name="price" placeholder="Precio por día (€)"
+          value={form.price} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+
+        <input type="text" name="location" placeholder="Ubicación"
+          value={form.location} onChange={handleChange} className="w-full border mb-5 px-3 py-2 rounded" />
+
+        <button type="submit" className="btn"
+          style={{ backgroundColor: "#2E676A", border: "none", borderRadius: "8px", color: "#ffffff" }}
+          disabled={loading}>
+          {loading ? "Guardando..." : "Añadir producto"}
         </button>
       </form>
     </div>
   );
 };
-
