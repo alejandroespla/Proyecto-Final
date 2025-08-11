@@ -24,7 +24,7 @@ export const Banner = () => {
               ¡Alquílalo fácil y ahorra! <br />
               Y si tienes material, gana dinero prestándolo.
             </p>
-            <Link to={"/add-product"}>
+            <Link to={"/register"}>
               <Button variant="btn btn-outline-success" size="lg">
                 Empieza ahora
               </Button>
@@ -43,12 +43,12 @@ export const Banner = () => {
           <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
             <h1 className="fw-bold">Deja de comprar y alquila.</h1>
             <p className="lead">
-              
+
               Usa el material solo cuando lo necesites,
               y saca beneficio del que ya tienes.
             </p>
-            <Link to={"/add-product"}>
-              <Button variant="success" size="lg">
+            <Link to={"/register"}>
+              <Button variant="btn btn-outline-success" size="lg">
                 Empieza ahora
               </Button>
             </Link>
@@ -66,12 +66,12 @@ export const Banner = () => {
           <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
             <h1 className="fw-bold">¿Vas a usarlo una vez?</h1>
             <p className="lead">
-              
+
               ¡No lo compres, alquílalo aquí!
               Y si lo tienes tirado en casa… ¡ponlo a generar dinero!
             </p>
-            <Link to={"/add-product"}>
-              <Button variant="success" size="lg">
+            <Link to={"/register"}>
+              <Button variant="btn btn-outline-success" size="lg">
                 Empieza ahora
               </Button>
             </Link>
@@ -89,11 +89,11 @@ export const Banner = () => {
           <Carousel.Caption className="caption-style text-start text-dark d-flex flex-column justify-content-around">
             <h1 className="fw-bold">Gana prestando.</h1>
             <p className="lead">
-              Ahorra alquilando. 
+              Ahorra alquilando.
               Todo el material deportivo que necesitas, en una sola app.
             </p>
-            <Link to={"/add-product"}>
-              <Button variant="success" size="lg">
+            <Link to={"/register"}>
+              <Button variant="btn btn-outline-success" size="lg">
                 Empieza ahora
               </Button>
             </Link>
