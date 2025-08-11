@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 export const AddProduct = () => {
@@ -17,6 +17,7 @@ export const AddProduct = () => {
     location: ""
   });
 
+  const [message, setMessage] = useState({ type: "", text: "" });
   const [loading, setLoading] = useState(isEdit); // si edit, entonces secargan los datos
 
   const categoryOptions = {
@@ -28,15 +29,15 @@ export const AddProduct = () => {
   };
 
 
-  useEffect(()=>{
-    if(!isEdit) return;
+  useEffect(() => {
+    if (!isEdit) return;
 
-    (async()=>{
-      try{
+    (async () => {
+      try {
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/product/${id}`);
-        if(!res.ok) throw new Error("No se pudo cargar el producto");
+        if (!res.ok) throw new Error("No se pudo cargar el producto");
         const data = await res.json();
-        
+
         setForm({
           title: data.title ?? "",
           description: data.description ?? "",
@@ -45,7 +46,7 @@ export const AddProduct = () => {
           price: String(data.price ?? ""),
           location: data.location ?? ""
         });
-      } catch(err){
+      } catch (err) {
         alert("No se pudo cargar el producto");
       } finally {
         setLoading(false);
@@ -72,8 +73,8 @@ export const AddProduct = () => {
     }
 
     const url = isEdit
-    ? `${import.meta.env.VITE_BACKEND_URL}api_product/product/${id}`
-    : `${import.meta.env.VITE_BACKEND_URL}api_product/set-products`;
+      ? `${import.meta.env.VITE_BACKEND_URL}api_product/product/${id}`
+      : `${import.meta.env.VITE_BACKEND_URL}api_product/set-products`;
 
     const method = isEdit ? "PUT" : "POST";
 
@@ -93,12 +94,12 @@ export const AddProduct = () => {
         body: JSON.stringify(payload)
       });
 
-      if(response.status === 403) {alert("No puedes editar este producto"); return;}
+      if (response.status === 403) { alert("No puedes editar este producto"); return; }
       if (!response.ok) throw new Error(isEdit ? "Error al guardar cambios" : "Error al crear producto");
 
       await response.json();
       alert(isEdit ? "Cambios guardados" : "Producto creado con éxito");
-      navigate(`/product/${id}`) 
+      navigate(`/product/${id}`)
 
       // o limpia el form si es creación:
       if (!isEdit) {
@@ -110,25 +111,25 @@ export const AddProduct = () => {
     }
   };
 
-  
+
   if (loading) return <p>Cargando…</p>;
 
-/*
-      setForm({
-        title: "",
-        description: "",
-        category: "",
-        subcategory: "",
-        price: "",
-        location: ""
-      });
-    } catch (error) {
-      console.error(error);
-      setMessage({ type: "error", text: "Ocurrió un error al guardar el producto." });
-    } finally {
-      setLoading(false);
-    }
-  };*/
+  /*
+        setForm({
+          title: "",
+          description: "",
+          category: "",
+          subcategory: "",
+          price: "",
+          location: ""
+        });
+      } catch (error) {
+        console.error(error);
+        setMessage({ type: "error", text: "Ocurrió un error al guardar el producto." });
+      } finally {
+        setLoading(false);
+      }
+    };*/
 
   return (
     <div>
@@ -149,10 +150,10 @@ export const AddProduct = () => {
       <form onSubmit={handleSubmit} className="d-flex flex-column">
         <input type="text" name="title" placeholder="Título del producto"
           value={form.title} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
-        
+
         <textarea name="description" placeholder="Descripción"
           value={form.description} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
-        
+
         <select name="category" value={form.category} onChange={handleChange}
           className="w-full border mb-3 px-3 py-2 rounded">
           <option value="">Selecciona una categoría</option>
@@ -173,6 +174,8 @@ export const AddProduct = () => {
 
         <input type="number" name="price" placeholder="Precio por día (€)"
           value={form.price} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+
+        {/* Este es el campo al que hay que meterle el google maps */}
 
         <input type="text" name="location" placeholder="Ubicación"
           value={form.location} onChange={handleChange} className="w-full border mb-5 px-3 py-2 rounded" />
