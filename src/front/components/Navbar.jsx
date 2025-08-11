@@ -79,148 +79,69 @@ export const Navbar = () => {
             {currentUser ? (
               <>
                 <AddProductModal />
+              </div>
 
-                <div className="dropdown ms-3">
-                  <button
-                    className="d-flex align-items-center gap-2 btn btn-link text-decoration-none"
-                    type="button"
-                    id="userMenuButton"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    style={{ padding: 0 }}
-                  >
-                    <div
-                      style={{
-                        width: "35px",
-                        height: "35px",
-                        backgroundColor: "#2E676A",
-                        color: "#fff",
-                        borderRadius: "50%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                        userSelect: "none",
-                      }}
-                    >
-                      {initials}
-                    </div>
-                    <span style={{ fontSize: "0.8rem", userSelect: "none" }}>
-                      ▼
-                    </span>
-                  </button>
-                  <ul
-                    className="dropdown-menu dropdown-menu-end"
-                    aria-labelledby="userMenuButton"
-                  >
-                    <li>
-                      <Link className="dropdown-item" to="/user">
-                        Mi perfil
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/my-products">
-                        Mis productos
-                      </Link>
-                    </li>
-                    <li>
-                      <LogoutButton dispatch={dispatch} />
-                    </li>
-                  </ul>
-                </div>
-              </>
-            ) : (
-              <Link to={"/Login"}>
-                <button type="button" className="btn btn-outline-success">
-                  Login
-                </button>
-              </Link>
-            )}
-          </div>
-
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarTogglerDemo02"
-            aria-controls="navbarTogglerDemo02"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-        </div>
-      </nav>
-
-      <hr className="mb-0" />
-
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
-        <div className="container-fluid">
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div
-            className="collapse navbar-collapse"
-            id="navbarSupportedContent"
-          >
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0 button-categoria">
-              <li className="nav-item border-categoria">
-                <a className="nav-link" aria-current="page" href="#">
-                  Deporte de montaña
-                </a>
-              </li>
-              <li className="nav-item border-categoria">
-                <a className="nav-link" href="#">
-                  Deporte de Pelota
-                </a>
-              </li>
-              <li className="nav-item border-categoria">
-                <a className="nav-link" href="#">
-                  Deporte de Agua
-                </a>
-              </li>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
+              <div className="dropdown">
+                <button
+                  className="d-flex align-items-center gap-2"
+                  type="button"
+                  id="userMenuButton"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    padding: 0,
+                    cursor: "pointer"
+                  }}
                 >
-                  Otros Deportes
-                </a>
-                <ul className="dropdown-menu">
+                  <div
+                    style={{
+                      width: "35px",
+                      height: "35px",
+                      backgroundColor: "#2E676A",
+                      color: "#fff",
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: "bold",
+                      userSelect: "none"
+                    }}
+                  >
+                    {initials}
+                  </div>
+                  <span style={{ fontSize: "0.8rem", userSelect: "none" }}>▼</span>
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
                   <li>
-                    <a className="dropdown-item" href="#">
-                      Sobre ruedas
-                    </a>
+                    <Link className="dropdown-item" to="/user">
+                      Mi perfil
+                    </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="#">
-                      Bolos
-                    </a>
+                    <Link className="dropdown-item" to="/my-products">
+                      Mis productos
+                    </Link>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="#">
-                      Billar
-                    </a>
+                    <LogoutButton dispatch={dispatch} />
                   </li>
                 </ul>
-              </li>
-            </ul>
-          </div>
+              </div>
+            </>
+          ) : (
+            <Link to={"/Login"}>
+              <button
+                type="button"
+                className="btn btn-outline-success"
+              >
+                Login
+              </button>
+            </Link>
+          )}
         </div>
-      </nav>
-
-      <hr className="mt-0" />
-    </div>
+      </div>
+    </nav>
   );
 };
