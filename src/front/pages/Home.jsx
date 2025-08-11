@@ -13,8 +13,7 @@ import ciclismo from "../assets/img/ciclismo.jpg";
 import mountain_bike from "../assets/img/mountain_bike.jpg";
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
 
-// 🆕 IMPORTO el modal para testearlo
-import { AddProductModal } from "../components/AddProductModal";
+
 
 export const Home = () => {
 
@@ -47,11 +46,7 @@ export const Home = () => {
 
 			</div>
 			
-			{/* 🆕 ENLACE TEMPORAL PARA TESTEAR EL MODAL */}
-			<div className="text-center my-4">
-				<p>🛠 Test del modal AddProduct:</p>
-				<AddProductModal />
-			</div>
+			
 
 			{categories.map((cat, index) => (
 				<SectionCard

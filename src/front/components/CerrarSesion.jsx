@@ -1,14 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // si usas react-router
+import { useNavigate } from 'react-router-dom';
 
-export function LogoutButton() {
+export function LogoutButton({ dispatch }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Borrar token
-    localStorage.removeItem('token');
-
-    // Redirigir a login o página pública
+    localStorage.removeItem('jwt-token');
+    localStorage.removeItem('user');
+    dispatch({ type: "set_current_user", payload: null }); // limpiar estado global
     navigate('/');
   };
 
