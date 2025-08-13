@@ -64,7 +64,6 @@ export const CardProducto = () => {
 
             </div>
           </div>
-
         </div>
       </div>
       <Footer />
