@@ -39,7 +39,6 @@ export const Home = () => {
 			<div className="mb-5"> 
 
 			</div>
-
 			<div className="mb-5">
 				{store.currentUser ? (
 					<div></div>
