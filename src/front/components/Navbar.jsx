@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { LogoutButton } from "./CerrarSesion.jsx";
 import { AddProductModal } from "../components/AddProductModal";
+import "../styles/Navbar.css";
 
 export const Navbar = () => {
   const { store, dispatch } = useGlobalReducer();
   const [categoriesData, setCategoriesData] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState("Todas las categorías");
 
   useEffect(() => {
     const token = localStorage.getItem("jwt-token");
@@ -73,9 +75,16 @@ export const Navbar = () => {
     "Otros Deportes"
   ];
 
+  const handleCategoryClick = (category) => {
+    if (category === "Todas las categorías" || (categoriesData[category] && categoriesData[category].length > 0)) {
+      setSelectedCategory(category);
+    }
+  };
+
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary pt-0">
+      {/* Navbar principal */}
+      <nav className="navbar navbar-expand-lg bg-body-tertiary pt-0 ">
         <div className="container-fluid d-flex align-items-center justify-content-between">
           <a className="navbar-brand pt-0 d-flex align-items-center" href="/">
             <img className="imgLogo" src="src/front/assets/img/logo.png" alt="Logo" />
@@ -138,7 +147,8 @@ export const Navbar = () => {
         </div>
       </nav>
 
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      {/* Navbar categorías */}
+      <nav className="navbar navbar-expand-lg bg-body-tertiary navegacion">
         <div className="container-fluid" style={{ maxWidth: "1440px" }}>
           <button
             className="navbar-toggler"
@@ -154,17 +164,24 @@ export const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarCategories">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 button-categoria">
               {allCategories.map((category) => {
-                const hasProducts = category === "Todas las categorías" || (categoriesData[category] && categoriesData[category].length > 0);
+                const hasProducts =
+                  category === "Todas las categorías" ||
+                  (categoriesData[category] && categoriesData[category].length > 0);
+
+                const isSelected = selectedCategory === category;
 
                 return category === "Otros Deportes" ? (
                   <li key={category} className="nav-item dropdown border-categoria">
                     <a
-                      className={`nav-link dropdown-toggle ${!hasProducts ? "text-muted disabled" : ""}`}
+                      className={`nav-link dropdown-toggle category-link ${isSelected ? "selected" : ""} ${
+                        !hasProducts ? "text-muted disabled" : ""
+                      }`}
                       href="#"
                       role="button"
                       data-bs-toggle={hasProducts ? "dropdown" : undefined}
                       aria-expanded="false"
                       style={{ cursor: hasProducts ? "pointer" : "not-allowed" }}
+                      onClick={() => handleCategoryClick(category)}
                     >
                       {category}
                     </a>
@@ -175,8 +192,11 @@ export const Navbar = () => {
                       ).map((sub) => (
                         <li key={sub}>
                           <a
-                            className={`dropdown-item ${categoriesData[category]?.includes(sub) ? "" : "text-muted disabled"}`}
+                            className={`dropdown-item category-link ${
+                              categoriesData[category]?.includes(sub) ? "" : "text-muted disabled"
+                            }`}
                             href="#"
+                            onClick={() => handleCategoryClick(sub)}
                           >
                             {sub}
                           </a>
@@ -187,9 +207,12 @@ export const Navbar = () => {
                 ) : (
                   <li key={category} className="nav-item border-categoria">
                     <a
-                      className={`nav-link ${!hasProducts ? "text-muted disabled" : ""}`}
+                      className={`nav-link category-link ${isSelected ? "selected" : ""} ${
+                        !hasProducts ? "text-muted disabled" : ""
+                      }`}
                       href={hasProducts ? "#" : undefined}
                       style={{ cursor: hasProducts ? "pointer" : "not-allowed" }}
+                      onClick={() => handleCategoryClick(category)}
                     >
                       {category}
                     </a>
