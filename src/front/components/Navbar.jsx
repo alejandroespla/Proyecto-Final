@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { LogoutButton } from "./CerrarSesion.jsx";
@@ -6,6 +6,7 @@ import { AddProductModal } from "../components/AddProductModal";
 
 export const Navbar = () => {
   const { store, dispatch } = useGlobalReducer();
+  const [categoriesData, setCategoriesData] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem("jwt-token");
@@ -35,6 +36,23 @@ export const Navbar = () => {
     }
   }, [dispatch]);
 
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/products`)
+      .then(res => res.json())
+      .then(data => {
+        const grouped = {};
+        data.forEach((product) => {
+          if (!grouped[product.category]) grouped[product.category] = new Set();
+          if (product.subcategory) grouped[product.category].add(product.subcategory);
+        });
+        const finalData = {};
+        for (let cat in grouped) {
+          finalData[cat] = Array.from(grouped[cat]);
+        }
+        setCategoriesData(finalData);
+      });
+  }, []);
+
   const getInitials = (name) => {
     if (!name) return "U";
     return name
@@ -47,6 +65,14 @@ export const Navbar = () => {
   const currentUser = store.currentUser;
   const initials = getInitials(currentUser?.fullname);
 
+  const allCategories = [
+    "Todas las categorías",
+    "Deporte de montaña",
+    "Deporte de Pelota",
+    "Deporte de Agua",
+    "Otros Deportes"
+  ];
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary pt-0">
@@ -55,22 +81,10 @@ export const Navbar = () => {
             <img className="imgLogo" src="src/front/assets/img/logo.png" alt="Logo" />
           </a>
 
-          <div
-            className="searchBox"
-            style={{
-              flexGrow: 1,
-              maxWidth: "1440px",
-              marginLeft: "auto",
-              marginRight: "auto"
-            }}
-          >
+          <div className="searchBox" style={{ flexGrow: 1, maxWidth: "1440px", marginLeft: "auto", marginRight: "auto" }}>
             <form className="w-100 d-flex align-items-center">
               <div className="position-relative w-100 d-flex align-items-center">
-                <input
-                  type="search"
-                  className="w-100 searchBox_input"
-                  placeholder="Buscar"
-                />
+                <input type="search" className="w-100 searchBox_input" placeholder="Buscar" />
               </div>
             </form>
           </div>
@@ -81,7 +95,6 @@ export const Navbar = () => {
                 <div className="text-center my-4">
                   <AddProductModal />
                 </div>
-
                 <div className="dropdown">
                   <button
                     className="d-flex align-items-center gap-2"
@@ -89,12 +102,7 @@ export const Navbar = () => {
                     id="userMenuButton"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
-                    style={{
-                      border: "none",
-                      background: "transparent",
-                      padding: 0,
-                      cursor: "pointer"
-                    }}
+                    style={{ border: "none", background: "transparent", padding: 0, cursor: "pointer" }}
                   >
                     <div
                       style={{
@@ -115,37 +123,21 @@ export const Navbar = () => {
                     <span style={{ fontSize: "0.8rem", userSelect: "none" }}>▼</span>
                   </button>
                   <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
-                    <li>
-                      <Link className="dropdown-item" to="/user">
-                        Mi perfil
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="dropdown-item" to="/my-products">
-                        Mis productos
-                      </Link>
-                    </li>
-                    <li>
-                      <LogoutButton dispatch={dispatch} />
-                    </li>
+                    <li><Link className="dropdown-item" to="/user">Mi perfil</Link></li>
+                    <li><Link className="dropdown-item" to="/my-products">Mis productos</Link></li>
+                    <li><LogoutButton dispatch={dispatch} /></li>
                   </ul>
                 </div>
               </>
             ) : (
               <Link to={"/Login"}>
-                <button
-                  type="button"
-                  className="btn btn-outline-success"
-                >
-                  Login
-                </button>
+                <button type="button" className="btn btn-outline-success">Login</button>
               </Link>
             )}
           </div>
         </div>
       </nav>
 
-      {/* Categorías con collapse */}
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid" style={{ maxWidth: "1440px" }}>
           <button
@@ -159,54 +151,51 @@ export const Navbar = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div
-            className="collapse navbar-collapse"
-            id="navbarCategories"
-          >
+          <div className="collapse navbar-collapse" id="navbarCategories">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 button-categoria">
-              <li className="nav-item border-categoria">
-                <a className="nav-link" aria-current="page" href="#">
-                  Deporte de montaña
-                </a>
-              </li>
-              <li className="nav-item border-categoria">
-                <a className="nav-link" href="#">
-                  Deporte de Pelota
-                </a>
-              </li>
-              <li className="nav-item border-categoria">
-                <a className="nav-link" href="#">
-                  Deporte de Agua
-                </a>
-              </li>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Otros Deportes
-                </a>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Sobre ruedas
+              {allCategories.map((category) => {
+                const hasProducts = category === "Todas las categorías" || (categoriesData[category] && categoriesData[category].length > 0);
+
+                return category === "Otros Deportes" ? (
+                  <li key={category} className="nav-item dropdown border-categoria">
+                    <a
+                      className={`nav-link dropdown-toggle ${!hasProducts ? "text-muted disabled" : ""}`}
+                      href="#"
+                      role="button"
+                      data-bs-toggle={hasProducts ? "dropdown" : undefined}
+                      aria-expanded="false"
+                      style={{ cursor: hasProducts ? "pointer" : "not-allowed" }}
+                    >
+                      {category}
+                    </a>
+                    <ul className="dropdown-menu">
+                      {(categoriesData[category] && categoriesData[category].length > 0
+                        ? categoriesData[category]
+                        : ["Sin subcategorías"]
+                      ).map((sub) => (
+                        <li key={sub}>
+                          <a
+                            className={`dropdown-item ${categoriesData[category]?.includes(sub) ? "" : "text-muted disabled"}`}
+                            href="#"
+                          >
+                            {sub}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ) : (
+                  <li key={category} className="nav-item border-categoria">
+                    <a
+                      className={`nav-link ${!hasProducts ? "text-muted disabled" : ""}`}
+                      href={hasProducts ? "#" : undefined}
+                      style={{ cursor: hasProducts ? "pointer" : "not-allowed" }}
+                    >
+                      {category}
                     </a>
                   </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Bolos
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Billar
-                    </a>
-                  </li>
-                </ul>
-              </li>
+                );
+              })}
             </ul>
           </div>
         </div>
