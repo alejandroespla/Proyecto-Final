@@ -33,6 +33,7 @@ export const router = createBrowserRouter(
 
         <Route path="/products/new" element={<AddProduct />} />
         <Route path="/products/:id/edit" element={<AddProduct />} />
+        <Route path="/products/details" element={<ProductDetail />} />
         
 
         <Route path="/user" element={<MiPerfil />} />
