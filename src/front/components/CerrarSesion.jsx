@@ -12,11 +12,12 @@ export function LogoutButton({ dispatch }) {
   };
 
   return (
-    <span
-      style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+    <a
+      className='btn'
+      style={{ cursor: 'pointer', color: 'blue', }}
       onClick={handleLogout}
     >
       Cerrar sesión
-    </span>
+    </a>
   );
 }
