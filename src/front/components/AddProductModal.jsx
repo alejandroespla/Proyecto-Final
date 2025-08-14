@@ -12,10 +12,13 @@ export const AddProductModal = () => {
     <>
       <button
         type="button"
-        className="btn btn-primary"
+        className="btn btn-outline-primary d-flex align-items-center"
         onClick={handleOpen}
       >
-        Nuevo producto
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus-lg me-2" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+        </svg>
+        Producto
       </button>
 
       {showModal && (
@@ -35,7 +38,7 @@ export const AddProductModal = () => {
           >
             <div className="modal-content">
               <div className="modal-title ">
-                <h3 className="mt-4" style={{ width: "100%",}}>Publicar nuevo producto</h3>
+                <h3 className="mt-4" style={{ width: "100%", }}>Publicar nuevo producto</h3>
                 <button
                   type="button"
                   className="btn-close"

@@ -1,3 +1,18 @@
-.navbar{
-    height: 90px;
+.navegacion {
+  height: 50px;
+  font-size: 18px;
 }
+
+.category-link {
+  color: #2e676a;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.category-link:hover {
+  color: #65d0d8;
+}
+
+.category-link.selected {
+  color: #2e676a;
+}
+
