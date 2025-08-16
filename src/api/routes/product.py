@@ -125,7 +125,7 @@ def delete_product(product_id):
     
     product = Product.query.get(product_id)
     if not product:
-        return jasonify({"error": "No se encuentra el producto"}),404
+        return jsonify({"error": "No se encuentra el producto"}),404
     
     if product.user_id != user_id:
         return jsonify({"message": "forbidden"}), 403
