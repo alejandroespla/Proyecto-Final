@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar.jsx";
 import { Footer } from "../components/Footer.jsx";
 
@@ -7,7 +7,9 @@ export const CardProducto = () => {
   const { id } = useParams();
   const [prod, setProd] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -22,6 +24,38 @@ export const CardProducto = () => {
       }
     })();
   }, [id]);
+
+  const handleDelete = async () => {
+    if (!currentUser?.id) {
+      alert("Debes iniciar sesión.");
+      return;
+    }
+    const ok = window.confirm("¿Seguro que quieres eliminar este producto?");
+    if (!ok) return;
+
+    try {
+      setDeleting(true);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: currentUser.id }) // provisional (mejor JWT en backend)
+      });
+
+      if (res.status === 403) {
+        alert("No puedes eliminar este producto.");
+        return;
+      }
+      if (!res.ok) throw new Error("Error al eliminar");
+
+      alert("Producto eliminado");
+      navigate("/"); 
+    } catch (e) {
+      console.error(e);
+      alert("No se pudo eliminar el producto.");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   if (loading) return <div className="container my-5">Cargando producto…</div>;
   if (!prod) return <div className="container my-5">Producto no encontrado</div>;

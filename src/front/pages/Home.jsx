@@ -4,7 +4,7 @@ import { Banner } from "../components/Banner.jsx";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { SectionCard } from "../components/SectionCard.jsx";
 import { Footer } from "../components/Footer.jsx";
-
+import {SubsectionCard} from "../components/SubsectionCard.jsx"
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -68,11 +68,24 @@ export const Home = () => {
             <h5 className="text-muted">No existen productos aún</h5>
           </div>
         ) : (
-          <div className="row">
-            {store.products.map((product, index) => (
-              <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-                <SectionCard category={product} />
-              </div>
+          <div >
+            {categories.map((cat, index) => (
+              <SectionCard
+                key={index}
+                title={cat.category}
+                image={null} //esta es la imagen que se pasa al banner, si es null no hay banner
+                reverse={false} //Para alternar la iamgen de las Categorias, si es false, no se activa
+              >
+                {cat.products.map((product) => (
+                  <SubsectionCard
+                    key={product.id}
+                    id={product.id}
+                    image="https://via.placeholder.com/300" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
+                    title={product.title}
+                    price={`${product.price}€/día`}
+                  />
+                ))}
+              </SectionCard>
             ))}
           </div>
         )}

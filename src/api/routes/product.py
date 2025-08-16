@@ -115,5 +115,23 @@ def update_product(product_id):
     db.session.commit()
     return jsonify(product.serialize()), 200
 
+@api_product.route("/product/<int:product_id>", methods=["DELETE"])
+def delete_product(product_id):
+    data = request.get_json(silent=True) or {}
+
+    user_id = data.get("user_id")
+    if not user_id:
+        return jsonify({"error": "No se encuentra el usuario"}),400
+    
+    product = Product.query.get(product_id)
+    if not product:
+        return jsonify({"error": "No se encuentra el producto"}),404
+    
+    if product.user_id != user_id:
+        return jsonify({"message": "forbidden"}), 403
+    
+    db.session.delete(product)
+    db.session.commit()
+    return jsonify({"message": "Producto eliminado"}),200
 
 

@@ -116,22 +116,6 @@ export const AddProduct = () => {
 
   if (loading) return <p>Cargando…</p>;
 
-  /*
-        setForm({
-          title: "",
-          description: "",
-          category: "",
-          subcategory: "",
-          price: "",
-          location: ""
-        });
-      } catch (error) {
-        console.error(error);
-        setMessage({ type: "error", text: "Ocurrió un error al guardar el producto." });
-      } finally {
-        setLoading(false);
-      }
-    };*/
 
   return (
     <div>
