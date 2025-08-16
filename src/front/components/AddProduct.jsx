@@ -1,7 +1,7 @@
 "use_client";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from "@vis.gl/react-google-maps";
+import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
 
 export const AddProduct = () => {
 
@@ -9,6 +9,10 @@ export const AddProduct = () => {
   const isEdit = Boolean(id);
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("user"));
+
+  const position = { lat: 41.3872516334326, lng: 2.171430948862673 }
+  const { open, setOpen } = useState(false)
+
 
   const [form, setForm] = useState({
     title: "",
@@ -161,15 +165,24 @@ export const AddProduct = () => {
         <input type="number" name="price" placeholder="Precio por día (€)"
           value={form.price} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
 
-          <APIProvider apiKey= {key}>
-            <div style={{height: "100vh"}}>
-              <Map zoom={9} center={position} mapId={"2cff1ef28229f873716f5413"}>
-
-              </Map>
-            </div>
-          </APIProvider>
+        <APIProvider apiKey={"AIzaSyAZGZS8YvpJUtpA8KHH5CbnoYUU05xTVak"} onLoad={()=> console.log('Maps APi has loader')}>
+          <div style={{ height: "30vh", width: "100%" }}>
+            <Map
+              defaultZoom={10}
+              defaultCenter={position}
+              mapId={"2cff1ef28229f873716f5413"}
+              >
+              <AdvancedMarker position={position} onClick={() => setOpen(true)}>
+                <Pin />
+              </AdvancedMarker>
+              {open && <InfoWindow position={position} onClose={() => setOpen(false)}>
+                <p>Barcelona</p>
+              </InfoWindow>}
+            </Map>
+          </div>
+        </APIProvider>
         {/* Este es el campo al que hay que meterle el google maps */}
-        
+
         <input type="text" name="location" placeholder="Ubicación"
           value={form.location} onChange={handleChange} className="w-full border mb-5 px-3 py-2 rounded" />
 

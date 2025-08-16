@@ -53,7 +53,7 @@ export const SectionCard = ({ title, image = null, reverse = false, children }) 
             ))}
           </div>
         </div>
-      </div> 
+      </div>
     </div>
   );
 };
