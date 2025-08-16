@@ -43,24 +43,24 @@ export const CardProducto = () => {
             <p className="text-muted">{prod.category} / {prod.subcategory}</p>
             <h3 className="text-danger mb-3">{prod.price} €/día</h3>
 
-                            <p className="mb-4">{prod.description}</p>
+            <p className="mb-4">{prod.description}</p>
 
-                            <div className="d-flex flex-column gap-1 mb-4">
-                                <span><strong>Ubicación:</strong> {prod.location || "—"}</span>
-                                <span><strong>Publicado por:</strong> {prod.username}</span>
-                            </div>
+            <div className="d-flex flex-column gap-1 mb-4">
+              <span><strong>Ubicación:</strong> {prod.location || "—"}</span>
+              <span><strong>Publicado por:</strong> {prod.username}</span>
+            </div>
 
-                            <div className="d-flex gap-2">
-                                <button className="btn btn-primary">Reservar</button>
-                                <button className="btn btn-outline-secondary">Contactar</button>
-                                {/* Botón de prueba "Editar" */}
-                                {/* Si quieres mostrarlo siempre para probar, deja solo el Link. 
+            <div className="d-flex gap-2">
+              <button className="btn btn-primary">Reservar</button>
+              <button className="btn btn-outline-secondary">Contactar</button>
+              {/* Botón de prueba "Editar" */}
+              {/* Si quieres mostrarlo siempre para probar, deja solo el Link. 
                   Si quieres mostrarlo solo al dueño, envuelve con la condición: */}
-                                {currentUser?.id === prod.user_id && (
-                                    <Link to={`/products/${id}/edit`} className="btn btn-warning">
-                                        Editar
-                                    </Link>
-                                )}
+              {currentUser?.id === prod.user_id && (
+                <Link to={`/products/${id}/edit`} className="btn btn-warning">
+                  Editar
+                </Link>
+              )}
 
             </div>
           </div>
