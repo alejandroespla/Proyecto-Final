@@ -87,20 +87,13 @@ export const CardProducto = () => {
             <div className="d-flex gap-2">
               <button className="btn btn-primary">Reservar</button>
               <button className="btn btn-outline-secondary">Contactar</button>
+              {/* Botón de prueba "Editar" */}
+              {/* Si quieres mostrarlo siempre para probar, deja solo el Link. 
+                  Si quieres mostrarlo solo al dueño, envuelve con la condición: */}
               {currentUser?.id === prod.user_id && (
-                <>
-                  <Link to={`/products/${id}/edit`} className="btn btn-warning">
-                    Editar
-                  </Link>
-                  <button
-                    id="btn-eliminar"
-                    className="btn btn-danger"
-                    onClick={handleDelete}
-                    disabled={deleting}
-                  >
-                    {deleting ? "Eliminando…" : "Eliminar"}
-                  </button>
-                </>
+                <Link to={`/products/${id}/edit`} className="btn btn-warning">
+                  Editar
+                </Link>
               )}
 
             </div>
