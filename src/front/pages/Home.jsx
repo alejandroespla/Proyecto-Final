@@ -7,6 +7,7 @@ import { Footer } from "../components/Footer.jsx";
 import {SubsectionCard} from "../components/SubsectionCard.jsx"
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
 
 export const Home = () => {
   const [categories, setCategories] = useState([]);
@@ -14,7 +15,7 @@ export const Home = () => {
   const { store, dispatch } = useGlobalReducer();
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/products`)
+    fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/products`)
       .then(res => res.json())
       .then(data => {
         dispatch({ type: "set_products", payload: data });
@@ -80,7 +81,8 @@ export const Home = () => {
                   <SubsectionCard
                     key={product.id}
                     id={product.id}
-                    image="https://via.placeholder.com/300" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
+                    image={cyclist_bycicle}
+                    //image="https://via.placeholder.com/300" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
                     title={product.title}
                     price={`${product.price}€/día`}
                   />
