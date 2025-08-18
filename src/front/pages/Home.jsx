@@ -8,13 +8,11 @@ import { SubsectionCard } from "../components/SubsectionCard.jsx";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
-import { useLocation } from "react-router-dom"; // 👈 para saber la ruta actual
 
 export const Home = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const { store, dispatch } = useGlobalReducer();
-  const location = useLocation();
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/products`)
@@ -30,7 +28,6 @@ export const Home = () => {
       });
   }, []);
 
-  // Loader de tarjetas
   const renderSkeletonCards = (count) => {
     return Array(count)
       .fill(0)
@@ -57,12 +54,8 @@ export const Home = () => {
         <Navbar />
       </div>
 
-      {/* Banner SOLO en Home (ruta "/") y SOLO si no hay usuario */}
-      {location.pathname === "/" && !store.currentUser && (
-        <div className="mb-5">
-          <Banner />
-        </div>
-      )}
+      {/* Banner solo en Home y sin usuario */}
+      {!store.currentUser && <div className="mb-5"><Banner /></div>}
 
       {/* Categorías / Productos */}
       <div className="container my-5">
@@ -101,25 +94,3 @@ export const Home = () => {
     </div>
   );
 };
-
-export const initialStore = () => {
-  return {
-    currentUser: null,
-    products: [],
-    message: null,
-  };
-};
-
-export default function storeReducer(store, action = {}) {
-  switch (action.type) {
-    case "set_current_user":
-      return { ...store, currentUser: action.payload };
-    case "add_product":
-      return { ...store, products: [...store.products, action.payload] };
-    case "set_products":
-      return { ...store, products: action.payload };
-    default:
-      console.error("Unknown action:", action.type);
-      return store;
-  }
-}
