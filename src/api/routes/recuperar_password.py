@@ -10,8 +10,7 @@ import os
 api_reset = Blueprint('api_reset', __name__)
 
 # Usar variable de entorno para la URL del frontend
-FRONTEND_URL = os.getenv("FRONTEND_URL", "https://shiny-xylophone-j6g599x4vv4cpv5g-3000.app.github.dev")
-
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://reimagined-disco-57j7q9jxg7qf7g6-3001.app.github.dev/")
 
 @api_reset.route('/password-reset', methods=['POST'])
 def send_password_reset():

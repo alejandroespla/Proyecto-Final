@@ -15,7 +15,7 @@ import {AddProduct} from "./components/AddProduct.jsx"
 import { ForgotPassword } from "./pages/RecuperarPassword.jsx";
 import { ResetPassword } from "./pages/ResetearPassword.jsx";
 import { MiPerfil } from "./pages/MiPerfil.jsx";
-import ProductDetail from "./pages/ProductDetail.jsx";
+import {CardProducto} from "./components/CardProducto.jsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,7 +33,7 @@ export const router = createBrowserRouter(
 
         <Route path="/products/new" element={<AddProduct />} />
         <Route path="/products/:id/edit" element={<AddProduct />} />
-        <Route path="/products/details" element={<ProductDetail />} />
+        <Route path="/products/details/:id" element={<CardProducto />} />
         
 
         <Route path="/user" element={<MiPerfil />} />

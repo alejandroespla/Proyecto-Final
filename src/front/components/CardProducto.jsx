@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar.jsx";
 import { Footer } from "../components/Footer.jsx";
+import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
 
 export const CardProducto = () => {
   const { id } = useParams();
@@ -67,7 +68,8 @@ export const CardProducto = () => {
         <div className="row g-4">
           <div className="col-md-6">
             <img
-              src={prod.image || "https://via.placeholder.com/800x600"}
+              //src={prod.image }//|| "https://via.placeholder.com/800x600"}
+              src={cyclist_bycicle}
               alt={prod.title}
               className="img-fluid rounded shadow-sm"
             />
@@ -87,13 +89,20 @@ export const CardProducto = () => {
             <div className="d-flex gap-2">
               <button className="btn btn-primary">Reservar</button>
               <button className="btn btn-outline-secondary">Contactar</button>
-              {/* Botón de prueba "Editar" */}
-              {/* Si quieres mostrarlo siempre para probar, deja solo el Link. 
-                  Si quieres mostrarlo solo al dueño, envuelve con la condición: */}
               {currentUser?.id === prod.user_id && (
-                <Link to={`/products/${id}/edit`} className="btn btn-warning">
-                  Editar
-                </Link>
+                <>
+                  <Link to={`/products/${id}/edit`} className="btn btn-warning">
+                    Editar
+                  </Link>
+                  <button
+                    id="btn-eliminar"
+                    className="btn btn-danger"
+                    onClick={handleDelete}
+                    disabled={deleting}
+                  >
+                    {deleting ? "Eliminando…" : "Eliminar"}
+                  </button>
+                </>
               )}
 
             </div>

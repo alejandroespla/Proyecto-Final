@@ -37,7 +37,7 @@ export const AddProduct = () => {
 
     (async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/product/${id}`);
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`);
         if (!res.ok) throw new Error("No se pudo cargar el producto");
         const data = await res.json();
 
@@ -97,9 +97,10 @@ export const AddProduct = () => {
       if (response.status === 403) { alert("No puedes editar este producto"); return; }
       if (!response.ok) throw new Error(isEdit ? "Error al guardar cambios" : "Error al crear producto");
 
-      await response.json();
+      
+      const data = await response.json();
       alert(isEdit ? "Cambios guardados" : "Producto creado con éxito");
-      navigate(`/product/${id}`);
+      navigate(`/products/details/${data.id}`)
 
       if (!isEdit) {
         setForm({ title: "", description: "", category: "", subcategory: "", price: "", location: "" });
