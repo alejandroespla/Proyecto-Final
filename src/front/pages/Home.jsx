@@ -4,15 +4,17 @@ import { Banner } from "../components/Banner.jsx";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { SectionCard } from "../components/SectionCard.jsx";
 import { Footer } from "../components/Footer.jsx";
-import {SubsectionCard} from "../components/SubsectionCard.jsx"
+import { SubsectionCard } from "../components/SubsectionCard.jsx";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
+import { useLocation } from "react-router-dom"; // 👈 para saber la ruta actual
 
 export const Home = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const { store, dispatch } = useGlobalReducer();
+  const location = useLocation();
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/products`)
@@ -55,10 +57,12 @@ export const Home = () => {
         <Navbar />
       </div>
 
-      {/* Banner solo si NO hay usuario logeado */}
-      <div className="mb-5">
-        {!store.currentUser && <Banner />}
-      </div>
+      {/* Banner SOLO en Home (ruta "/") y SOLO si no hay usuario */}
+      {location.pathname === "/" && !store.currentUser && (
+        <div className="mb-5">
+          <Banner />
+        </div>
+      )}
 
       {/* Categorías / Productos */}
       <div className="container my-5">
@@ -69,20 +73,19 @@ export const Home = () => {
             <h5 className="text-muted">No existen productos aún</h5>
           </div>
         ) : (
-          <div >
+          <div>
             {categories.map((cat, index) => (
               <SectionCard
                 key={index}
                 title={cat.category}
-                image={null} //esta es la imagen que se pasa al banner, si es null no hay banner
-                reverse={false} //Para alternar la iamgen de las Categorias, si es false, no se activa
+                image={null}
+                reverse={false}
               >
                 {cat.products.map((product) => (
                   <SubsectionCard
                     key={product.id}
                     id={product.id}
                     image={cyclist_bycicle}
-                    //image="https://via.placeholder.com/300" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
                     title={product.title}
                     price={`${product.price}€/día`}
                   />
