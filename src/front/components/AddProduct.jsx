@@ -10,21 +10,13 @@ import usePlacesAutocomplete, {
 import {  } from "@reach/combobox";
 import "@reac"
 export const AddProduct = () => {
-
   const { id } = useParams();                 // <- si existe, estamos editando
   const isEdit = Boolean(id);
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
-  const position = { lat: 41.3872516334326, lng: 2.171430948862673 }
-  const { open, setOpen } = useState(false)
-
-  const {isLoaded} = useLoadScript({
-    googleMapsApikey:"AIzaSyAZGZS8YvpJUtpA8KHH5CbnoYUU05xTVak",
-    libraries:["Places"]
-  });
-  if (!isLoaded) return <div>Loagin...</div>;
-  return <Map/>
+  const position = { lat: 41.3872516334326, lng: 2.171430948862673 };
+  const [open, setOpen] = useState(false);
 
   const [form, setForm] = useState({
     title: "",
@@ -36,7 +28,7 @@ export const AddProduct = () => {
   });
 
   const [message, setMessage] = useState({ type: "", text: "" });
-  const [loading, setLoading] = useState(isEdit); // si edit, entonces secargan los datos
+  const [loading, setLoading] = useState(isEdit); // si edit, entonces se cargan los datos
 
   const categoryOptions = {
     "Deportes de pelota": ["Fútbol", "Baloncesto", "Tennis", "Volleyball", "Golf", "Ping pong", "Pádel", "Otro"],
@@ -46,13 +38,12 @@ export const AddProduct = () => {
     "Otros deportes": ["Bolos", "Billar", "Otro"]
   };
 
-
   useEffect(() => {
     if (!isEdit) return;
 
     (async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/product/${id}`);
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`);
         if (!res.ok) throw new Error("No se pudo cargar el producto");
         const data = await res.json();
 
@@ -103,23 +94,20 @@ export const AddProduct = () => {
     };
 
     try {
-      //setLoading(true);
       const response = await fetch(url, {
         method,
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
 
       if (response.status === 403) { alert("No puedes editar este producto"); return; }
       if (!response.ok) throw new Error(isEdit ? "Error al guardar cambios" : "Error al crear producto");
 
-      await response.json();
+      
+      const data = await response.json();
       alert(isEdit ? "Cambios guardados" : "Producto creado con éxito");
-      navigate(`/product/${id}`)
+      navigate(`/products/details/${data.id}`)
 
-      // o limpia el form si es creación:
       if (!isEdit) {
         setForm({ title: "", description: "", category: "", subcategory: "", price: "", location: "" });
       }
@@ -129,9 +117,7 @@ export const AddProduct = () => {
     }
   };
 
-
   if (loading) return <p>Cargando…</p>;
-
 
   return (
     <div>
@@ -177,26 +163,34 @@ export const AddProduct = () => {
         <input type="number" name="price" placeholder="Precio por día (€)"
           value={form.price} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
 
-        <APIProvider apiKey={"AIzaSyAZGZS8YvpJUtpA8KHH5CbnoYUU05xTVak"} onLoad={()=> console.log('Maps APi has loader')}>
-          <div style={{ height: "30vh", width: "100%" }}>
+        {/* Input de ubicación arriba del mapa */}
+        <input type="text" name="location" placeholder="Ubicación"
+          value={form.location} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+
+        <APIProvider apiKey={"AIzaSyAZGZS8YvpJUtpA8KHH5CbnoYUU05xTVak"} onLoad={() => console.log('Maps API loaded')}>
+          <div style={{ 
+            height: "30vh", 
+            width: "100%", 
+            borderRadius: "16px", 
+            overflow: "hidden", 
+            marginBottom: "15px" 
+          }}>
             <Map
               defaultZoom={10}
               defaultCenter={position}
               mapId={"2cff1ef28229f873716f5413"}
-              >
+            >
               <AdvancedMarker position={position} onClick={() => setOpen(true)}>
                 <Pin />
               </AdvancedMarker>
-              {open && <InfoWindow position={position} onClose={() => setOpen(false)}>
-                <p>Barcelona</p>
-              </InfoWindow>}
+              {open && (
+                <InfoWindow position={position} onClose={() => setOpen(false)}>
+                  <p>Barcelona</p>
+                </InfoWindow>
+              )}
             </Map>
           </div>
         </APIProvider>
-        {/* Este es el campo al que hay que meterle el google maps */}
-
-        <input type="text" name="location" placeholder="Ubicación"
-          value={form.location} onChange={handleChange} className="w-full border mb-5 px-3 py-2 rounded" />
 
         <button type="submit" className="btn"
           style={{ backgroundColor: "#2E676A", border: "none", borderRadius: "8px", color: "#ffffff" }}

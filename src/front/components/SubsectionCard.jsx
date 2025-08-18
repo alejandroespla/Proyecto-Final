@@ -8,7 +8,7 @@ export const SubsectionCard = ({ id, image, title, price, oldPrice, discount }) 
   const { store } = useGlobalReducer();
 
   const handleClick = () => {
-    if (store?.currentUser) navigate(`/product/${id}`);
+    if (store?.currentUser) navigate(`/products/details/${id}`);
     else navigate("/login");
   };
 
