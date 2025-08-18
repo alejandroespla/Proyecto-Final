@@ -2,6 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+
+} from "use-places-autocomplete";
+import
 
 export const AddProduct = () => {
 
