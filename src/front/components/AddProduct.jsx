@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
+import {GoogleMap, useLoadScript, Marker } from "@react-google-maps/api"
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
-
 } from "use-places-autocomplete";
-import
-
+import {  } from "@reach/combobox";
+import "@reac"
 export const AddProduct = () => {
 
   const { id } = useParams();                 // <- si existe, estamos editando
@@ -19,6 +19,12 @@ export const AddProduct = () => {
   const position = { lat: 41.3872516334326, lng: 2.171430948862673 }
   const { open, setOpen } = useState(false)
 
+  const {isLoaded} = useLoadScript({
+    googleMapsApikey:"AIzaSyAZGZS8YvpJUtpA8KHH5CbnoYUU05xTVak",
+    libraries:["Places"]
+  });
+  if (!isLoaded) return <div>Loagin...</div>;
+  return <Map/>
 
   const [form, setForm] = useState({
     title: "",
