@@ -6,37 +6,53 @@ import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
 export const MisProductos = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
   const navigate = useNavigate();
 
+const token = localStorage.getItem("token");
+const currentUser = JSON.parse(localStorage.getItem("user") || "null")
 
-    const handleDelete = async () => {
-      const ok = window.confirm("¿Seguro que quieres eliminar este producto?");
-      if (!ok) return;
-        else{
+const handleDelete = async (id) => {
+    const ok = window.confirm("¿Seguro que quieres eliminar este producto?");
+    if (!ok) return;
 
-        }
+    try {
+      setDeletingId(id);
 
-      try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`, {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ user_id: currentUser.id }) // provisional (mejor JWT en backend)
-        });
+      const headers = {};
 
-        if (res.status === 403) {
-          alert("No puedes eliminar este producto.");
-          return;
-        }
-        if (!res.ok) throw new Error("Error al eliminar");
-
-        alert("Producto eliminado");
-        navigate("/"); 
-      } catch (e) {
-        console.error(e);
-        alert("No se pudo eliminar el producto.");
-      } finally {
-        setDeleting(false);
+      if (token) {
+        headers.Authorization = `Bearer ${token}`; // ✅ preferible con JWT
+      } else if (currentUser?.id) {
+        headers["Content-Type"] = "application/json";
       }
+
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`, {
+        method: "DELETE",
+        headers,
+        body: token ? undefined : JSON.stringify({ user_id: currentUser?.id }) // solo si NO tienes JWT
+      });
+
+      if (res.status === 401) {
+        alert("Tu sesión expiró. Inicia sesión de nuevo.");
+        navigate("/login");
+        return;
+      }
+      if (res.status === 403) {
+        alert("No puedes eliminar este producto.");
+        return;
+      }
+      if (!res.ok) throw new Error("Error al eliminar");
+
+      // ✅ Actualiza la lista sin salir de la página
+      setItems(prev => prev.filter(p => p.id !== id));
+      alert("Producto eliminado");
+    } catch (e) {
+      console.error(e);
+      alert("No se pudo eliminar el producto.");
+    } finally {
+      setDeletingId(null);
+    }
   };
 
 
@@ -103,7 +119,7 @@ export const MisProductos = () => {
 
                   <div className="mt-auto d-flex gap-2">
                     <Link to={`/products/details/${p.id}`} className="btn btn-sm btn-outline-secondary w-100">Ver</Link>
-                    <Link to={`/products/${id}/edit`} className="btn btn-sm btn-outline-primary w-100">Editar</Link>
+                    <Link to={`/products/${p.id}/edit`} className="btn btn-sm btn-outline-primary w-100">Editar</Link>
                     <button onClick={()=>handleDelete(p.id)} className="btn btn-sm btn-outline-danger">Borrar</button> 
                   </div>
                 </div>
