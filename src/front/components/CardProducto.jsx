@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { Navbar } from "../components/Navbar.jsx";
 import { Footer } from "../components/Footer.jsx";
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
 
@@ -9,13 +8,19 @@ export const CardProducto = () => {
   const [prod, setProd] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
+
+  const [showContact, setShowContact] = useState(false);
+  const [message, setMessage] = useState("");
+
   const currentUser = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`
+        );
         const data = await res.json();
         setProd(data);
       } catch (e) {
@@ -36,11 +41,14 @@ export const CardProducto = () => {
 
     try {
       setDeleting(true);
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: currentUser.id }) // provisional (mejor JWT en backend)
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_id: currentUser.id }),
+        }
+      );
 
       if (res.status === 403) {
         alert("No puedes eliminar este producto.");
@@ -49,7 +57,7 @@ export const CardProducto = () => {
       if (!res.ok) throw new Error("Error al eliminar");
 
       alert("Producto eliminado");
-      navigate("/"); 
+      navigate("/");
     } catch (e) {
       console.error(e);
       alert("No se pudo eliminar el producto.");
@@ -58,17 +66,63 @@ export const CardProducto = () => {
     }
   };
 
-  if (loading) return <div className="container my-5">Cargando producto…</div>;
-  if (!prod) return <div className="container my-5">Producto no encontrado</div>;
+  const handleSendMessage = async () => {
+    if (!currentUser?.id) {
+      alert("Debes iniciar sesión para contactar.");
+      return;
+    }
+    if (!message.trim()) {
+      alert("Escribe un mensaje.");
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api_message/messages`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sender_id: currentUser.id,
+            receiver_id: prod.user_id,
+            product_id: prod.id,
+            content: message,
+          }),
+        }
+      );
+
+      if (!res.ok) throw new Error("Error enviando mensaje");
+
+      alert("Mensaje enviado al propietario ✅");
+      setMessage("");
+      setShowContact(false);
+    } catch (e) {
+      console.error(e);
+      alert("No se pudo enviar el mensaje.");
+    }
+  };
+
+  if (loading)
+    return <div className="container my-5">Cargando producto…</div>;
+  if (!prod)
+    return <div className="container my-5">Producto no encontrado</div>;
 
   return (
     <div>
-      <Navbar />
+      {/* botón X para volver atrás */}
+      <div className="d-flex justify-content-end p-3">
+        <button
+          className="btn btn-outline-secondary"
+          onClick={() => navigate(-1)}
+        >
+          ✕
+        </button>
+      </div>
+
       <div className="container my-5">
         <div className="row g-4">
           <div className="col-md-6">
             <img
-              //src={prod.image }//|| "https://via.placeholder.com/800x600"}
               src={cyclist_bycicle}
               alt={prod.title}
               className="img-fluid rounded shadow-sm"
@@ -76,22 +130,42 @@ export const CardProducto = () => {
           </div>
           <div className="col-md-6">
             <h2 className="mb-2">{prod.title}</h2>
-            <p className="text-muted">{prod.category} / {prod.subcategory}</p>
+            <p className="text-muted">
+              {prod.category} / {prod.subcategory}
+            </p>
             <h3 className="text-danger mb-3">{prod.price} €/día</h3>
 
             <p className="mb-4">{prod.description}</p>
 
             <div className="d-flex flex-column gap-1 mb-4">
-              <span><strong>Ubicación:</strong> {prod.location || "—"}</span>
-              <span><strong>Publicado por:</strong> {prod.username}</span>
+              <span>
+                <strong>Ubicación:</strong> {prod.location || "—"}
+              </span>
+              <span>
+                <strong>Publicado por:</strong> {prod.username}
+              </span>
             </div>
 
             <div className="d-flex gap-2">
               <button className="btn btn-primary">Reservar</button>
-              <button className="btn btn-outline-secondary">Contactar</button>
+
+              {/* Mostrar "Contactar" solo si NO eres el dueño */}
+              {currentUser?.id !== prod.user_id && (
+                <button
+                  className="btn btn-outline-secondary"
+                  onClick={() => setShowContact(true)}
+                >
+                  Contactar
+                </button>
+              )}
+
+              {/* Si eres el dueño: mostrar editar y eliminar */}
               {currentUser?.id === prod.user_id && (
                 <>
-                  <Link to={`/products/${id}/edit`} className="btn btn-warning">
+                  <Link
+                    to={`/products/${id}/edit`}
+                    className="btn btn-warning"
+                  >
                     Editar
                   </Link>
                   <button
@@ -104,11 +178,71 @@ export const CardProducto = () => {
                   </button>
                 </>
               )}
-
             </div>
           </div>
         </div>
       </div>
+
+      {/* modal de contacto */}
+      {showContact && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="modal-backdrop fade show"
+            onClick={() => setShowContact(false)}
+          ></div>
+
+          {/* Modal */}
+          <div
+            className="modal fade show d-block"
+            tabIndex="-1"
+            role="dialog"
+            style={{ zIndex: 1050 }}
+          >
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content modal-style">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <h5 className="modal-title"></h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => setShowContact(false)}
+                  ></button>
+                </div>
+
+                {/* Cuerpo sin línea separadora */}
+                <h5 className="m-2">Contactar con {prod.username}</h5>
+                <div className="modal-body p-0">
+                  <textarea
+                    className="form-control border-0 rounded-0"
+                    rows="4"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Escribe tu mensaje..."
+                  ></textarea>
+                </div>
+
+                {/* Footer sin borde superior */}
+                <div className="modal-footer border-0">
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => setShowContact(false)}
+                  >
+                    Cerrar
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleSendMessage}
+                  >
+                    Enviar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       <Footer />
     </div>
   );
