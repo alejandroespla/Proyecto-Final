@@ -16,3 +16,6 @@
   color: #2e676a;
 }
 
+.dropdown-menu {
+  z-index: 2000 !important;
+}

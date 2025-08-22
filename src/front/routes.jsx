@@ -1,9 +1,9 @@
-// Import necessary components and functions from react-router-dom.
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
+
 import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
@@ -11,11 +11,14 @@ import { Login } from "./pages/Login";
 import Register from "./pages/Register";
 import {MisProductos} from "./pages/MisProductos.jsx";
 
-import {AddProduct} from "./components/AddProduct.jsx"
+import { AddProduct } from "./components/AddProduct.jsx";
 import { ForgotPassword } from "./pages/RecuperarPassword.jsx";
 import { ResetPassword } from "./pages/ResetearPassword.jsx";
 import { MiPerfil } from "./pages/MiPerfil.jsx";
-import {CardProducto} from "./components/CardProducto.jsx";
+import { CardProducto } from "./components/CardProducto.jsx";
+
+import { Inbox } from "./pages/Inbox.jsx";
+import { Message } from "./pages/Message.jsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +40,10 @@ export const router = createBrowserRouter(
         <Route path="/mis-productos" element={<MisProductos/>}/>
 
         <Route path="/user" element={<MiPerfil />} />
+
+        {/* Nuevas rutas de mensajes */}
+        <Route path="/inbox" element={<Inbox />} />
+        <Route path="/message/:messageId" element={<Message />} />
       </Route>
     </>
   )
