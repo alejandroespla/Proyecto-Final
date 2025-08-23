@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import logo from "../assets/img/logo.png";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ export const Login = () => {
         <Link to={"/"} >
           <img
             className="mx-auto d-block mb-3"
-            src="../src/front/assets/img/logo.png"
+            src={logo}
             style={{ maxWidth: "280px", width: "100%", borderRadius: "24px" }}
             alt="Logo"
           />
