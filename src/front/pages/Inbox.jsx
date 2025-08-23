@@ -28,7 +28,7 @@ export const Inbox = () => {
     };
 
     fetchChats();
-  }, [currentUser, backendApi]);
+  }, []);
 
   if (!currentUser) {
     return (

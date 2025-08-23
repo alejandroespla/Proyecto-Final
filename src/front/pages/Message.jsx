@@ -43,7 +43,7 @@ export const Message = () => {
     };
 
     fetchMessages();
-  }, [chatId, currentUser, backendApi, token]);
+  }, []);
 
   useEffect(() => {
     if (messagesEndRef.current) {
