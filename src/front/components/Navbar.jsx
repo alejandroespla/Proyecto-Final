@@ -188,6 +188,13 @@ export const Navbar = () => {
                           Mis productos
                         </Link>
                       </li>
+                       
+                      <li className="d-flex align-items-center mb-2">
+                        <img src={productos} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                        <Link className="dropdown-item ms-2" to="/mis-reservas">
+                          Mis reservas
+                        </Link>
+                      </li>
 
                       <li className="d-flex align-items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-box-arrow-right" viewBox="0 0 16 16">

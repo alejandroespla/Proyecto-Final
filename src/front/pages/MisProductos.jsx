@@ -9,10 +9,10 @@ export const MisProductos = () => {
   const [deletingId, setDeletingId] = useState(null);
   const navigate = useNavigate();
 
-const token = localStorage.getItem("token");
-const currentUser = JSON.parse(localStorage.getItem("user") || "null")
+  const token = localStorage.getItem("token");
+  const currentUser = JSON.parse(localStorage.getItem("user") || "null")
 
-const handleDelete = async (id) => {
+  const handleDelete = async (id) => {
     const ok = window.confirm("¿Seguro que quieres eliminar este producto?");
     if (!ok) return;
 
@@ -22,7 +22,7 @@ const handleDelete = async (id) => {
       const headers = {};
 
       if (token) {
-        headers.Authorization = `Bearer ${token}`; // ✅ preferible con JWT
+        headers.Authorization = `Bearer ${token}`; //  preferible con JWT
       } else if (currentUser?.id) {
         headers["Content-Type"] = "application/json";
       }
@@ -44,7 +44,7 @@ const handleDelete = async (id) => {
       }
       if (!res.ok) throw new Error("Error al eliminar");
 
-      // ✅ Actualiza la lista sin salir de la página
+      //  Actualiza la lista sin salir de la página
       setItems(prev => prev.filter(p => p.id !== id));
       alert("Producto eliminado");
     } catch (e) {
@@ -69,7 +69,7 @@ const handleDelete = async (id) => {
         if (token) {
           options.headers = { Authorization: `Bearer ${token}` };
         } else if (user?.id) {
-        //como no funciona con el jwt entra aqui
+          //como no funciona con el jwt entra aqui
           url = `${import.meta.env.VITE_BACKEND_URL}/api_product/users/${user.id}/products`;
         } else {
           navigate("/login");
@@ -100,6 +100,12 @@ const handleDelete = async (id) => {
       <div className="d-flex align-items-center justify-content-between mb-3">
         <h2 className="m-0">Mis productos</h2>
         <Link to="/add-product" className="btn btn-primary">Añadir producto</Link>
+        <button
+          className="btn btn-outline-secondary"
+          onClick={() => navigate("/")}
+        >
+          ✕
+        </button>
       </div>
 
       {items.length === 0 ? (
@@ -120,7 +126,7 @@ const handleDelete = async (id) => {
                   <div className="mt-auto d-flex gap-2">
                     <Link to={`/products/details/${p.id}`} className="btn btn-sm btn-outline-secondary w-100">Ver</Link>
                     <Link to={`/products/${p.id}/edit`} className="btn btn-sm btn-outline-primary w-100">Editar</Link>
-                    <button onClick={()=>handleDelete(p.id)} className="btn btn-sm btn-outline-danger">Borrar</button> 
+                    <button onClick={() => handleDelete(p.id)} className="btn btn-sm btn-outline-danger">Borrar</button>
                   </div>
                 </div>
               </div>

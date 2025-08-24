@@ -1,29 +1,52 @@
 import React, { useEffect, useState } from "react";
+import {useNavigate } from "react-router-dom";
 
 export const ArticulosReservados = () => {
     const [reservas, setReservas] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem("reservas")) || [];
+        const currentUser = JSON.parse(localStorage.getItem("user"));
 
-        // Convierte las fechas de string a Date porque como se estan guardando en el localstorage pierde el formato
-        const fechaConvertida = data.map((res) => ({
+        const misReservas = data.filter(res => res.userId === currentUser?.id).map(res => ({
             ...res,
             fechaInicio: new Date(res.fechaInicio),
             fechaFin: new Date(res.fechaFin),
         }));
 
-        setReservas(fechaConvertida);
+        setReservas(misReservas);
     }, []);
 
     const handleDeleteReserva = (index) => {
+        const toDelete = reservas[index];
+
         const nuevasReservas = reservas.filter((_, i) => i !== index);
         setReservas(nuevasReservas);
+
+        const all = JSON.parse(localStorage.getItem("reservas")) || [];
+        const updated = all.filter(r =>
+            !(
+                r.userId === toDelete.userId &&
+                r.producto?.id === toDelete.producto?.id &&
+                r.fechaInicio === toDelete.fechaInicio.toISOString() &&
+                r.fechaFin === toDelete.fechaFin.toISOString()
+            )
+        );
+
         localStorage.setItem("reservas", JSON.stringify(nuevasReservas));
     };
 
     return (
         <div className="container my-5">
+            <div className="d-flex justify-content-end p-3">
+                <button
+                    className="btn btn-outline-secondary"
+                    onClick={() => navigate("/")}
+                >
+                    ✕
+                </button>
+            </div>
             <h2>Mis artículos reservados</h2>
             {reservas.length === 0 ? (
                 <p>No tienes artículos reservados</p>

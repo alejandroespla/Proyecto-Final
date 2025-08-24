@@ -4,7 +4,7 @@ import { Footer } from "../components/Footer.jsx";
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { PiOrangeDuotone } from "react-icons/pi";
+
 
 
 export const CardProducto = () => {
@@ -14,46 +14,49 @@ export const CardProducto = () => {
   const [deleting, setDeleting] = useState(false);
 
   const [showContact, setShowContact] = useState(false);
-  const [showReserva, setShowReserva] =useState(false);
+  const [showReserva, setShowReserva] = useState(false);
   const [message, setMessage] = useState("");
 
-  const [fechaInicio, setFechaInicio]= useState(null);
+  const [fechaInicio, setFechaInicio] = useState(null);
   const [fechaFin, setFechaFin] = useState(null);
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
-  const calcularPrecio = () =>{
-    if(!fechaInicio || !fechaFin) return 0;
-    const diferenciaTiempo= Math.abs(fechaFin - fechaInicio);
-    const diferenciaDias = Math.ceil(diferenciaTiempo / (1000 * 60 *60 *24) +1) //el +1 es para el dia de inicio, el *1000 es para llevar de ms a s
+  const calcularPrecio = () => {
+    if (!fechaInicio || !fechaFin) return 0;
+    const diferenciaTiempo = Math.abs(fechaFin - fechaInicio);
+    const diferenciaDias = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24) + 1) //el +1 es para el dia de inicio, el *1000 es para llevar de ms a s
     return diferenciaDias * prod.price;
   }
 
-      const confirmarReserva = () =>{
-      if(!fechaInicio || !fechaFin){
-        alert("Escoja un rango de fehcas válida.")
-        return;
-      }
-
-      const reserva={
-        producto: prod,
-        fechaInicio: fechaInicio.toISOString(),
-        fechaFin: fechaFin.toISOString(),
-        total: calcularPrecio(),
-        dueño: prod.username,
-      };
-
-      //esto se va a guardar en el localstorage por el momento mientras se prueba
-      const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
-      reservas.push(reserva);
-      localStorage.setItem("reservas", JSON.stringify(reservas));
-
-      setShowReserva(false);
-      alert("Artículo reservado!");
-      navigate("/mis-reservas");
+  const confirmarReserva = () => {
+    if (!fechaInicio || !fechaFin) {
+      alert("Escoja un rango de fehcas válida.")
       return;
     }
+
+    const reserva = {
+      producto: prod,
+      fechaInicio: fechaInicio.toISOString(),
+      fechaFin: fechaFin.toISOString(),
+      total: calcularPrecio(),
+      dueño: prod.username,
+      ownerId: prod.user_id,        // dueño del producto
+      userId: currentUser.id,       // QUIEN RESERVA
+      createdAt: new Date().toISOString()
+    };
+
+    //esto se va a guardar en el localstorage por el momento mientras se prueba
+    const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+    reservas.push(reserva);
+    localStorage.setItem("reservas", JSON.stringify(reservas));
+
+    setShowReserva(false);
+    alert("Artículo reservado!");
+    navigate("/mis-reservas");
+    return;
+  }
 
 
 
@@ -194,19 +197,19 @@ export const CardProducto = () => {
               {/* Mostrar "Contactar" solo si NO eres el dueño */}
               {currentUser?.id !== prod.user_id && (
                 <>
-                    <button 
+                  <button
                     className="btn btn-primary"
                     onClick={() => setShowReserva(true)}
-                    >
-                      Reservar
-                    </button>
-                    
-                    <button
-                      className="btn btn-outline-secondary"
-                      onClick={() => setShowContact(true)}
-                    >
-                      Contactar
-                    </button>
+                  >
+                    Reservar
+                  </button>
+
+                  <button
+                    className="btn btn-outline-secondary"
+                    onClick={() => setShowContact(true)}
+                  >
+                    Contactar
+                  </button>
                 </>
               )}
 
@@ -299,24 +302,24 @@ export const CardProducto = () => {
       {showReserva && (
         <>
           <div
-          className="modal-backdrop fade show"
-          onClick={() => setShowReserva(false)}
+            className="modal-backdrop fade show"
+            onClick={() => setShowReserva(false)}
           ></div>
 
           <div
-          className="modal fade show d-block"
-          tabIndex="-1"
-          role="dialog"
-          style={{ zIndex: 1050}}
+            className="modal fade show d-block"
+            tabIndex="-1"
+            role="dialog"
+            style={{ zIndex: 1050 }}
           >
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content modal-style p-3">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h5 className="modal-title">Reservar {prod.title}</h5>
                   <button
-                  className="btn-close"
-                  type="button"
-                  onClick={() => setShowReserva(false)}
+                    className="btn-close"
+                    type="button"
+                    onClick={() => setShowReserva(false)}
                   >
                   </button>
                 </div>
@@ -325,22 +328,22 @@ export const CardProducto = () => {
 
                 <div className="d-flex gap-2 mb-3">
                   <DatePicker
-                  selected={fechaInicio}
-                  onChange={(fecha)=>setFechaInicio(fecha)}
-                  selectsStart
-                  fechaInicio={fechaInicio}
-                  fechaFin={fechaFin}
-                  placeholderText="Fecha de inicio"
+                    selected={fechaInicio}
+                    onChange={(fecha) => setFechaInicio(fecha)}
+                    selectsStart
+                    startDate={fechaInicio}
+                    endDate={fechaFin}
+                    placeholderText="Fecha de inicio"
                   />
 
                   <DatePicker
-                  selected={fechaFin}
-                  onChange={(fecha) => setFechaFin(fecha)}
-                  selectsEnd
-                  fechaInicio={fechaInicio}
-                  fechaFin={fechaFin}
-                  minDate={fechaInicio}
-                  placeholderText="Fecha de finalizacion"
+                    selected={fechaFin}
+                    onChange={(fecha) => setFechaFin(fecha)}
+                    selectsEnd
+                    startDate={fechaInicio}
+                    endDate={fechaFin}
+                    minDate={fechaInicio}
+                    placeholderText="Fecha de finalizacion"
                   />
                 </div>
 
@@ -348,15 +351,15 @@ export const CardProducto = () => {
 
                 <div className="d-flex justify-content-end gap-2">
                   <button
-                  className="btn btn-secondary"
-                  onClick={()=> setShowReserva(false)}
+                    className="btn btn-secondary"
+                    onClick={() => setShowReserva(false)}
                   >
                     Cancelar
                   </button>
 
                   <button
-                  className="btn btn-primary"
-                  onClick={()=> confirmarReserva()}
+                    className="btn btn-primary"
+                    onClick={() => confirmarReserva()}
                   >
                     Reservar
                   </button>
