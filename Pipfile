@@ -23,6 +23,7 @@ bcrypt = "*"
 flask-mail = "*"
 flask = "*"
 mail = "*"
+tomli = "*"
 
 [requires]
 python_version = "3.13"
