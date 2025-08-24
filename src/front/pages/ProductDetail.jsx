@@ -39,7 +39,7 @@ const ProductDetail = ({ product }) => {
                 <FaUserCircle size={40} className="me-3 text-secondary" />
                 <div>
                   <h6 className="mb-0">{product.owner || "Usuario anónimo"}</h6>
-                  <small className="text-muted">Vendedor en Wallaclone</small>
+                  <small className="text-muted">Vendedor en Sportsy</small>
                 </div>
               </div>
             </div>

@@ -5,12 +5,34 @@ import { LogoutButton } from "./CerrarSesion.jsx";
 import { AddProductModal } from "../components/AddProductModal";
 import "../styles/Navbar.css";
 import productos from "../assets/img/productos.png";
+import logo from "../assets/img/logo.png";
 
 export const Navbar = () => {
   const { store, dispatch } = useGlobalReducer();
-  const [categoriesData, setCategoriesData] = useState({});
   const [selectedCategory, setSelectedCategory] = useState("Todas las categorías");
+  const [selectedSubcategory, setSelectedSubcategory] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(null); // controla qué menú está abierto
 
+  // Categorías y subcategorías fijas
+  const categoriesData = {
+    "Todas las categorías": [],
+    "Deportes de pelota": ["Fútbol", "Baloncesto", "Tennis", "Volleyball", "Golf", "Ping pong", "Pádel", "Otro"],
+    "Deportes de agua": ["Surf", "Piragüismo", "Pádel surf", "Ski acuático", "Wakeboard", "Kayak", "Bodyboard", "Otro"],
+    "Deportes de montaña": ["Alpinismo", "Trekking", "Acampada", "Senderismo", "Escalada", "Otro"],
+    "Deportes sobre ruedas": ["Bicicleta", "MTB", "Skate", "Surf skate", "Patinaje", "Rollerblades", "Motocross", "Motociclismo", "Otro"],
+    "Otros deportes": ["Bolos", "Billar", "Otro"],
+  };
+
+  const allCategories = [
+    "Todas las categorías",
+    "Deportes de pelota",
+    "Deportes de agua",
+    "Deportes de montaña",
+    "Deportes sobre ruedas",
+    "Otros deportes",
+  ];
+
+  // Mantener sesión usuario
   useEffect(() => {
     const token = localStorage.getItem("jwt-token");
     if (token) {
@@ -39,23 +61,6 @@ export const Navbar = () => {
     }
   }, [dispatch]);
 
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_BACKEND_URL}api_product/products`)
-      .then((res) => res.json())
-      .then((data) => {
-        const grouped = {};
-        data.forEach((product) => {
-          if (!grouped[product.category]) grouped[product.category] = new Set();
-          if (product.subcategory) grouped[product.category].add(product.subcategory);
-        });
-        const finalData = {};
-        for (let cat in grouped) {
-          finalData[cat] = Array.from(grouped[cat]);
-        }
-        setCategoriesData(finalData);
-      });
-  }, []);
-
   const getInitials = (name) => {
     if (!name) return "U";
     return name
@@ -68,62 +73,63 @@ export const Navbar = () => {
   const currentUser = store.currentUser;
   const initials = getInitials(currentUser?.fullname);
 
-  const allCategories = [
-    "Todas las categorías",
-    "Deporte de montaña",
-    "Deporte de Pelota",
-    "Deporte de Agua",
-    "Otros Deportes",
-  ];
-
   const handleCategoryClick = (category) => {
-    if (
-      category === "Todas las categorías" ||
-      (categoriesData[category] && categoriesData[category].length > 0)
-    ) {
+    if (category === selectedCategory) {
+      setOpenDropdown(openDropdown === category ? null : category);
+    } else {
       setSelectedCategory(category);
+      setSelectedSubcategory(null);
+      setOpenDropdown(category);
     }
+  };
+
+  const handleSubcategoryClick = (subcat) => {
+    setSelectedSubcategory(subcat);
+    setSelectedCategory(selectedCategory);
+    setOpenDropdown(null);
+  };
+
+  const products = store.products || [];
+  const categoryHasProducts = (category, subcat = null) => {
+    if (category === "Todas las categorías") return products.length > 0;
+    return products.some((p) => {
+      if (subcat) return p.subcategoria === subcat;
+      return p.categoria === category;
+    });
   };
 
   return (
     <>
       {/* Navbar principal */}
-      <nav className="navbar navbar-expand-lg bg-body-tertiary pt-0 ">
-        <div className="container-fluid d-flex align-items-center" style={{maxWidth:"1700px"}}>
-          <a className="navbar-brand pt-0 d-flex align-items-center" href="/">
-            <img className="imgLogo" src="src/front/assets/img/logo.png" alt="Logo" />
-          </a>
+      <nav className="navbar navbar-expand-lg bg-body-tertiary pt-0">
+        <div
+          className="container-fluid d-flex align-items-center position-relative"
+          style={{ maxWidth: "1700px", zIndex: 1100 }}
+        >
+          <Link className="navbar-brand pt-0 d-flex align-items-center" to="/">
+            <img className="imgLogo" src={logo} alt="Logo" />
+          </Link>
 
-          <div
-            className="searchBox"
-            style={{ flexGrow: 1, maxWidth: "1440px", marginLeft: "auto", marginRight: "auto" }}
-          >
+          {/* Barra de búsqueda */}
+          <div className="searchBox" style={{ flexGrow: 1, maxWidth: "1440px", margin: "0 auto" }}>
             <form className="w-100 d-flex align-items-center">
-              <div className="position-relative w-100 d-flex align-items-center">
-                <input type="search" className="w-100 searchBox_input" placeholder="Buscar" />
-              </div>
+              <input type="search" className="w-100 searchBox_input" placeholder="Buscar" />
             </form>
           </div>
 
-          <div className="d-flex align-items-center gap-3 m-3">
+          {/* Menú usuario */}
+          <div className="d-flex align-items-center gap-3 m-3 position-relative">
             {currentUser ? (
               <>
-                <div className="text-center my-4">
-                  <AddProductModal />
-                </div>
-                <div className="dropdown">
+                <AddProductModal />
+
+                <div className="dropdown" style={{ position: "relative" }}>
                   <button
-                    className="d-flex align-items-center gap-2"
                     type="button"
-                    id="userMenuButton"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    style={{
-                      border: "none",
-                      background: "transparent",
-                      padding: 0,
-                      cursor: "pointer",
-                    }}
+                    className="d-flex align-items-center gap-2"
+                    style={{ border: "none", background: "transparent", padding: 0, cursor: "pointer" }}
+                    onClick={() => setOpenDropdown(openDropdown === "user" ? null : "user")}
+                    aria-expanded={openDropdown === "user"}
                   >
                     <div
                       style={{
@@ -141,84 +147,98 @@ export const Navbar = () => {
                     >
                       {initials}
                     </div>
-                    <span style={{ fontSize: "0.8rem", userSelect: "none" }}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="#2E676A"
-                        className="bi bi-chevron-down"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
-                        />
-                      </svg>
-                    </span>
                   </button>
-                  <ul
-                    className="dropdown-menu dropdown-menu-end"
-                    aria-labelledby="userMenuButton"
-                    style={{
-                      padding: "16px",
-                      borderRadius: "24px",
-                      border: "none",
-                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-                    }}
-                  >
-                    <li className="d-flex align-items-center dropdown-item" style={{ height: "40px" }}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="currentColor"
-                        className="bi bi-person-circle"
-                        viewBox="0 0 16 16"
-                      >
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                        <path
-                          fillRule="evenodd"
-                          d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-                        />
-                      </svg>
-                      <Link className="dropdown-item" to="/user">
-                        Mi perfil
-                      </Link>
-                    </li>
 
-                    <li className="d-flex align-items-center dropdown-item mb-3" style={{ height: "40px" }}>
-                      <img src={productos} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
-                      <Link className="dropdown-item" to="/my-products">
-                        Mis productos
-                      </Link>
-                    </li>
+                  {openDropdown === "user" && (
+                    <ul
+                      className="dropdown-menu dropdown-menu-end p-3 show"
+                      style={{
+                        borderRadius: "24px",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                        position: "absolute",
+                        right: 0,
+                        top: "calc(100% + 0.5rem)",
+                        minWidth: "200px",
+                      }}
+                    >
+                      <li className="d-flex align-items-center mb-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          className="bi bi-person-circle"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                          <path
+                            fillRule="evenodd"
+                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                          />
+                        </svg>
+                        <Link className="dropdown-item ms-2" to="/user">
+                          Mi perfil
+                        </Link>
+                      </li>
 
-                    <li className="d-flex align-items-center dropdown-item" style={{ height: "40px" }}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="currentColor"
-                        className="bi bi-box-arrow-right"
-                        viewBox="0 0 16 16"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"
-                        />
-                        <path
-                          fillRule="evenodd"
-                          d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"
-                        />
-                      </svg>
-                      <LogoutButton dispatch={dispatch} />
-                    </li>
-                  </ul>
+                      <li className="d-flex align-items-center mb-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          className="bi bi-chat-dots"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
+                          <path d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9 9 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.4 10.4 0 0 1-.524 2.318l-.003.011a11 11 0 0 1-.244.637c-.079.186.074.394.273.362a22 22 0 0 0 .693-.125m.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6-3.004 6-7 6a8 8 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a11 11 0 0 0 .398-2" />
+                        </svg>
+                        <Link
+                          className="dropdown-item ms-2"
+                          to="/inbox"
+                          onClick={() => {
+                            dispatch({ type: "mark_all_messages_read" });
+                            setOpenDropdown(null);
+                          }}
+                        >
+                          Inbox
+                        </Link>
+                      </li>
+
+                      <li className="d-flex align-items-center mb-2">
+
+                        <img src={productos} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                        <Link className="dropdown-item ms-2" to="/mis-productos">
+                          Mis productos
+                        </Link>
+                      </li>
+
+                      <li className="d-flex align-items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          className="bi bi-box-arrow-right"
+                          viewBox="0 0 16 16"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"
+                          />
+                          <path
+                            fillRule="evenodd"
+                            d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"
+                          />
+                        </svg>
+                        <LogoutButton dispatch={dispatch} />
+                      </li>
+                    </ul>
+                  )}
                 </div>
               </>
             ) : (
-              <Link to={"/Login"}>
+              <Link to={"/login"}>
                 <button type="button" className="btn btn-outline-success">
                   Login
                 </button>
@@ -242,47 +262,53 @@ export const Navbar = () => {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
+
           <div className="collapse navbar-collapse" id="navbarCategories">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 button-categoria">
               {allCategories.map((category) => {
-                const hasProducts =
-                  category === "Todas las categorías" ||
-                  (categoriesData[category] && categoriesData[category].length > 0);
-
+                const subcats = categoriesData[category];
                 const isSelected = selectedCategory === category;
+                const isOpen = openDropdown === category;
+                const enabled = categoryHasProducts(category);
 
-                return category === "Otros Deportes" ? (
-                  <li key={category} className="nav-item dropdown border-categoria">
-                    <a
-                      className={`nav-link dropdown-toggle ${isSelected ? "active" : ""}`}
-                      href="#"
-                      role="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      onClick={() => handleCategoryClick(category)}
-                    >
-                      {category}
-                    </a>
-                    <ul className="dropdown-menu">
-                      {categoriesData[category]?.map((subcat) => (
-                        <li key={subcat}>
-                          <a className="dropdown-item" href="#">
-                            {subcat}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                ) : (
-                  <li key={category} className="nav-item border-categoria">
+                if (category === "Todas las categorías") {
+                  return (
+                    <li key={category} className="nav-item border-categoria">
+                      <button
+                        type="button"
+                        className={`nav-link ${isSelected ? "active" : ""}`}
+                        onClick={() => handleCategoryClick(category)}
+                        style={{ border: "none", background: "transparent" }}
+                        disabled={!enabled}
+                      >
+                        {category}
+                      </button>
+                    </li>
+                  );
+                }
+
+                return (
+                  <li key={category} className="nav-item border-categoria dropdown">
                     <button
-                      className={`nav-link ${isSelected ? "active" : ""}`}
-                      disabled={!hasProducts}
+                      className={`nav-link dropdown-toggle ${isSelected ? "active" : ""}`}
+                      type="button"
                       onClick={() => handleCategoryClick(category)}
                       style={{ border: "none", background: "transparent" }}
+                      disabled={!enabled}
                     >
                       {category}
                     </button>
+                    {isOpen && subcats.length > 0 && (
+                      <ul className="dropdown-menu show">
+                        {subcats.map((subcat) => (
+                          <li key={subcat}>
+                            <button className="dropdown-item" onClick={() => handleSubcategoryClick(subcat)}>
+                              {subcat}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 );
               })}
