@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar.jsx";
 import { Footer } from "../components/Footer.jsx";
-import logo from "../assets/img/logo.png";
 
 export const Inbox = () => {
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [productTitles, setProductTitles] = useState({});
   const currentUser = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const backendApi = import.meta.env.VITE_BACKEND_URL.replace(/\/+$/, "");
@@ -20,6 +20,27 @@ export const Inbox = () => {
         if (!res.ok) throw new Error("Error al cargar chats");
         const data = await res.json();
         setChats(data);
+
+        // Extraer product_id únicos
+        const productIds = [...new Set(data.map((chat) => chat.product_id).filter(Boolean))];
+        
+        // Obtener títulos de productos con múltiples fetch, en paralelo
+        const promises = productIds.map((id) =>
+          fetch(`${backendApi}/api_product/product/${id}`)
+            .then((r) => (r.ok ? r.json() : null))
+            .then((product) => ({ id, title: product?.title || "Sin producto" }))
+            .catch(() => ({ id, title: "Sin producto" }))
+        );
+
+        const titlesArray = await Promise.all(promises);
+
+        // Convertir array a objeto { productId: productTitle }
+        const titlesMap = {};
+        titlesArray.forEach(({ id, title }) => {
+          titlesMap[id] = title;
+        });
+
+        setProductTitles(titlesMap);
       } catch (e) {
         console.error(e);
       } finally {
@@ -28,7 +49,7 @@ export const Inbox = () => {
     };
 
     fetchChats();
-  }, []);
+  }, [currentUser, backendApi]);
 
   if (!currentUser) {
     return (
@@ -51,7 +72,9 @@ export const Inbox = () => {
       <div className="container my-5">
         <h2 className="mb-4">💬 Chats</h2>
         {loading && <p>Cargando chats...</p>}
-        {!loading && chats.length === 0 && <div className="alert alert-info">No tienes chats todavía.</div>}
+        {!loading && chats.length === 0 && (
+          <div className="alert alert-info">No tienes chats todavía.</div>
+        )}
         <div className="list-group shadow-sm rounded">
           {chats.map((chat) => (
             <button
@@ -61,7 +84,9 @@ export const Inbox = () => {
             >
               <div>
                 <strong>{chat.other_user_name}</strong>
-                <p className="mb-1 text-muted">Producto: {chat.product_id || "Sin producto"}</p>
+                <p className="mb-1 text-muted">
+                  Producto: {productTitles[chat.product_id] || "Sin producto"}
+                </p>
               </div>
             </button>
           ))}
