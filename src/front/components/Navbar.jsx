@@ -207,16 +207,8 @@ export const Navbar = () => {
 
                       <li className="d-flex align-items-center mb-2">
 
-                        <img
-                          src={productos}
-                          alt="Productos"
-                          style={{ width: "24px", height: "24px", objectFit: "contain" }}
-                        />
-                        <Link className="dropdown-item ms-2" to="/my-products" onClick={() => setOpenDropdown(null)}>
-
                         <img src={productos} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                         <Link className="dropdown-item ms-2" to="/mis-productos">
-
                           Mis productos
                         </Link>
                       </li>
