@@ -19,3 +19,5 @@ class User(db.Model):
             "username": self.username,
             "fullname": self.fullname
         }
+    
+    
