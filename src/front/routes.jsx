@@ -5,7 +5,7 @@ import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
-import NewProduct from "./pages/NewProduct";
+import {MisProductos} from "./pages/MisProductos.jsx";
 
 import { AddProduct } from "./components/AddProduct.jsx";
 import { ForgotPassword } from "./pages/RecuperarPassword.jsx";
@@ -25,10 +25,14 @@ export const router = createBrowserRouter(
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route element={<ForgotPassword />} path="/forgot-password" />
+        
         <Route element={<ResetPassword />} path="/reset-password" />
         <Route path="/products/new" element={<AddProduct />} />
         <Route path="/products/:id/edit" element={<AddProduct />} />
         <Route path="/products/details/:id" element={<CardProducto />} />
+
+        <Route path="/mis-productos" element={<MisProductos/>}/>
+
         <Route path="/user" element={<MiPerfil />} />
         {/* Nuevas rutas de mensajes */}
         <Route path="/inbox" element={<Inbox />} />

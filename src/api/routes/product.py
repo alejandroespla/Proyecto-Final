@@ -3,6 +3,7 @@ from api.models.Product import Product
 from api.database.db import db
 from api.models.User import User
 from flask_cors import CORS
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 api_product = Blueprint('api_product', __name__)
 
@@ -133,3 +134,9 @@ def delete_product(product_id):
     db.session.delete(product)
     db.session.commit()
     return jsonify({"message": "Producto eliminado"}),200
+
+
+@api_product.route("/users/<int:user_id>/products", methods=["GET"])
+def products_by_user(user_id):
+    products = Product.query.filter_by(user_id=user_id).all()
+    return jsonify([p.serialize() for p in products]), 200
