@@ -107,20 +107,34 @@ export const Message = () => {
       <div className="container my-5">
         <h2 className="mb-4">Chat</h2>
         <div
-          className="chat-window border rounded p-3 mb-3"
-          style={{ height: "400px", overflowY: "auto" }}
+          className="chat-window border p-3 mb-3"
+          style={{ height: "400px", overflowY: "auto", borderRadius: "16px", background: "#ffffffff" }}
         >
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className={`message p-2 my-1 rounded ${msg.sender_id === currentUser.id ? "text-end bg-primary text-white" : "text-start bg-light"
-                }`}
+              className="d-flex"
+              style={{
+                justifyContent: msg.sender_id === currentUser.id ? "flex-end" : "flex-start",
+                marginBottom: "8px"
+              }}
             >
-              {msg.content}
-              <br />
-              <small className="text-muted" style={{ fontSize: "0.75rem" }}>
-                {new Date(msg.timestamp).toLocaleString()}
-              </small>
+              <div
+                className={`message p-3 ${msg.sender_id === currentUser.id ? "bg-primary text-white" : "bg-white text-dark border"}`}
+                style={{
+                  borderRadius: "16px",
+                  display: "inline-block",
+                  maxWidth: "50%",
+                  wordBreak: "break-word",
+                  textAlign: "left"
+                }}
+              >
+                {msg.content}
+                <br />
+                <small style={{ fontSize: "0.75rem", color: msg.sender_id === currentUser.id ? "#ffffffff" : "#877d7dff" }}>
+                  {new Date(msg.timestamp).toLocaleString()}
+                </small>
+              </div>
             </div>
           ))}
           <div ref={messagesEndRef} />
@@ -128,15 +142,19 @@ export const Message = () => {
 
         <div className="input-group">
           <textarea
-            className="form-control"
-            rows="3"
+            className="form-control me-4 p-3"
+            style={{ borderRadius: "16px" }}
+            rows="2"
             placeholder="Escribe tu mensaje..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             disabled={sending}
           ></textarea>
-          <button className="btn btn-primary" onClick={handleSendMessage} disabled={sending || !input.trim()}>
+          <button className="btn btn-outline-success" onClick={handleSendMessage} disabled={sending || !input.trim()}
+            style={{ minWidth:"160px", borderRadius: "16px" }}
+          >
             {sending ? "Enviando..." : "Enviar"}
+
           </button>
         </div>
 
