@@ -23,6 +23,9 @@ export default function storeReducer(store, action = {}) {
     case "add_message":
       return { ...store, messages: [...store.messages, action.payload] };
 
+    case "set_messages":
+      return { ...store, messages: action.payload }; // NUEVO
+
     case "mark_message_read":
       return {
         ...store,

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer.jsx";
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
+import logo from "../assets/img/logo.png";
 
 export const CardProducto = () => {
   const { id } = useParams();
@@ -9,18 +10,17 @@ export const CardProducto = () => {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
 
-  const [showContact, setShowContact] = useState(false);
-  const [message, setMessage] = useState("");
-
   const currentUser = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
+
+  // Limpia la URL backend para evitar doble slash
+  const backendApi = import.meta.env.VITE_BACKEND_URL.replace(/\/+$/, "");
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`
-        );
+        const res = await fetch(`${backendApi}/api_product/product/${id}`);
+        if (!res.ok) throw new Error("Error cargando producto");
         const data = await res.json();
         setProd(data);
       } catch (e) {
@@ -29,7 +29,7 @@ export const CardProducto = () => {
         setLoading(false);
       }
     })();
-  }, [id]);
+  }, [id, backendApi]);
 
   const handleDelete = async () => {
     if (!currentUser?.id) {
@@ -41,21 +41,16 @@ export const CardProducto = () => {
 
     try {
       setDeleting(true);
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api_product/product/${id}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ user_id: currentUser.id }),
-        }
-      );
-
+      const res = await fetch(`${backendApi}/api_product/product/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: currentUser.id }),
+      });
       if (res.status === 403) {
         alert("No puedes eliminar este producto.");
         return;
       }
       if (!res.ok) throw new Error("Error al eliminar");
-
       alert("Producto eliminado");
       navigate("/");
     } catch (e) {
@@ -66,55 +61,41 @@ export const CardProducto = () => {
     }
   };
 
-  const handleSendMessage = async () => {
+  const handleOpenChat = async () => {
     if (!currentUser?.id) {
       alert("Debes iniciar sesión para contactar.");
       return;
     }
-    if (!message.trim()) {
-      alert("Escribe un mensaje.");
-      return;
-    }
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api_message/messages`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sender_id: currentUser.id,
-            receiver_id: prod.user_id,
-            product_id: prod.id,
-            content: message,
-          }),
-        }
-      );
-
-      if (!res.ok) throw new Error("Error enviando mensaje");
-
-      alert("Mensaje enviado al propietario ✅");
-      setMessage("");
-      setShowContact(false);
+      const res = await fetch(`${backendApi}/api_message/open_chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_a_id: currentUser.id,
+          user_b_id: prod.user_id,
+          product_id: prod.id,
+        }),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Error ${res.status}: ${text}`);
+      }
+      const chat = await res.json();
+      navigate(`/inbox/${chat.id}`);
     } catch (e) {
-      console.error(e);
-      alert("No se pudo enviar el mensaje.");
+      console.error("Error abrir chat:", e);
+      alert(`No se pudo abrir el chat: ${e.message}`);
     }
   };
 
-  if (loading)
-    return <div className="container my-5">Cargando producto…</div>;
-  if (!prod)
-    return <div className="container my-5">Producto no encontrado</div>;
+  if (loading) return <div className="container my-5">Cargando producto…</div>;
+  if (!prod) return <div className="container my-5">Producto no encontrado</div>;
 
   return (
     <div>
-      {/* botón X para volver atrás */}
       <div className="d-flex justify-content-end p-3">
-        <button
-          className="btn btn-outline-secondary"
-          onClick={() => navigate(-1)}
-        >
+        <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
           ✕
         </button>
       </div>
@@ -122,11 +103,7 @@ export const CardProducto = () => {
       <div className="container my-5">
         <div className="row g-4">
           <div className="col-md-6">
-            <img
-              src={cyclist_bycicle}
-              alt={prod.title}
-              className="img-fluid rounded shadow-sm"
-            />
+            <img src={cyclist_bycicle} alt={prod.title} className="img-fluid rounded shadow-sm" />
           </div>
           <div className="col-md-6">
             <h2 className="mb-2">{prod.title}</h2>
@@ -134,9 +111,7 @@ export const CardProducto = () => {
               {prod.category} / {prod.subcategory}
             </p>
             <h3 className="text-danger mb-3">{prod.price} €/día</h3>
-
             <p className="mb-4">{prod.description}</p>
-
             <div className="d-flex flex-column gap-1 mb-4">
               <span>
                 <strong>Ubicación:</strong> {prod.location || "—"}
@@ -148,24 +123,14 @@ export const CardProducto = () => {
 
             <div className="d-flex gap-2">
               <button className="btn btn-primary">Reservar</button>
-
-              {/* Mostrar "Contactar" solo si NO eres el dueño */}
               {currentUser?.id !== prod.user_id && (
-                <button
-                  className="btn btn-outline-secondary"
-                  onClick={() => setShowContact(true)}
-                >
+                <button className="btn btn-outline-secondary" onClick={handleOpenChat}>
                   Contactar
                 </button>
               )}
-
-              {/* Si eres el dueño: mostrar editar y eliminar */}
               {currentUser?.id === prod.user_id && (
                 <>
-                  <Link
-                    to={`/products/${id}/edit`}
-                    className="btn btn-warning"
-                  >
+                  <Link to={`/products/${id}/edit`} className="btn btn-warning">
                     Editar
                   </Link>
                   <button
@@ -182,66 +147,6 @@ export const CardProducto = () => {
           </div>
         </div>
       </div>
-
-      {/* modal de contacto */}
-      {showContact && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="modal-backdrop fade show"
-            onClick={() => setShowContact(false)}
-          ></div>
-
-          {/* Modal */}
-          <div
-            className="modal fade show d-block"
-            tabIndex="-1"
-            role="dialog"
-            style={{ zIndex: 1050 }}
-          >
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content modal-style">
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                  <h5 className="modal-title"></h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setShowContact(false)}
-                  ></button>
-                </div>
-
-                {/* Cuerpo sin línea separadora */}
-                <h5 className="m-2">Contactar con {prod.username}</h5>
-                <div className="modal-body p-0">
-                  <textarea
-                    className="form-control border-0 rounded-0"
-                    rows="4"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Escribe tu mensaje..."
-                  ></textarea>
-                </div>
-
-                {/* Footer sin borde superior */}
-                <div className="modal-footer border-0">
-                  <button
-                    className="btn btn-secondary"
-                    onClick={() => setShowContact(false)}
-                  >
-                    Cerrar
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={handleSendMessage}
-                  >
-                    Enviar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
 
       <Footer />
     </div>

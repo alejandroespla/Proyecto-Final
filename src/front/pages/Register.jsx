@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/register.css'; 
 import { Link } from 'react-router-dom';
+import logo from "../assets/img/logo.png";
 
 const RegisterForm = () => {
   const [form, setForm] = useState({
@@ -81,7 +82,7 @@ const RegisterForm = () => {
       <div className="register-card bg-white bg-opacity-75 p-4 rounded shadow">
         <Link to={"/"} >
         <img className="mx-auto d-block mb-3"  
-					 src="../src/front/assets/img/logo.png" 
+					 src={logo}
 					 style={{ maxWidth: "280px", width: "100%", borderRadius:"24px"}} 
 					 alt="Logo"
 				/>
