@@ -5,6 +5,7 @@ import { LogoutButton } from "./CerrarSesion.jsx";
 import { AddProductModal } from "../components/AddProductModal";
 import "../styles/Navbar.css";
 import productos from "../assets/img/productos.png";
+import reservas from "../assets/img/reservas.png";
 
 
 
@@ -190,7 +191,7 @@ export const Navbar = () => {
                       </li>
                        
                       <li className="d-flex align-items-center mb-2">
-                        <img src={productos} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                        <img src={reservas} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                         <Link className="dropdown-item ms-2" to="/mis-reservas">
                           Mis reservas
                         </Link>
