@@ -40,7 +40,7 @@ export const ForgotPassword = () => {
 		const email = e.target.email.value;
 
 		try {
-			const response = await fetch( "https://probable-waffle-64p76qv66pcr7v7-3001.app.github.dev/api/password-reset",
+			const response = await fetch( `${import.meta.env.VITE_BACKEND_URL}/api/password-reset`,
 				{
 					method: "POST",
 					headers: {
