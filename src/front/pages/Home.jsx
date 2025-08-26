@@ -4,11 +4,36 @@ import { Banner } from "../components/Banner.jsx";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { SectionCard } from "../components/SectionCard.jsx";
 import { Footer } from "../components/Footer.jsx";
-import {SubsectionCard} from "../components/SubsectionCard.jsx"
+import { SubsectionCard } from "../components/SubsectionCard.jsx";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+
+// Imágenes productos
+import image_not_found from "../assets/img/ImageNotFound.png";
+import pelota from "../assets/img/pelota.png";
+import pelota2 from "../assets/img/pelota2.jpg";
+import pelota3 from "../assets/img/pelota3.png";
+import agua1 from "../assets/img/agua1.png";
+import agua2 from "../assets/img/agua2.jpg";
+import agua3 from "../assets/img/agua3.jpg";
+import mountain from "../assets/img/mountain.jpg";
+import mountain2 from "../assets/img/mountain2.jpg";
+import mountain3 from "../assets/img/mountain3.png";
+import ruedas from "../assets/img/ruedas.jpg";
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
 import mountain_bike from "../assets/img/mountain_bike.jpg";
+import otros1 from "../assets/img/otros1.png";
+import otros2 from "../assets/img/otros2.png";
+import otros3 from "../assets/img/otros3.jpg";
+
+const imagesByCategory = {
+  "deportes de pelota": [pelota2, pelota3, pelota],
+  "deportes de agua": [agua1, agua2, agua3],
+  "deportes de montaña": [mountain, mountain2, mountain3],
+  "deportes sobre ruedas": [mountain_bike, ruedas, cyclist_bycicle],
+  "otros deportes": [otros1, otros2, otros3],
+};
+const normalizeCategory = cat => (cat || "").trim().toLowerCase();
 
 export const Home = () => {
   const [categories, setCategories] = useState([]);
@@ -29,7 +54,6 @@ export const Home = () => {
       });
   }, []);
 
-  // Loader de tarjetas
   const renderSkeletonCards = (count) => {
     return Array(count)
       .fill(0)
@@ -55,12 +79,10 @@ export const Home = () => {
       <div className="bg-body-tertiary">
         <Navbar />
       </div>
-
       {/* Banner solo si NO hay usuario logeado */}
       <div className="mb-5">
         {!store.currentUser && <Banner />}
       </div>
-
       {/* Categorías / Productos */}
       <div className="container my-5">
         {loading ? (
@@ -70,54 +92,33 @@ export const Home = () => {
             <h5 className="text-muted">No existen productos aún</h5>
           </div>
         ) : (
-          <div >
-            {categories.map((cat, index) => (
-              <SectionCard
-                key={index}
-                title={cat.category}
-                image={null} //esta es la imagen que se pasa al banner, si es null no hay banner
-                reverse={false} //Para alternar la iamgen de las Categorias, si es false, no se activa
-              >
-                {cat.products.map((product) => (
-                  <SubsectionCard
-                    key={product.id}
-                    id={product.id}
-                    images={[cyclist_bycicle,mountain_bike,cyclist_bycicle]}
-                    //image="https://via.placeholder.com/300" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
-                    title={product.title}
-                    price={`${product.price}€/día`}
-                  />
-                ))}
-              </SectionCard>
-            ))}
+          <div>
+            {categories.map((cat, index) => {
+              const imgArray = imagesByCategory[normalizeCategory(cat.category)] || [image_not_found, image_not_found, image_not_found];
+              return (
+                <SectionCard
+                  key={index}
+                  title={cat.category}
+                  image={null}
+                  reverse={false}
+                >
+                  {cat.products.map((product) => (
+                    <SubsectionCard
+                      key={product.id}
+                      id={product.id}
+                      images={imgArray}
+                      title={product.title}
+                      price={`${product.price}€/día`}
+                    />
+                  ))}
+                </SectionCard>
+              );
+            })}
           </div>
         )}
       </div>
-
       {/* Footer */}
       <Footer />
     </div>
   );
 };
-
-export const initialStore = () => {
-  return {
-    currentUser: null,
-    products: [],
-    message: null,
-  };
-};
-
-export default function storeReducer(store, action = {}) {
-  switch (action.type) {
-    case "set_current_user":
-      return { ...store, currentUser: action.payload };
-    case "add_product":
-      return { ...store, products: [...store.products, action.payload] };
-    case "set_products":
-      return { ...store, products: action.payload };
-    default:
-      console.error("Unknown action:", action.type);
-      return store;
-  }
-}
