@@ -8,6 +8,7 @@ import {SubsectionCard} from "../components/SubsectionCard.jsx"
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
+import mountain_bike from "../assets/img/mountain_bike.jpg";
 
 export const Home = () => {
   const [categories, setCategories] = useState([]);
@@ -81,7 +82,7 @@ export const Home = () => {
                   <SubsectionCard
                     key={product.id}
                     id={product.id}
-                    image={cyclist_bycicle}
+                    images={[cyclist_bycicle,mountain_bike,cyclist_bycicle]}
                     //image="https://via.placeholder.com/300" // Estas imagenes podemos agregarlas nosotros, no son las de los articulos
                     title={product.title}
                     price={`${product.price}€/día`}

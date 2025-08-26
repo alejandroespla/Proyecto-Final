@@ -2,12 +2,12 @@ import React, { useRef, useState } from "react";
 import "../styles/sectioncard.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-export const SectionCard = ({ title, image = null, reverse = false, children }) => {
+export const SectionCard = ({ title, subtitle, image = null, reverse = false, children }) => {
   const scrollRef = useRef(null);
   const [scrollIndex, setScrollIndex] = useState(0);
 
   const totalItems = React.Children.count(children);
-  const itemsPerPage = 6; // 2 filas x 3 columnas visibles
+  const itemsPerPage = 3; // 2 filas x 3 columnas visibles
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const scrollTo = (index) => {
@@ -24,17 +24,16 @@ export const SectionCard = ({ title, image = null, reverse = false, children }) 
 
   return (
     <div className="container my-5 section-card">
-      <h3 className="fw-bold mb-3">{title}</h3>
+      <h3 className="fw-bold mb-1">{title}</h3>
+      {subtitle && <h5 className="text-muted mb-3">{subtitle}</h5>}
 
       <div className={`d-flex ${hasBanner ? "flex-wrap flex-md-nowrap" : "w-100"} ${reverse && hasBanner ? "flex-row-reverse" : ""}`}>
-        {/* Banner opcional: NO se renderiza si image es null */}
         {hasBanner && (
           <div className="banner-col">
             <img src={image} alt={title} className="img-fluid rounded shadow-sm w-100 h-100 object-fit-cover" />
           </div>
         )}
 
-        {/* Carrusel: a ancho completo si no hay banner */}
         <div className={`cards-col position-relative ${!hasBanner ? "cards-col-full" : ""}`}>
           <button className="carousel-btn left" onClick={handlePrev} disabled={scrollIndex === 0}>
             <FaChevronLeft />

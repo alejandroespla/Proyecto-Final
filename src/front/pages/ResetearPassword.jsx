@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import logo from "../assets/img/logo.png";
 
 export const ResetPassword = () => {
     const [backgroundUrl, setBackgroundUrl] = useState("");
@@ -77,7 +78,7 @@ export const ResetPassword = () => {
             <div className="card shadow-sm p-5 bg-white bg-opacity-75" style={{ maxWidth: "500px", width: "100%", borderRadius: "24px" }}>
                 <Link to={"/"}>
                     <img className="mx-auto d-block mb-3"
-                        src="../src/front/assets/img/logo.png"
+                        src={logo}
                         style={{ maxWidth: "220px", width: "100%", borderRadius: "24px" }}
                         alt="Logo"
                     />
@@ -118,3 +119,5 @@ export const ResetPassword = () => {
         </div>
     );
 };
+
+
