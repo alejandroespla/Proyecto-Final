@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useRef, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { LogoutButton } from "./CerrarSesion.jsx";
 import { AddProductModal } from "../components/AddProductModal";
 import "../styles/Navbar.css";
 import productos from "../assets/img/productos.png";
+import shoppingcart from "../assets/img/shoppingcart.png";
+
+
 import logo from "../assets/img/logo.png";
 
 export const Navbar = () => {
@@ -12,6 +15,107 @@ export const Navbar = () => {
   const [selectedCategory, setSelectedCategory] = useState("Todas las categorías");
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null); // controla qué menú está abierto
+  const navigate = useNavigate();
+
+  // Los productos pueden venir plano (productos) o agrupado (grupos con .products)
+  const products = useMemo(() => {
+    const raw = store?.products ?? [];
+    if (!Array.isArray(raw)) return [];
+    // Si viene plano (tiene title/id), se usa como tal
+    const looksFlat = raw.length && (raw[0]?.title || raw[0]?.id);
+    return looksFlat ? raw : raw.flatMap(g => g?.products ?? []);
+  }, [store?.products]);
+
+  ///////Para la busqueda////////////////////////
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
+
+  const searchWrapRef = useRef(null);
+  const inputRef = useRef(null);
+
+
+  // para quitar acentos y a minúsculas
+  const norm = (s) =>
+    (s || "")
+      .toString()
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .toLowerCase();
+
+  // helpers para leer propiedades con nombres distintos, porsi cambian en el backend
+  const getTitle = (p) => p?.title || p?.name || "";
+  const getCat = (p) => p?.subcategory || p?.category || "";
+  const getUsername = (p) => p?.username || "";
+
+  ///Busca a los 150ms de dejar de teclear
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      setShowResults(false);
+      setActiveIndex(-1);
+      return;
+    }
+
+    const t = setTimeout(() => {
+      const q = norm(query);
+      const filtered = (products || [])
+        .filter((p) => {
+          const haystack = `${getTitle(p)} ${getCat(p)} ${getUsername(p)}`;
+          return norm(haystack).includes(q);
+        })
+        .slice(0, 8); // limita a 8 sugerencias
+      setResults(filtered);
+      setShowResults(true);
+      setActiveIndex(-1);
+    }, 150);
+
+    return () => clearTimeout(t);
+  }, [query, products]);
+
+  ////Para que el dropdown se cierre al hacer click afuera
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (searchWrapRef.current && !searchWrapRef.current.contains(e.target)) {
+        setShowResults(false);
+        setActiveIndex(-1);
+      }
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
+
+
+  const goToProduct = (p) => {
+    if (!p?.id) return;
+    setShowResults(false);
+    setQuery("");
+    navigate(`/products/details/${p.id}`);
+  };
+
+  ///Para poder usar las flechas, enter y escape en el dropdown
+  const onKeyDown = (e) => {
+    if (!showResults || results.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % results.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => (i - 1 + results.length) % results.length);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const chosen = results[activeIndex] ?? results[0];
+      if (chosen) goToProduct(chosen);
+    } else if (e.key === "Escape") {
+      setShowResults(false);
+      setActiveIndex(-1);
+    }
+  };
+
+  //////////////////////////////////////////////
+
 
   // Categorías y subcategorías fijas
   const categoriesData = {
@@ -89,7 +193,7 @@ export const Navbar = () => {
     setOpenDropdown(null);
   };
 
-  const products = store.products || [];
+  //const products = store.products || [];
   const categoryHasProducts = (category, subcat = null) => {
     if (category === "Todas las categorías") return products.length > 0;
     return products.some((p) => {
@@ -111,10 +215,43 @@ export const Navbar = () => {
           </Link>
 
           {/* Barra de búsqueda */}
-          <div className="searchBox" style={{ flexGrow: 1, maxWidth: "1440px", margin: "0 auto" }}>
-            <form className="w-100 d-flex align-items-center">
-              <input type="search" className="w-100 searchBox_input" placeholder="Buscar" />
+          <div className="searchBox" style={{ flexGrow: 1, maxWidth: "1440px", margin: "0 auto" }} ref={searchWrapRef}>
+            <form
+              className="w-100 d-flex align-items-center"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                ref={inputRef}
+                type="search"
+                className="w-100 searchBox_input"
+                placeholder="Buscar por nombre o categoría…"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onFocus={() => query && setShowResults(true)}
+                onKeyDown={onKeyDown}
+                autoComplete="off"
+              />
             </form>
+
+            {showResults && results.length > 0 && (
+              <ul className="search-suggest dropdown-menu show p-0">
+                {results.map((p, idx) => (
+                  <li
+                    key={p.id ?? idx}
+                    className={`search-suggest-item ${idx === activeIndex ? "active" : ""}`}
+                    onMouseEnter={() => setActiveIndex(idx)}
+                    onMouseDown={(e) => e.preventDefault()} // evita blur antes del click
+                    onClick={() => goToProduct(p)}
+                  >
+                    <div className="d-flex flex-column">
+                      <span className="title">{getTitle(p)}</span>
+                      <small className="text-muted">{getCat(p)}</small>
+                    </div>
+                    {/* Aqui puedo poner miniaturas de imagenes */}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {/* Menú usuario */}
@@ -210,6 +347,13 @@ export const Navbar = () => {
                         <img src={productos} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                         <Link className="dropdown-item ms-2" to="/mis-productos">
                           Mis productos
+                        </Link>
+                      </li>
+
+                      <li className="d-flex align-items-center mb-2">
+                        <img src={shoppingcart} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                        <Link className="dropdown-item ms-2" to="/mis-reservas">
+                          Mis reservas
                         </Link>
                       </li>
 

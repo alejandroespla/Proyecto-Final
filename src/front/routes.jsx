@@ -6,6 +6,7 @@ import { Single } from "./pages/Single";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
 import {MisProductos} from "./pages/MisProductos.jsx";
+import { ArticulosReservados } from "./pages/ArticulosReservados.jsx";
 
 import { AddProduct } from "./components/AddProduct.jsx";
 import { ForgotPassword } from "./pages/RecuperarPassword.jsx";
@@ -32,6 +33,7 @@ export const router = createBrowserRouter(
         <Route path="/products/details/:id" element={<CardProducto />} />
 
         <Route path="/mis-productos" element={<MisProductos/>}/>
+        <Route path="/mis-reservas" element={<ArticulosReservados/>}/>
 
         <Route path="/user" element={<MiPerfil />} />
         {/* Nuevas rutas de mensajes */}
