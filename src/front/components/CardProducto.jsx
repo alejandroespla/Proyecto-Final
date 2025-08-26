@@ -140,7 +140,7 @@ export const CardProducto = () => {
   return (
     <div>
       <div className="d-flex justify-content-end p-3">
-        <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
+        <button className="btn btn-outline-secondary" onClick={() => navigate("/")}>
           ✕
         </button>
       </div>
