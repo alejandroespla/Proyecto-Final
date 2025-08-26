@@ -36,7 +36,7 @@
 		"eslint-plugin-react": "^7.33.1",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-plugin-react-refresh": "^0.4.3",
-		"vite": "^4.4.8"
+		"vite": "^7.1.2"
 	},
 	"babel": {
 		"presets": [
@@ -56,6 +56,8 @@
 	"dependencies": {
 		"@googlemaps/extended-component-library": "^0.6.14",
 		"@googlemaps/react-wrapper": "^1.2.0",
+		"@reach/combobox": "^0.18.0",
+		"@react-google-maps/api": "^2.20.7",
 		"@vis.gl/react-google-maps": "^1.5.5",
 		"bootstrap": "^5.3.7",
 		"bootstrap-icons": "^1.13.1",
