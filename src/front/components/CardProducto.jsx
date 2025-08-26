@@ -3,7 +3,32 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer.jsx";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
+import pelota from "../assets/img/pelota.png";
+import pelota2 from "../assets/img/pelota2.jpg";
+import pelota3 from "../assets/img/pelota3.png";
+import agua1 from "../assets/img/agua1.png";
+import agua2 from "../assets/img/agua2.jpg";
+import agua3 from "../assets/img/agua3.jpg";
+import mountain from "../assets/img/mountain.jpg";
+import mountain2 from "../assets/img/mountain2.jpg";
+import mountain3 from "../assets/img/mountain3.png";
+import ruedas from "../assets/img/ruedas.jpg";
+import mountain_bike from "../assets/img/mountain_bike.jpg";
+import otros1 from "../assets/img/otros1.png";
+import otros2 from "../assets/img/otros2.png";
+import otros3 from "../assets/img/otros3.jpg";
+import image_not_found from "../assets/img/ImageNotFound.png";
+
+const imagesByCategory = {
+  "deportes de pelota": [pelota2, pelota3, pelota],
+  "deportes de agua": [agua1, agua2, agua3],
+  "deportes de montaña": [mountain, mountain2, mountain3],
+  "deportes sobre ruedas": [mountain_bike, ruedas, cyclist_bycicle],
+  "otros deportes": [otros1, otros2, otros3],
+};
+const normalizeCategory = (cat) => (cat || "").trim().toLowerCase();
 
 export const CardProducto = () => {
   const { id } = useParams();
@@ -17,7 +42,6 @@ export const CardProducto = () => {
   const currentUser = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
-  // Limpia la URL backend para evitar doble slash
   const backendApi = import.meta.env.VITE_BACKEND_URL.replace(/\/+$/, "");
 
   useEffect(() => {
@@ -126,6 +150,9 @@ export const CardProducto = () => {
   if (loading) return <div className="container my-5">Cargando producto…</div>;
   if (!prod) return <div className="container my-5">Producto no encontrado</div>;
 
+  let imgArray = imagesByCategory[normalizeCategory(prod.category)] || [image_not_found];
+  let mainImage = imgArray[0] || image_not_found;
+
   return (
     <div>
       <div className="d-flex justify-content-end p-3">
@@ -137,7 +164,7 @@ export const CardProducto = () => {
       <div className="container my-5">
         <div className="row g-4">
           <div className="col-md-6">
-            <img src={cyclist_bycicle} alt={prod.title} className="img-fluid rounded shadow-sm" />
+            <img src={mainImage} alt={prod.title} className="img-fluid rounded shadow-sm" />
           </div>
           <div className="col-md-6">
             <h2 className="mb-2">{prod.title}</h2>
@@ -156,9 +183,11 @@ export const CardProducto = () => {
             </div>
 
             <div className="d-flex gap-2">
-              <button className="btn btn-primary" onClick={() => setShowReserva(true)}>
-                Reservar
-              </button>
+              {currentUser?.id !== prod.user_id && (
+                <button className="btn btn-primary" onClick={() => setShowReserva(true)}>
+                  Reservar
+                </button>
+              )}
               {currentUser?.id !== prod.user_id && (
                 <button className="btn btn-outline-secondary" onClick={handleOpenChat}>
                   Contactar
