@@ -1,19 +1,121 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useRef, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { LogoutButton } from "./CerrarSesion.jsx";
 import { AddProductModal } from "../components/AddProductModal";
 import "../styles/Navbar.css";
 import productos from "../assets/img/productos.png";
-import reservas from "../assets/img/reservas.png";
+import shoppingcart from "../assets/img/shoppingcart.png";
 
 
+import logo from "../assets/img/logo.png";
 
 export const Navbar = () => {
   const { store, dispatch } = useGlobalReducer();
   const [selectedCategory, setSelectedCategory] = useState("Todas las categorías");
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
-  const [openDropdown, setOpenDropdown] = useState(null); // controlar qué menú está abierto
+  const [openDropdown, setOpenDropdown] = useState(null); // controla qué menú está abierto
+  const navigate = useNavigate();
+
+  // Los productos pueden venir plano (productos) o agrupado (grupos con .products)
+  const products = useMemo(() => {
+    const raw = store?.products ?? [];
+    if (!Array.isArray(raw)) return [];
+    // Si viene plano (tiene title/id), se usa como tal
+    const looksFlat = raw.length && (raw[0]?.title || raw[0]?.id);
+    return looksFlat ? raw : raw.flatMap(g => g?.products ?? []);
+  }, [store?.products]);
+
+  ///////Para la busqueda////////////////////////
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
+
+  const searchWrapRef = useRef(null);
+  const inputRef = useRef(null);
+
+
+  // para quitar acentos y a minúsculas
+  const norm = (s) =>
+    (s || "")
+      .toString()
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .toLowerCase();
+
+  // helpers para leer propiedades con nombres distintos, porsi cambian en el backend
+  const getTitle = (p) => p?.title || p?.name || "";
+  const getCat = (p) => p?.subcategory || p?.category || "";
+  const getUsername = (p) => p?.username || "";
+
+  ///Busca a los 150ms de dejar de teclear
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      setShowResults(false);
+      setActiveIndex(-1);
+      return;
+    }
+
+    const t = setTimeout(() => {
+      const q = norm(query);
+      const filtered = (products || [])
+        .filter((p) => {
+          const haystack = `${getTitle(p)} ${getCat(p)} ${getUsername(p)}`;
+          return norm(haystack).includes(q);
+        })
+        .slice(0, 8); // limita a 8 sugerencias
+      setResults(filtered);
+      setShowResults(true);
+      setActiveIndex(-1);
+    }, 150);
+
+    return () => clearTimeout(t);
+  }, [query, products]);
+
+  ////Para que el dropdown se cierre al hacer click afuera
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (searchWrapRef.current && !searchWrapRef.current.contains(e.target)) {
+        setShowResults(false);
+        setActiveIndex(-1);
+      }
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
+
+
+  const goToProduct = (p) => {
+    if (!p?.id) return;
+    setShowResults(false);
+    setQuery("");
+    navigate(`/products/details/${p.id}`);
+  };
+
+  ///Para poder usar las flechas, enter y escape en el dropdown
+  const onKeyDown = (e) => {
+    if (!showResults || results.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % results.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => (i - 1 + results.length) % results.length);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const chosen = results[activeIndex] ?? results[0];
+      if (chosen) goToProduct(chosen);
+    } else if (e.key === "Escape") {
+      setShowResults(false);
+      setActiveIndex(-1);
+    }
+  };
+
+  //////////////////////////////////////////////
+
 
   // Categorías y subcategorías fijas
   const categoriesData = {
@@ -34,7 +136,7 @@ export const Navbar = () => {
     "Otros deportes",
   ];
 
-  // Mantener sesión de usuario
+  // Mantener sesión usuario
   useEffect(() => {
     const token = localStorage.getItem("jwt-token");
     if (token) {
@@ -91,7 +193,7 @@ export const Navbar = () => {
     setOpenDropdown(null);
   };
 
-  const products = store.products || [];
+  //const products = store.products || [];
   const categoryHasProducts = (category, subcat = null) => {
     if (category === "Todas las categorías") return products.length > 0;
     return products.some((p) => {
@@ -104,30 +206,67 @@ export const Navbar = () => {
     <>
       {/* Navbar principal */}
       <nav className="navbar navbar-expand-lg bg-body-tertiary pt-0">
-        <div className="container-fluid d-flex align-items-center" style={{ maxWidth: "1700px" }}>
+        <div
+          className="container-fluid d-flex align-items-center position-relative"
+          style={{ maxWidth: "1700px", zIndex: 1100 }}
+        >
           <Link className="navbar-brand pt-0 d-flex align-items-center" to="/">
-            <img className="imgLogo" src="src/front/assets/img/logo.png" alt="Logo" />
+            <img className="imgLogo" src={logo} alt="Logo" />
           </Link>
 
           {/* Barra de búsqueda */}
-          <div className="searchBox" style={{ flexGrow: 1, maxWidth: "1440px", margin: "0 auto" }}>
-            <form className="w-100 d-flex align-items-center">
-              <input type="search" className="w-100 searchBox_input" placeholder="Buscar" />
+          <div className="searchBox" style={{ flexGrow: 1, maxWidth: "1440px", margin: "0 auto" }} ref={searchWrapRef}>
+            <form
+              className="w-100 d-flex align-items-center"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                ref={inputRef}
+                type="search"
+                className="w-100 searchBox_input"
+                placeholder="Buscar por nombre o categoría…"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onFocus={() => query && setShowResults(true)}
+                onKeyDown={onKeyDown}
+                autoComplete="off"
+              />
             </form>
+
+            {showResults && results.length > 0 && (
+              <ul className="search-suggest dropdown-menu show p-0">
+                {results.map((p, idx) => (
+                  <li
+                    key={p.id ?? idx}
+                    className={`search-suggest-item ${idx === activeIndex ? "active" : ""}`}
+                    onMouseEnter={() => setActiveIndex(idx)}
+                    onMouseDown={(e) => e.preventDefault()} // evita blur antes del click
+                    onClick={() => goToProduct(p)}
+                  >
+                    <div className="d-flex flex-column">
+                      <span className="title">{getTitle(p)}</span>
+                      <small className="text-muted">{getCat(p)}</small>
+                    </div>
+                    {/* Aqui puedo poner miniaturas de imagenes */}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {/* Menú usuario */}
-          <div className="d-flex align-items-center gap-3 m-3">
+          <div className="d-flex align-items-center gap-3 m-3 position-relative">
             {currentUser ? (
               <>
                 <AddProductModal />
 
-                <div className="dropdown">
+                <div className="dropdown" style={{ position: "relative" }}>
                   <button
                     type="button"
                     className="d-flex align-items-center gap-2"
                     style={{ border: "none", background: "transparent", padding: 0, cursor: "pointer" }}
                     onClick={() => setOpenDropdown(openDropdown === "user" ? null : "user")}
+                    aria-expanded={openDropdown === "user"}
                   >
                     <div
                       style={{
@@ -149,11 +288,25 @@ export const Navbar = () => {
 
                   {openDropdown === "user" && (
                     <ul
-                      className="dropdown-menu dropdown-menu-start p-3 show"
-                      style={{ borderRadius: "24px", boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}
+                      className="dropdown-menu dropdown-menu-end p-3 show"
+                      style={{
+                        borderRadius: "24px",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                        position: "absolute",
+                        right: 0,
+                        top: "calc(100% + 0.5rem)",
+                        minWidth: "200px",
+                      }}
                     >
                       <li className="d-flex align-items-center mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          className="bi bi-person-circle"
+                          viewBox="0 0 16 16"
+                        >
                           <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                           <path
                             fillRule="evenodd"
@@ -166,7 +319,14 @@ export const Navbar = () => {
                       </li>
 
                       <li className="d-flex align-items-center mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-chat-dots" viewBox="0 0 16 16">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          className="bi bi-chat-dots"
+                          viewBox="0 0 16 16"
+                        >
                           <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
                           <path d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9 9 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.4 10.4 0 0 1-.524 2.318l-.003.011a11 11 0 0 1-.244.637c-.079.186.074.394.273.362a22 22 0 0 0 .693-.125m.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6-3.004 6-7 6a8 8 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a11 11 0 0 0 .398-2" />
                         </svg>
@@ -174,31 +334,38 @@ export const Navbar = () => {
                           className="dropdown-item ms-2"
                           to="/inbox"
                           onClick={() => {
-                            // marcar todos los mensajes como leídos en el store
                             dispatch({ type: "mark_all_messages_read" });
+                            setOpenDropdown(null);
                           }}
                         >
                           Inbox
                         </Link>
                       </li>
 
-
                       <li className="d-flex align-items-center mb-2">
+
                         <img src={productos} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                         <Link className="dropdown-item ms-2" to="/mis-productos">
                           Mis productos
                         </Link>
                       </li>
-                       
+
                       <li className="d-flex align-items-center mb-2">
-                        <img src={reservas} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
+                        <img src={shoppingcart} alt="Productos" style={{ width: "24px", height: "24px", objectFit: "contain" }} />
                         <Link className="dropdown-item ms-2" to="/mis-reservas">
                           Mis reservas
                         </Link>
                       </li>
 
                       <li className="d-flex align-items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          fill="currentColor"
+                          className="bi bi-box-arrow-right"
+                          viewBox="0 0 16 16"
+                        >
                           <path
                             fillRule="evenodd"
                             d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"
@@ -215,8 +382,10 @@ export const Navbar = () => {
                 </div>
               </>
             ) : (
-              <Link to={"/Login"}>
-                <button type="button" className="btn btn-outline-success">Login</button>
+              <Link to={"/login"}>
+                <button type="button" className="btn btn-outline-success">
+                  Login
+                </button>
               </Link>
             )}
           </div>

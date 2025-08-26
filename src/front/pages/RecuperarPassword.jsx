@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import logo from "../assets/img/logo.png";
 
 export const ForgotPassword = () => {
 	const [backgroundUrl, setBackgroundUrl] = useState("");
@@ -39,7 +40,7 @@ export const ForgotPassword = () => {
 		const email = e.target.email.value;
 
 		try {
-			const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/password-reset`,
+			const response = await fetch( `${import.meta.env.VITE_BACKEND_URL}/api/password-reset`,
 				{
 					method: "POST",
 					headers: {
@@ -69,7 +70,7 @@ export const ForgotPassword = () => {
 			<div className="card shadow-sm p-5 bg-white bg-opacity-75" style={{ maxWidth: "500px", width: "100%", borderRadius: "24px" }}>
 				<Link to={"/"}>
 					<img className="mx-auto d-block mb-3"
-						src="../src/front/assets/img/logo.png"
+						src={logo}
 						style={{ maxWidth: "220px", width: "100%", borderRadius: "24px" }}
 						alt="Logo"
 					/>
@@ -109,4 +110,5 @@ export const ForgotPassword = () => {
 			</div>
 		</div>
 	);
+
 };

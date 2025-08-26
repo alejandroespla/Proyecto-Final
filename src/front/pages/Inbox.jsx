@@ -1,22 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar.jsx";
 import { Footer } from "../components/Footer.jsx";
 
 export const Inbox = () => {
-  const [messages, setMessages] = useState([]);
+  const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [productTitles, setProductTitles] = useState({});
   const currentUser = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
+  const backendApi = import.meta.env.VITE_BACKEND_URL.replace(/\/+$/, "");
 
   useEffect(() => {
     if (!currentUser?.id) return;
 
-    const fetchMessages = async () => {
+    const fetchChats = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api_message/inbox/${currentUser.id}`);
-        if (!res.ok) throw new Error("Error al cargar mensajes");
+        const res = await fetch(`${backendApi}/api_message/inbox/${currentUser.id}`);
+        if (!res.ok) throw new Error("Error al cargar chats");
         const data = await res.json();
-        setMessages(data);
+        setChats(data);
+
+        // Extraer product_id únicos
+        const productIds = [...new Set(data.map((chat) => chat.product_id).filter(Boolean))];
+        
+        // Obtener títulos de productos con múltiples fetch, en paralelo
+        const promises = productIds.map((id) =>
+          fetch(`${backendApi}/api_product/product/${id}`)
+            .then((r) => (r.ok ? r.json() : null))
+            .then((product) => ({ id, title: product?.title || "Sin producto" }))
+            .catch(() => ({ id, title: "Sin producto" }))
+        );
+
+        const titlesArray = await Promise.all(promises);
+
+        // Convertir array a objeto { productId: productTitle }
+        const titlesMap = {};
+        titlesArray.forEach(({ id, title }) => {
+          titlesMap[id] = title;
+        });
+
+        setProductTitles(titlesMap);
       } catch (e) {
         console.error(e);
       } finally {
@@ -24,55 +48,51 @@ export const Inbox = () => {
       }
     };
 
-    fetchMessages();
-  }, [currentUser]);
+    fetchChats();
+  }, [currentUser, backendApi]);
 
   if (!currentUser) {
     return (
-      <div>
+      <>
         <Navbar />
         <div className="container my-5 text-center">
-          <h2>Debes iniciar sesión para ver tus mensajes</h2>
+          <h2>Debes iniciar sesión para ver tus chats</h2>
           <Link to="/login" className="btn btn-primary mt-3">
             Ir a Login
           </Link>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 
   return (
-    <div>
+    <>
       <Navbar />
       <div className="container my-5">
-        <h2 className="mb-4">📩 Mis Mensajes</h2>
-
-        {loading && <p>Cargando mensajes...</p>}
-
-        {!loading && messages.length === 0 && (
-          <div className="alert alert-info">No tienes mensajes todavía.</div>
+        <h2 className="mb-4">💬 Chats</h2>
+        {loading && <p>Cargando chats...</p>}
+        {!loading && chats.length === 0 && (
+          <div className="alert alert-info">No tienes chats todavía.</div>
         )}
-
         <div className="list-group shadow-sm rounded">
-          {messages.map((msg) => (
-            <Link
-              key={msg.id}
-              to={`/inbox/${msg.id}`}
+          {chats.map((chat) => (
+            <button
+              key={chat.id}
               className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+              onClick={() => navigate(`/inbox/${chat.id}`)}
             >
               <div>
-                <strong>{msg.sender_username}</strong>  
-                <p className="mb-1 text-muted">{msg.content.slice(0, 50)}...</p>
+                <strong>{chat.other_user_name}</strong>
+                <p className="mb-1 text-muted">
+                  Producto: {productTitles[chat.product_id] || "Sin producto"}
+                </p>
               </div>
-              <small className="text-muted">
-                {new Date(msg.timestamp).toLocaleDateString()}
-              </small>
-            </Link>
+            </button>
           ))}
         </div>
       </div>
       <Footer />
-    </div>
+    </>
   );
 };
