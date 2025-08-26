@@ -110,4 +110,5 @@ export const ForgotPassword = () => {
 			</div>
 		</div>
 	);
+
 };
