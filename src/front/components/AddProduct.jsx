@@ -1,16 +1,22 @@
 "use_client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createPortal, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { APIProvider, Map, AdvancedMarker, Pin, InfoWindow } from '@vis.gl/react-google-maps';
+import { APIProvider, ControlPosition, MapControl, Map, useMap, useMapsLibrary, AdvancedMarker, useAdvancedMarkerRef } from '@vis.gl/react-google-maps';
+
+import { createRoot } from "react-dom/client";
+import { App } from "../components/App.jsx"
 
 export const AddProduct = () => {
-  const { id } = useParams(); // si existe, estamos editando
+
+  const { id } = useParams();                 // <- si existe, estamos editando
   const isEdit = Boolean(id);
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("user"));
-
+  // Zona de api Google Maps 
+  const API_KEY = globalThis.GOOGLE_MAPS_API_KEY ?? "AIzaSyAZGZS8YvpJUtpA8KHH5CbnoYUU05xTVak";
   const position = { lat: 41.3872516334326, lng: 2.171430948862673 };
-  const [open, setOpen] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [markerRef, marker] = useAdvancedMarkerRef();
 
   const [form, setForm] = useState({
     title: "",
@@ -96,6 +102,7 @@ export const AddProduct = () => {
 
       if (response.status === 403) { alert("No puedes editar este producto"); return; }
       if (!response.ok) throw new Error(isEdit ? "Error al guardar cambios" : "Error al crear producto");
+
 
       const data = await response.json();
       alert(isEdit ? "Cambios guardados" : "Producto creado con éxito");
@@ -232,37 +239,43 @@ export const AddProduct = () => {
             </select>
           )}
 
-          <input type="number" name="price" placeholder="Precio por día (€)"
-            value={form.price} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+        <input type="number" name="price" placeholder="Precio por día (€)"
+          value={form.price} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded"
+        />
 
-          <input type="text" name="location" placeholder="Ubicación"
-            value={form.location} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+        <div className="mapContiner">
+          <APIProvider
+            apiKey={API_KEY}
+            solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
+          >
+            <Map
+              mapId={"2cff1ef28229f873716f5413"}
+              defaultZoom={9}
+              defaultCenter={position}
+              gestureHandling={"greedy"}
+              disableDefaultUI={true}
+              className="map"
+            >
+              <AdvancedMarker ref={markerRef} position={null} />
+            </Map>
 
-          <APIProvider apiKey={"AIzaSyAZGZS8YvpJUtpA8KHH5CbnoYUU05xTVak"} onLoad={() => console.log('Maps API loaded')}>
-            <div
-              style={{
-                height: "30vh",
-                width: "100%",
-                borderRadius: "16px",
-                overflow: "hidden",
-                marginBottom: "15px"
-              }}>
-              <Map
-                defaultZoom={10}
-                defaultCenter={position}
-                mapId={"2cff1ef28229f873716f5413"}
-              >
-                <AdvancedMarker position={position} onClick={() => setOpen(true)}>
-                  <Pin />
-                </AdvancedMarker>
-                {open && (
-                  <InfoWindow position={position} onClose={() => setOpen(false)}>
-                    <p>Barcelona</p>
-                  </InfoWindow>
-                )}
-              </Map>
-            </div>
+
+            <MapControl position={ControlPosition.TOP}>
+              <div className="autocomplete-control">
+                <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
+              </div>
+            </MapControl>
+            <Maphandler place={selectedPlace} marker={marker} />
+
+
+
+
           </APIProvider>
+        </div>
+
+        );
+        {/* Input de ubicación arriba del mapa */}
+
 
           <button type="submit" className="btn"
             style={{ backgroundColor: "#2E676A", border: "none", borderRadius: "8px", color: "#ffffff" }}
@@ -274,3 +287,54 @@ export const AddProduct = () => {
     </div>
   );
 };
+
+const Maphandler = ({ place, marker }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (!map || !place || !marker) return;
+    if (place.geometry?.viewport) {
+      map.fitBounds(place.geometry?.location);
+    }
+    marker.position = place.geometry?.location;
+  }, [map, place, marker]);
+  return null;
+}
+const PlaceAutocomplete = ({ onPlaceSelect }) => {
+  const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
+  const inputRef = useRef(null);
+  const places = useMapsLibrary("places");
+  console.log(places)
+
+  useEffect(() => {
+    if (!places || !inputRef.current) return;
+
+    const options = {
+      fields: ["geometry", "name", "formatted_address"],
+      types: ["establishment", "geocode"]
+    };
+
+    setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
+  }, [places]);
+  useEffect(() => {
+    if (!placeAutocomplete) return;
+
+
+    const listener = placeAutocomplete.addListener("place_changed", () => {
+      let places = placeAutocomplete.getPlace()
+      console.log("lugares:", places)
+      onPlaceSelect(places);
+    });
+
+    return () => {
+      if (listener) {
+        google.maps.event.removeListener(listener)
+      }
+    }
+  }, [onPlaceSelect, placeAutocomplete]);
+
+  return (
+    <div className="autocomplete-container">
+      <input ref={inputRef} />
+    </div>
+  );
+}
