@@ -106,7 +106,7 @@ export const AddProduct = () => {
 
       const data = await response.json();
       alert(isEdit ? "Cambios guardados" : "Producto creado con éxito");
-      navigate(`/products/details/${data.id}`)
+      navigate(`/products/details/${data.id}`);
 
       if (!isEdit) {
         setForm({ title: "", description: "", category: "", subcategory: "", price: "", location: "" });
@@ -118,6 +118,10 @@ export const AddProduct = () => {
   };
 
   if (loading) return <p>Cargando…</p>;
+
+  const handleCancel = () => {
+    navigate(-1); // vuelve a la página anterior
+  };
 
   return (
     <div>
@@ -135,30 +139,105 @@ export const AddProduct = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="d-flex flex-column">
-        <input type="text" name="title" placeholder="Título del producto"
-          value={form.title} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+      {isEdit ? (
+        <div className="container my-4">
+          <form onSubmit={handleSubmit} className="d-flex flex-column">
+            {/* campos form */}
+            <input type="text" name="title" placeholder="Título del producto"
+              value={form.title} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
 
-        <textarea name="description" placeholder="Descripción"
-          value={form.description} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+            <textarea name="description" placeholder="Descripción"
+              value={form.description} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
 
-        <select name="category" value={form.category} onChange={handleChange}
-          className="w-full border mb-3 px-3 py-2 rounded">
-          <option value="">Selecciona una categoría</option>
-          {Object.keys(categoryOptions).map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
+            <select name="category" value={form.category} onChange={handleChange}
+              className="w-full border mb-3 px-3 py-2 rounded">
+              <option value="">Selecciona una categoría</option>
+              {Object.keys(categoryOptions).map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
 
-        {form.category && (
-          <select name="subcategory" value={form.subcategory} onChange={handleChange}
+            {form.category && (
+              <select name="subcategory" value={form.subcategory} onChange={handleChange}
+                className="w-full border mb-3 px-3 py-2 rounded">
+                <option value="">Selecciona una subcategoría</option>
+                {categoryOptions[form.category].map((sub) => (
+                  <option key={sub} value={sub}>{sub}</option>
+                ))}
+              </select>
+            )}
+
+            <input type="number" name="price" placeholder="Precio por día (€)"
+              value={form.price} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+
+            <input type="text" name="location" placeholder="Ubicación"
+              value={form.location} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+
+            <APIProvider apiKey={"AIzaSyAZGZS8YvpJUtpA8KHH5CbnoYUU05xTVak"} onLoad={() => console.log('Maps API loaded')}>
+              <div
+                style={{
+                  height: "30vh",
+                  width: "100%",
+                  borderRadius: "16px",
+                  overflow: "hidden",
+                  marginBottom: "15px"
+                }}>
+                <Map
+                  defaultZoom={10}
+                  defaultCenter={position}
+                  mapId={"2cff1ef28229f873716f5413"}
+                >
+                  <AdvancedMarker position={position} onClick={() => setOpen(true)}>
+                    <Pin />
+                  </AdvancedMarker>
+                  {open && (
+                    <InfoWindow position={position} onClose={() => setOpen(false)}>
+                      <p>Barcelona</p>
+                    </InfoWindow>
+                  )}
+                </Map>
+              </div>
+            </APIProvider>
+
+            <div className="d-flex gap-2">
+              <button type="submit" className="btn"
+                style={{ backgroundColor: "#2E676A", border: "none", borderRadius: "8px", color: "#ffffff" }}
+                disabled={loading}>
+                {loading ? "Guardando..." : "Guardar cambios"}
+              </button>
+              <button type="button" className="btn btn-secondary" onClick={handleCancel}>
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      ) : (
+        // Formulario sin contenedor para modo creación
+        <form onSubmit={handleSubmit} className="d-flex flex-column">
+          {/* campos form (igual que arriba) */}
+          <input type="text" name="title" placeholder="Título del producto"
+            value={form.title} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+
+          <textarea name="description" placeholder="Descripción"
+            value={form.description} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
+
+          <select name="category" value={form.category} onChange={handleChange}
             className="w-full border mb-3 px-3 py-2 rounded">
-            <option value="">Selecciona una subcategoría</option>
-            {categoryOptions[form.category].map((sub) => (
-              <option key={sub} value={sub}>{sub}</option>
+            <option value="">Selecciona una categoría</option>
+            {Object.keys(categoryOptions).map((cat) => (
+              <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
-        )}
+
+          {form.category && (
+            <select name="subcategory" value={form.subcategory} onChange={handleChange}
+              className="w-full border mb-3 px-3 py-2 rounded">
+              <option value="">Selecciona una subcategoría</option>
+              {categoryOptions[form.category].map((sub) => (
+                <option key={sub} value={sub}>{sub}</option>
+              ))}
+            </select>
+          )}
 
         <input type="number" name="price" placeholder="Precio por día (€)"
           value={form.price} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded"
@@ -198,12 +277,13 @@ export const AddProduct = () => {
         {/* Input de ubicación arriba del mapa */}
 
 
-        <button type="submit" className="btn"
-          style={{ backgroundColor: "#2E676A", border: "none", borderRadius: "8px", color: "#ffffff" }}
-          disabled={loading}>
-          {loading ? "Guardando..." : "Añadir producto"}
-        </button>
-      </form>
+          <button type="submit" className="btn"
+            style={{ backgroundColor: "#2E676A", border: "none", borderRadius: "8px", color: "#ffffff" }}
+            disabled={loading}>
+            {loading ? "Guardando..." : "Añadir producto"}
+          </button>
+        </form>
+      )}
     </div>
   );
 };
