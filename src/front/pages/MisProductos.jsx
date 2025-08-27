@@ -119,9 +119,7 @@ export const MisProductos = () => {
     <div className="container my-4">
       <div className="d-flex align-items-center justify-content-between mb-3">
         <h2 className="m-0">Mis productos</h2>
-        <Link to="/add-product" className="btn btn-primary">
-          Añadir producto
-        </Link>
+        
         <button className="btn btn-outline-secondary" onClick={() => navigate("/")}>
           ✕
         </button>
