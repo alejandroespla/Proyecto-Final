@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Footer } from "../components/Footer.jsx";
 import cyclist_bycicle from "../assets/img/cyclist_bycicle.jpg";
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 

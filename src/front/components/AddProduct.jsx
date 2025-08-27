@@ -1,5 +1,5 @@
 "use_client";
-import React, { useEffect, useState, createPortal } from "react";
+import React, { useEffect, useState, createPortal, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { APIProvider, ControlPosition, MapControl, Map, useMap, useMapsLibrary, AdvancedMarker, useAdvancedMarkerRef } from '@vis.gl/react-google-maps';
 
@@ -161,32 +161,42 @@ export const AddProduct = () => {
         )}
 
         <input type="number" name="price" placeholder="Precio por día (€)"
-          value={form.price} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded" />
-        <APIProvider
-          apiKey={API_KEY}
-          solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
-        >
-          <Map
-            mapId={"2cff1ef28229f873716f5413"}
-            defaultZoom={9}
-            defaultCenter={position}
-            gestureHandling={"greedy"}
-            disableDefaultUI={true}
-          >
-            <AdvancedMarker ref={markerRef} position={null} />
-          </Map>
-          <MapControl position={ControlPosition.TOP}>
-            <div className="autocomplete-control">
-              <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
-            </div>
-          </MapControl>
-          <Maphandler place={selectedPlace} marker={marker} />
+          value={form.price} onChange={handleChange} className="w-full border mb-3 px-3 py-2 rounded"
+        />
 
-        </APIProvider>
+        <div className="mapContiner">
+          <APIProvider
+            apiKey={API_KEY}
+            solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
+          >
+            <Map
+              mapId={"2cff1ef28229f873716f5413"}
+              defaultZoom={9}
+              defaultCenter={position}
+              gestureHandling={"greedy"}
+              disableDefaultUI={true}
+              className="map"
+            >
+              <AdvancedMarker ref={markerRef} position={null} />
+            </Map>
+
+
+            <MapControl position={ControlPosition.TOP}>
+              <div className="autocomplete-control">
+                <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
+              </div>
+            </MapControl>
+            <Maphandler place={selectedPlace} marker={marker} />
+
+
+
+
+          </APIProvider>
+        </div>
+
         );
         {/* Input de ubicación arriba del mapa */}
-        <input type="text" id="autocomplete" placeholder="Ubicación"
-          /*value={form.location} onChange={handleChange} */ className="w-full border mb-3 px-3 py-2 rounded" />
+
 
         <button type="submit" className="btn"
           style={{ backgroundColor: "#2E676A", border: "none", borderRadius: "8px", color: "#ffffff" }}
@@ -197,6 +207,7 @@ export const AddProduct = () => {
     </div>
   );
 };
+
 const Maphandler = ({ place, marker }) => {
   const map = useMap();
   useEffect(() => {
@@ -210,14 +221,16 @@ const Maphandler = ({ place, marker }) => {
 }
 const PlaceAutocomplete = ({ onPlaceSelect }) => {
   const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
-  const inputRef = useState(null);
+  const inputRef = useRef(null);
   const places = useMapsLibrary("places");
+  console.log(places)
 
   useEffect(() => {
     if (!places || !inputRef.current) return;
 
     const options = {
       fields: ["geometry", "name", "formatted_address"],
+      types: ["establishment", "geocode"]
     };
 
     setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
@@ -225,13 +238,23 @@ const PlaceAutocomplete = ({ onPlaceSelect }) => {
   useEffect(() => {
     if (!placeAutocomplete) return;
 
-    placeAutocomplete.addListener("place_changed", () => {
-      onPlaceSelect(placeAutocomplete.getPlace());
+
+    const listener = placeAutocomplete.addListener("place_changed", () => {
+      let places = placeAutocomplete.getPlace()
+      console.log("lugares:", places)
+      onPlaceSelect(places);
     });
+
+    return () => {
+      if (listener) {
+        google.maps.event.removeListener(listener)
+      }
+    }
   }, [onPlaceSelect, placeAutocomplete]);
+
   return (
     <div className="autocomplete-container">
-      <input value={inputRef} />
+      <input ref={inputRef} />
     </div>
   );
 }
